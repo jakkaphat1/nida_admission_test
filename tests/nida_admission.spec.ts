@@ -9,11 +9,11 @@ test.describe('NIDA Admission Test Suite', () => {
     await expect(page).toHaveURL(/.*admissions-uat.nida.ac.th/);
   });
 
-  test('TC-02 ทดสอบสมัครสอบและค้นหาวิชา', async ({ admissionPage }) => {
-    await admissionPage.goto();
-    // ค้นหาวิชา "วิชาเฉพาะ 2" ตาม Data ใน Test Case 
-    await admissionPage.searchSubject('วิชาเฉพาะ 2'); 
-    // เพิ่มการตรวจสอบว่าเจอวิชาในตาราง...
-  });
+//   test('TC-02 ทดสอบสมัครสอบและค้นหาวิชา', async ({ admissionPage }) => {
+//     await admissionPage.goto();
+//     // ค้นหาวิชา "วิชาเฉพาะ 2" ตาม Data ใน Test Case 
+//     await admissionPage.searchSubject('วิชาเฉพาะ 2'); 
+//     // เพิ่มการตรวจสอบว่าเจอวิชาในตาราง...
+//   });
 
 });

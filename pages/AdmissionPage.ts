@@ -2,29 +2,28 @@ import { Page, Locator } from '@playwright/test';
 
 export class AdmissionPage {
   readonly page: Page;
+
+  readonly url = 'https://admissions-uat.nida.ac.th/';
+  readonly emailSelector = 'input[name="email"]';
+  readonly loginButtonSelector = 'button:has-text("เข้าใช้งานระบบ")';
+
+  //ประกาศตัวแปร Locator สำหรับใช้ใน Method
+  readonly loginEmailInput: Locator;
   readonly loginButton: Locator;
-  readonly admissionMenu: Locator;
-  readonly subjectSearchInput: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    // นิยามปุ่ม/ช่องต่างๆ ตามเอกสาร 
-    this.loginButton = page.getByRole('button', { name: 'เข้าใช้งานระบบ' });
-    this.admissionMenu = page.getByText('สมัครสอบ');
-    this.subjectSearchInput = page.locator('input[type="text"]');
+
+    //ผูก Selector เข้ากับ Locator
+    this.loginEmailInput = page.locator(this.emailSelector);
+    this.loginButton = page.locator(this.loginButtonSelector);
   }
 
   async goto() {
-    await this.page.goto('https://admissions-uat.nida.ac.th/'); // 
+    await this.page.goto(this.url);
   }
 
-  async clickLogin() {
-    await this.loginButton.click();
-  }
-
-  async searchSubject(subjectName: string) {
-    await this.admissionMenu.click();
-    await this.subjectSearchInput.fill(subjectName);
-    await this.page.getByRole('button', { name: 'ค้นหา' }).click();
+  async fillEmail(email: string) {
+    await this.loginEmailInput.fill(email);
   }
 }
