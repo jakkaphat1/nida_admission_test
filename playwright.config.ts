@@ -23,7 +23,7 @@ export default defineConfig({
     headless: false,  // ← เก็บไว้
     viewport: { width: 1280, height: 720 },
     trace: 'on',
-    video: 'on-first-retry',
+    video: 'on',
     screenshot: 'only-on-failure',
     
     launchOptions: {

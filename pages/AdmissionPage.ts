@@ -1,24 +1,42 @@
 import { Page, Locator } from '@playwright/test';
 
 export class AdmissionPage {
-  readonly page: Page;
 
-  readonly url = 'https://admissions-uat.nida.ac.th/';
-  readonly emailSelector = 'input[name="email"]';
-  readonly loginButtonSelector = 'button:has-text("เข้าใช้งานระบบ")';
+  /**
+ * LOCATORS SECTION
+ * ---------------------------------------------------------------- */
+  page: Page;
+  url = 'https://admissions-uat.nida.ac.th/';
+  emailSelector = 'input[name="email"]';
+  loginButtonSelector = 'button:has-text("เข้าใช้งานระบบ")';
+  
 
-  //ประกาศตัวแปร Locator สำหรับใช้ใน Method
-  readonly loginEmailInput: Locator;
-  readonly loginButton: Locator;
+  /**
+ * TEST DATA SECTION
+ * ---------------------------------------------------------------- */
+  email = 'jakkaphat.w@kkumail.com'
+  
 
+    /**
+ * Initialize SECTION
+ * ---------------------------------------------------------------- */
+  //ประกาศตัวแปร Locator สำหรับใช้ใน Method ของ Constructor
+  loginEmailInput: Locator;
+  loginButton: Locator;
+
+  
+  /**
+ * Constructor SECTION
+ * ---------------------------------------------------------------- */
   constructor(page: Page) {
-    this.page = page;
-
     //ผูก Selector เข้ากับ Locator
+    this.page = page;
     this.loginEmailInput = page.locator(this.emailSelector);
     this.loginButton = page.locator(this.loginButtonSelector);
   }
 
+
+  // Method
   async goto() {
     await this.page.goto(this.url);
   }
@@ -26,4 +44,8 @@ export class AdmissionPage {
   async fillEmail(email: string) {
     await this.loginEmailInput.fill(email);
   }
+
+  async clickLogin() {
+  await this.loginButton.click();
+}
 }
