@@ -21,8 +21,8 @@ test.describe('NIDA Admission Test Suite', () => {
 
   test('TC-02 ทดสอบตรวจสอบข้อมูล Step 1:  ตรวจสอบหลักสูตรที่เลือกและทุนการศึกษา', async ({ admissionPage, page }) => {
 
-    // go to admission page
-    await admissionPage.goto();
+    // go to admissions-uat.nida.ac.th/programs
+    await admissionPage.gotoPrograms();
 
     const projectName = 'โครงการโนว่าทดสอบ'; 
     await admissionPage.clickRegister(projectName);
@@ -30,5 +30,5 @@ test.describe('NIDA Admission Test Suite', () => {
     await expect(page.getByText(projectName)).toBeVisible();
   });
 
-
+  
 });

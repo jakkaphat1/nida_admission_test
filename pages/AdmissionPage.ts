@@ -74,4 +74,8 @@ export class AdmissionPage {
     await this.registerButtonByProject(projectName).click();
   }
 
+  // pages/AdmissionPage.ts
+  async gotoPrograms() {
+    await this.page.goto('https://admissions-uat.nida.ac.th/programs');
+}
 }
