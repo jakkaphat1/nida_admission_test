@@ -1,0 +1,9 @@
+รันคำสั่ง: npx playwright test fixtures/auth.setup.ts --headed
+
+หน้าจอเบราว์เซอร์จะเปิดขึ้นมาและหยุดที่ page.pause()
+
+คุณพิมพ์อีเมล/รหัสผ่าน และกดรหัส OTP ในมือถือด้วยตัวเอง จนหน้าจอ Login สำเร็จ
+
+กดปุ่ม Resume ในโปรแกรม Playwright Inspector เพื่อให้มันเซฟไฟล์ user.json
+
+หลังจากนี้ ไฟล์ user.json จะมี Session ของคุณแล้ว และคุณสามารถรันเทสตัวอื่นๆ ได้โดยไม่ต้อง Login อีก
