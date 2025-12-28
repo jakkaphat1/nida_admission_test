@@ -9,7 +9,8 @@ export class AdmissionPage {
   url = 'https://admissions-uat.nida.ac.th/';
   emailSelector = 'input[name="email"]';
   loginButtonSelector = 'button:has-text("เข้าใช้งานระบบ")';
-  
+  projectCardSelector = 'div.flex.flex-col.overflow-hidden.rounded-xl.border';
+  googleLoginSelector = 'button:has-text("Login with Google")';
 
   /**
  * TEST DATA SECTION
@@ -23,8 +24,19 @@ export class AdmissionPage {
   //ประกาศตัวแปร Locator สำหรับใช้ใน Method ของ Constructor
   loginEmailInput: Locator;
   loginButton: Locator;
+  googleLoginButton: Locator;
 
-  
+  /**
+* GETTERS SECTION
+* ---------------------------------------------------------------- */
+  registerButtonByProject(projectName: string): Locator { // dynamic getter
+    return this.page.locator(this.projectCardSelector)
+      .filter({ hasText: projectName })
+      .getByRole('button', { name: 'สมัครเรียน' });
+  }
+
+
+
   /**
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -33,6 +45,7 @@ export class AdmissionPage {
     this.page = page;
     this.loginEmailInput = page.locator(this.emailSelector);
     this.loginButton = page.locator(this.loginButtonSelector);
+    this.googleLoginButton = page.locator(this.googleLoginSelector);
   }
 
 
@@ -41,11 +54,24 @@ export class AdmissionPage {
     await this.page.goto(this.url);
   }
 
+  // Method to fill email
   async fillEmail(email: string) {
     await this.loginEmailInput.fill(email);
   }
 
+  // Method to click login with Google
+  async clickLoginWithGoogle() {
+    await this.googleLoginButton.click();
+  }
+
   async clickLogin() {
-  await this.loginButton.click();
-}
+    await this.loginButton.click();
+
+  }
+
+  async clickRegister(projectName: string) {
+    // เรียกใช้ Dynamic Locator แล้วสั่ง click
+    await this.registerButtonByProject(projectName).click();
+  }
+
 }

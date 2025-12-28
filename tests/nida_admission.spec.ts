@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures/baseTest';
 
 test.describe('NIDA Admission Test Suite', () => {
   
-  test('TC-01 การเข้าใช้งานระบบรับสมัคร', async ({ admissionPage, page }) => {
+  test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)', async ({ admissionPage, page }) => {
     // 1. เข้าไปที่หน้าเว็บระบบรับสมัคร
     await admissionPage.goto();
 
@@ -14,6 +14,22 @@ test.describe('NIDA Admission Test Suite', () => {
     
     // 4. ตรวจสอบผลลัพธ์ที่คาดหวัง 
     await expect(page).toHaveURL(/.*admissions-uat.nida.ac.th/);
+  });
+
+
+  test('TC-02 ทดสอบตรวจสอบข้อมูล Step 1:  ตรวจสอบหลักสูตรที่เลือกและทุนการศึกษา', async ({ admissionPage, page }) => {
+
+    // go to admission page
+    await admissionPage.goto();
+
+    await admissionPage.loginButton.click(); 
+    
+    await admissionPage.clickLoginWithGoogle();
+    await admissionPage.clickLogin();
+
+    const projectName = 'โครงการโนว่าทดสอบ'; 
+    await admissionPage.clickRegister(projectName);
+
   });
 
 
