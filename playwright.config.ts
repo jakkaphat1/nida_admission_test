@@ -33,11 +33,20 @@ export default defineConfig({
   },
 
   projects: [
+
+    // เพิ่ม path ตัว setup สำหรับการ authenticate
+    {
+      name: 'setup',
+      testMatch: /auth\.setup\.ts/,
+    },
+
     {
       name: 'chromium',
       use: { 
         ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json', // ชี้ไปที่ไฟล์ที่จะเซฟ
       },
+      dependencies: ['setup'],
     },
   ],
 });

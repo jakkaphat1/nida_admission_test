@@ -22,14 +22,10 @@ test.describe('NIDA Admission Test Suite', () => {
     // go to admission page
     await admissionPage.goto();
 
-    await admissionPage.loginButton.click(); 
-    
-    await admissionPage.clickLoginWithGoogle();
-    await admissionPage.clickLogin();
-
     const projectName = 'โครงการโนว่าทดสอบ'; 
     await admissionPage.clickRegister(projectName);
 
+    await expect(page.getByText(projectName)).toBeVisible();
   });
 
 
