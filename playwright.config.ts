@@ -21,7 +21,8 @@ export default defineConfig({
   
   use: {
     headless: false,  // ← เก็บไว้
-    viewport: { width: 1280, height: 720 },
+    // viewport: { width: 1280, height: 720 },
+    viewport: null,
     trace: 'on',
     video: 'on',
     screenshot: 'only-on-failure',
@@ -29,6 +30,7 @@ export default defineConfig({
     launchOptions: {
       headless: false,  // ← เพิ่มตรงนี้ด้วย
       slowMo: 500,      // ← ชะลอให้เห็นชัดขึ้น (optional)
+      args: ['--start-maximized'],
     }
   },
 
