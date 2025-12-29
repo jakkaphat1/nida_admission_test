@@ -70,11 +70,24 @@ export class AdmissionPage {
   }
 
   async clickRegister(projectName: string) {
-    // เรียกใช้ Dynamic Locator แล้วสั่ง click
-    await this.registerButtonByProject(projectName).click();
-  }
+    // เจาะจงไปที่ div ที่มี aria-label="card" และมีชื่อโครงการภายใน h3
+    const projectCard = this.page.locator('div[aria-label="card"]')
+      .filter({ has: this.page.locator('h3', { hasText: projectName }) });
 
-  // pages/AdmissionPage.ts
+    // ตรวจสอบสถานะการมองเห็น และการมีอยู่ของข้อมูล
+    await projectCard.waitFor({ state: 'visible', timeout: 15000 });
+
+    // สั่ง Scroll แบบบังคับเพื่อให้ Card มาอยู่กลางจอ
+    await projectCard.scrollIntoViewIfNeeded();
+
+    // หาปุ่ม "สมัครเรียน" ภายใน Card นั้นโดยตรง
+    const registerBtn = projectCard.getByRole('button', { name: 'สมัครเรียน' });
+    
+    // คลิก
+    await registerBtn.click();
+  
+  }
+  
   async gotoPrograms() {
     await this.page.goto('https://admissions-uat.nida.ac.th/programs');
 }

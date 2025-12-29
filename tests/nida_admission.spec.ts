@@ -24,6 +24,10 @@ test.describe('NIDA Admission Test Suite', () => {
     // go to admissions-uat.nida.ac.th/programs
     await admissionPage.gotoPrograms();
 
+    // รอให้หน้าโหลดเสร็จสมบูรณ์
+    await page.waitForLoadState('networkidle');
+    
+    // กำหนดชื่อโครงการที่ต้องการทดสอบ
     const projectName = 'โครงการโนว่าทดสอบ'; 
     await admissionPage.clickRegister(projectName);
 
