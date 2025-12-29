@@ -45,8 +45,10 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { 
-        ...devices['Desktop Chrome'],
+        // ...devices['Desktop Chrome'],
+        browserName: 'chromium',
         storageState: 'playwright/.auth/user.json', // ชี้ไปที่ไฟล์ที่จะเซฟ
+        viewport: null,
       },
       dependencies: ['setup'],
     },
