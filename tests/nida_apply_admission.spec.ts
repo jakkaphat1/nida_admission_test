@@ -1,4 +1,5 @@
 import { test, expect } from '../fixtures/baseTest';
+import { AdmissionPage } from '../pages/AdmissionPage';
 
 // test.use({ storageState: 'playwright/.auth/user.json' });
 
@@ -89,6 +90,48 @@ test.describe('NIDA Admission Test Suite', () => {
     await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
   });
 
+  test('TC-04 ทดสอบกรอกข้อมูล Step 2: กรอกข้อมูลเบื้องต้น ', async ({ admissionPage, page }) => {
+    // go to admissions-uat.nida.ac.th/programs
+    await admissionPage.gotoPrograms();
 
+    // รอให้หน้าโหลดเสร็จสมบูรณ์
+    await page.waitForLoadState('networkidle');
+    
+    // กำหนดชื่อโครงการที่ต้องการทดสอบ
+    const projectName = 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)';
+    await admissionPage.clickRegister(projectName);
+
+    await expect(page.getByText(projectName)).toBeVisible();
+    await page.waitForLoadState('networkidle');
+
+    // handle duplicate project popup
+    await admissionPage.handleDuplicateProjectPopup();
+
+
+    // mock data ของ นศ
+    const myStudentData = {
+        firstEngName: 'Eva',
+        lastEngName: 'Todsob',
+        TelNumber: '0812345678',
+        email: 'jakkaphatz2004@gmail.com',
+        
+        // Logic ที่อยู่: เลือกในประเทศ
+        inCountryAddress: true, 
+        province: 'กรุงเทพมหานคร',
+        district: 'จตุจักร',
+        subDistrict: 'จอมพล',
+        postalCode: '10900',
+
+        // การศึกษา
+        graduatedInCountry: 'จบการศึกษาในประเทศ', // ต้องตรงกับ Label ปุ่ม Radio
+        graduatedDate: '01012565',
+        universityName: 'จุฬาลงกรณ์มหาวิทยาลัย',
+        educationalQualification: 'สัตวแพทยศาสตรบัณฑิต',
+        gpa: '3.50'
+      }
+
+      await admissionPage.fillStudentInfo(myStudentData);
+
+  });
 
 });
