@@ -52,7 +52,7 @@ export default defineConfig({
         storageState: 'playwright/.auth/user.json', // ชี้ไปที่ไฟล์ที่จะเซฟ
         viewport: null,
       },
-      dependencies: ['setup'],
+      // dependencies: ['setup'],
     },
   ],
 });
