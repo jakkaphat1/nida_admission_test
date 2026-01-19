@@ -30,7 +30,7 @@ export default defineConfig({
     launchOptions: {
       headless: false,  // ← เพิ่มตรงนี้ด้วย
       slowMo: 500,      // ← ชะลอให้เห็นชัดขึ้น (optional)
-      args: ['--start-maximized'],
+      args: ['--start-maximized','--disable-blink-features=AutomationControlled',]
     }
   },
 

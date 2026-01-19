@@ -17,9 +17,21 @@ test.describe('NIDA Admission Test Suite', () => {
   //   // 4. ตรวจสอบผลลัพธ์ที่คาดหวัง 
   //   await expect(page).toHaveURL(/.*admissions-uat.nida.ac.th/);
   // });
+  test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)', async ({ admissionPage, page }) => {
+    await admissionPage.goto();
+    await admissionPage.loginButton.click();
+    await admissionPage.fillEmail(admissionPage.email);
+    await expect(page).toHaveURL(/.*admissions-uat.nida.ac.th/);
+  });
 
+  test('TC-02 ทดสอบการเข้าสู่ระบบ', async ({ admissionPage, page }) => {
+    await admissionPage.goto();
+    await admissionPage.loginButton.click();
+    await admissionPage.fillEmail(admissionPage.email);
+    await expect(page).toHaveURL(/.*admissions-uat.nida.ac.th/);
+  });
 
-  test('TC-02 ทดสอบตรวจสอบข้อมูล Step 1:  ตรวจสอบหลักสูตรที่เลือกและทุนการศึกษา', async ({ admissionPage, page }) => {
+  test('TC-03 ทดสอบตรวจสอบข้อมูล Step 1:  ตรวจสอบหลักสูตรที่เลือกและทุนการศึกษา', async ({ admissionPage, page }) => {
 
     // go to admissions-uat.nida.ac.th/programs
     await admissionPage.gotoPrograms();
