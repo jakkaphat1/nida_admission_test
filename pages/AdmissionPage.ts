@@ -27,6 +27,8 @@ export class AdmissionPage {
   googleLoginButton: Locator;
   noScoreText: Locator;
   registerWrittenExamButon : Locator;
+  saveButton: Locator;
+  nextButton: Locator;
 
   /**
 * GETTERS SECTION
@@ -50,6 +52,8 @@ export class AdmissionPage {
     this.googleLoginButton = page.locator(this.googleLoginSelector);
     this.noScoreText = page.getByText('ยังไม่มีคะแนน');
     this.registerWrittenExamButon = page.getByRole('button', { name: 'สมัครสอบข้อเขียน' });
+    this.saveButton = page.getByRole('button', { name: 'บันทึก' });
+    this.nextButton = page.getByRole('button', { name: 'ถัดไป' });
   }
 
 
@@ -100,4 +104,28 @@ export class AdmissionPage {
     this.registerWrittenExamButon = this.page.getByRole('button', { name: 'สมัครสอบข้อเขียน' });
     await this.registerWrittenExamButon.click();
   }
+
+  async selectEducationLevel(levelName: string) {
+    // 1. ระบุตำแหน่ง Dropdown
+    const dropdown = this.page.locator('.react-select__control')
+      .filter({ hasText: 'เลือกระดับการศึกษา' });
+
+    // สั่ง Scroll ไปหาและคลิกเพื่อเปิดเมนู
+    await dropdown.scrollIntoViewIfNeeded();
+    await dropdown.click();
+
+    // 2. เลือก Option จากเมนูที่เด้งขึ้นมา
+    // ใช้ getByText และ exact: true เพื่อความแม่นยำ (กันกรณีมีคำว่า "ปริญญาตรีต่อเนื่อง" โผล่มา)
+    const option = this.page.getByText(levelName, { exact: true });
+    await option.click();
+
+    // 3. กดปุ่ม บันทึก
+    await this.saveButton.click();
+
+    // 4. กดปุ่ม ถัดไป
+    await this.nextButton.click();
+  }
+
+
+
 }
