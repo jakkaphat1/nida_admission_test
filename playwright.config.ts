@@ -44,6 +44,8 @@ export default defineConfig({
 
     {
       name: 'chromium',
+      testMatch: '**/*.spec.ts',
+      testIgnore: '**/auth.setup.ts',
       use: { 
         // ...devices['Desktop Chrome'],
         browserName: 'chromium',
