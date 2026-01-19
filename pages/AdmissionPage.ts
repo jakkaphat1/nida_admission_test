@@ -3,20 +3,23 @@ import { Page, Locator } from '@playwright/test';
 export interface StudentInfo {
   firstEngName: string;
   lastEngName: string;
-  TelNumber: string;
-  email: string;
+  // TelNumber: string;
+  // email: string;
   inCountryAddress: boolean;
   
+  address : string;
   province  : string;
   district  : string;
   subDistrict : string;
-  postalCode  : string;
 
   graduatedInCountry: string;
   graduatedDate: string;
   universityName: string;
   educationalQualification: string;
   gpa: string;
+
+  experienceYear: string;
+  experienceMonth: string;
 }
 
 
@@ -37,14 +40,14 @@ export class AdmissionPage {
 
   firstEngNameInput: Locator;
   lastEngNameInput: Locator;
-  TelNumberInput: Locator;
-  emailInput: Locator;
+  // TelNumberInput: Locator;
+  // emailInput: Locator;
   inCountryAddressRadio: Locator;
 
+  addressInput : Locator;
   provinceInput  : Locator;
   districtInput  : Locator;
   subDistrictInput : Locator;
-  postalCodeInput  : Locator;
 
   graduatedInCountryRadio: Locator;
   graduatedDateInput: Locator;
@@ -53,6 +56,9 @@ export class AdmissionPage {
   gpaInput: Locator;
 
   workStatusRadio: Locator;
+  experienceYearInput: Locator;
+  experienceMonthInput: Locator;
+
   question1Radio: Locator;
   question2Radio: Locator;
   /**
@@ -103,18 +109,24 @@ export class AdmissionPage {
     // fill Student Info locators
     this.firstEngNameInput = page.locator('#first_name_en');
     this.lastEngNameInput = page.locator('#last_name_en');
-    this.TelNumberInput = page.locator('#mobile');
-    this.emailInput = page.locator('#email');
+    // this.TelNumberInput = page.locator('#mobile');
+    // this.emailInput = page.locator('#email');
     this.inCountryAddressRadio = page.getByRole('radio', { name: 'ที่อยู่ในประเทศ' });
-    this.provinceInput = page.locator('#province_code');
-    this.districtInput = page.locator('#district_code');
-    this.subDistrictInput = page.locator('#subdistrict_code');
-    this.postalCodeInput = page.locator('#zipcode');
+    this.addressInput = page.locator('[id="address.addr_detail"]');
+    this.provinceInput = page.locator('.react-select__control').filter({ hasText: 'จังหวัด' }).locator('input');
+    this.districtInput = page.locator('.react-select__control').filter({ hasText: 'เขต/อำเภอ' }).locator('input');
+    this.subDistrictInput = page.locator('.react-select__control').filter({ hasText: 'แขวง/ตำบล' }).locator('input');
+    
     this.graduatedInCountryRadio = page.getByRole('radio', { name: 'จบการศึกษาในประเทศ' });
     this.graduatedDateInput = page.locator('[id="edu_history[0].grad_date"]');
-    this.universityNameInput = page.locator('[id="edu_history[0].edu_sch_code"]');
-    this.educationalQualificationInput = page.locator('[id="edu_history[0].edu_degree_code"]');
-    this.gpaInput = page.locator('[id="work_status_code-1"]');
+    this.universityNameInput = page.locator('[id="edu_history[0].edu_sch_code"] input.react-select__input');
+    this.educationalQualificationInput = page.locator('.unext-form-control').filter({ hasText: 'เลือกวุฒิการศึกษา' }).locator('input.react-select__input');
+    this.gpaInput = page.locator('[id="edu_history[0].edu_gpa"]');
+
+    const workExpSection = page.locator('div').filter({ hasText: /^ประสบการณ์ทำงานหลังสำเร็จการศึกษา$/ }).locator('..');
+    this.experienceYearInput = workExpSection.locator('.react-select__control').filter({ hasText: 'เลือกปี' });
+    this.experienceMonthInput = workExpSection.locator('.react-select__control').filter({ hasText: 'เลือกเดือน' });
+    
     this.workStatusRadio = page.locator('[id="question[0].choice_id-7"]');
     this.question1Radio = page.locator('[id="question[0].choice_id-7"]');
     this.question2Radio = page.locator('[id="question[1].choice_id-16"]');
@@ -204,8 +216,10 @@ export class AdmissionPage {
   async fillStudentInfo(data: StudentInfo){
     await this.firstEngNameInput.fill(data.firstEngName);
     await this.lastEngNameInput.fill(data.lastEngName);
-    await this.TelNumberInput.fill(data.TelNumber);
-    await this.emailInput.fill(data.email);
+    // await this.TelNumberInput.fill(data.TelNumber);
+    // await this.emailInput.fill(data.email);
+
+    await this.addressInput.fill(data.address);
 
     if (data.inCountryAddress) {
       // CASE: เป็นที่อยู่ในประเทศ
@@ -216,8 +230,18 @@ export class AdmissionPage {
       // 2. กรอกข้อมูลจังหวัด -> อำเภอ -> ตำบล
       // ต้องเช็คว่ามีข้อมูลส่งมาไหมก่อนกรอก เพื่อกัน error
       if (data.province) {
-        await this.provinceInput.fill(data.province);
+        // 1. คลิกไปที่ช่องก่อนเพื่อให้ Focus
+        await this.provinceInput.click();
+
+        // 2. พิมพ์ชื่อจังหวัดลงไปทีละตัว (ใช้ .pressSequentially จะเหมือนคนพิมพ์จริงและเสถียรกว่าสำหรับ React-Select)
+        await this.provinceInput.pressSequentially(data.province, { delay: 100 });
+
+        // 3. รอให้เมนูตัวเลือกปรากฏขึ้น (React-Select จะสร้าง list ขึ้นมาใหม่)
+        // แล้วกด Enter เพื่อเลือกตัวเลือกแรก
         await this.page.keyboard.press('Enter');
+        
+        // ป้องกันจังหวะหน่วงของระบบ
+        await this.page.waitForTimeout(500); 
       }
 
       if (data.district) {
@@ -230,18 +254,44 @@ export class AdmissionPage {
         await this.page.keyboard.press('Enter');
       }
 
-      if (data.postalCode) {
-        await this.postalCodeInput.fill(data.postalCode);
-      }
     }  
 
     await this.page.getByRole('radio', { name: data.graduatedInCountry }).check();
     await this.graduatedDateInput.fill(data.graduatedDate);
     await this.universityNameInput.fill(data.universityName);
     await this.page.keyboard.press('Enter');
-    await this.educationalQualificationInput.fill(data.educationalQualification);
+
+    if (data.educationalQualification) {
+      // 1. คลิกช่อง
+      await this.educationalQualificationInput.click();
+
+      await this.educationalQualificationInput.pressSequentially(data.educationalQualification, { delay: 150 });
+
+      await this.page.locator('.react-select__menu').waitFor({ state: 'visible' });
+
+      await this.page.keyboard.press('Enter');
+      
+      await this.page.waitForTimeout(500);
+  }
+
     await this.page.keyboard.press('Enter');
     await this.gpaInput.fill(data.gpa);
+
+    if (data.experienceYear) {
+        await this.experienceYearInput.click(); // คลิกเปิดช่องปี
+        // เลือกจากรายการที่เด้งขึ้นมา
+        await this.page.getByRole('option', { name: data.experienceYear, exact: true }).click();
+        await this.page.waitForTimeout(300);
+    }
+
+    if (data.experienceMonth) {
+        await this.experienceMonthInput.click(); // คลิกเปิดช่องเดือน
+        // เลือกจากรายการที่เด้งขึ้นมา
+        await this.page.getByRole('option', { name: data.experienceMonth, exact: true }).click();
+    }
+
+
+
     await this.workStatusRadio.check();
     await this.question1Radio.check();
     await this.question2Radio.check();

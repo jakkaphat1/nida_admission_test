@@ -110,24 +110,28 @@ test.describe('NIDA Admission Test Suite', () => {
 
     // mock data ของ นศ
     const myStudentData = {
-        firstEngName: 'Eva',
+        firstEngName: 'Nuey',
         lastEngName: 'Todsob',
-        TelNumber: '0812345678',
-        email: 'jakkaphatz2004@gmail.com',
+        // TelNumber: '0812345678',
+        // email: 'jakkaphatz2004@gmail.com',
         
         // Logic ที่อยู่: เลือกในประเทศ
-        inCountryAddress: true, 
+        inCountryAddress: true,
+        address: '123 ถนนสุขุมวิท',
         province: 'กรุงเทพมหานคร',
         district: 'จตุจักร',
         subDistrict: 'จอมพล',
-        postalCode: '10900',
 
         // การศึกษา
         graduatedInCountry: 'จบการศึกษาในประเทศ', // ต้องตรงกับ Label ปุ่ม Radio
         graduatedDate: '01012565',
         universityName: 'จุฬาลงกรณ์มหาวิทยาลัย',
         educationalQualification: 'สัตวแพทยศาสตรบัณฑิต',
-        gpa: '3.50'
+        gpa: '3.50',
+        experienceYear: '1 ปี',
+        experienceMonth: '6 เดือน',
+
+
       }
 
       await admissionPage.fillStudentInfo(myStudentData);
