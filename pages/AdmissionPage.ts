@@ -25,6 +25,8 @@ export class AdmissionPage {
   loginEmailInput: Locator;
   loginButton: Locator;
   googleLoginButton: Locator;
+  noScoreText: Locator;
+  registerWrittenExamButon : Locator;
 
   /**
 * GETTERS SECTION
@@ -46,6 +48,8 @@ export class AdmissionPage {
     this.loginEmailInput = page.locator(this.emailSelector);
     this.loginButton = page.locator(this.loginButtonSelector);
     this.googleLoginButton = page.locator(this.googleLoginSelector);
+    this.noScoreText = page.getByText('ยังไม่มีคะแนน');
+    this.registerWrittenExamButon = page.getByRole('button', { name: 'สมัครสอบข้อเขียน' });
   }
 
 
@@ -90,5 +94,10 @@ export class AdmissionPage {
   
   async gotoPrograms() {
     await this.page.goto('https://admissions-uat.nida.ac.th/programs');
-}
+  }
+
+  async clickRegisterWrittenExam() {
+    this.registerWrittenExamButon = this.page.getByRole('button', { name: 'สมัครสอบข้อเขียน' });
+    await this.registerWrittenExamButon.click();
+  }
 }

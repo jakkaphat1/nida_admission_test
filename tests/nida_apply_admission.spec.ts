@@ -17,6 +17,7 @@ test.describe('NIDA Admission Test Suite', () => {
   //   // 4. ตรวจสอบผลลัพธ์ที่คาดหวัง 
   //   await expect(page).toHaveURL(/.*admissions-uat.nida.ac.th/);
   // });
+
   test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)', async ({ admissionPage, page }) => {
     await admissionPage.goto();
     await admissionPage.loginButton.click();
@@ -31,7 +32,7 @@ test.describe('NIDA Admission Test Suite', () => {
     await expect(page).toHaveURL(/.*admissions-uat.nida.ac.th/);
   });
 
-  test('TC-03 ทดสอบตรวจสอบข้อมูล Step 1:  ตรวจสอบหลักสูตรที่เลือกและทุนการศึกษา', async ({ admissionPage, page }) => {
+  test('TC-03 ทดสอบตรวจสอบข้อมูล Step 1: ตรวจสอบหลักสูตรที่เลือกและทุนการศึกษา กรณีหลักสูตรที่สมัครต้องการคะแนนสอบ (ไม่มีคะแนนสอบ)', async ({ admissionPage, page }) => {
 
     // go to admissions-uat.nida.ac.th/programs
     await admissionPage.gotoPrograms();
@@ -40,10 +41,16 @@ test.describe('NIDA Admission Test Suite', () => {
     await page.waitForLoadState('networkidle');
     
     // กำหนดชื่อโครงการที่ต้องการทดสอบ
-    const projectName = 'โครงการโนว่าทดสอบ'; 
+    const projectName = 'รัฐประศาสนศาตรมหาบัณฑิต ภาคพิเศษ กรุงเทพมหานคร'; 
     await admissionPage.clickRegister(projectName);
 
     await expect(page.getByText(projectName)).toBeVisible();
+
+    //
+    await admissionPage.noScoreText.scrollIntoViewIfNeeded();
+    await expect(admissionPage.noScoreText).toBeVisible();
+
+    await admissionPage.clickRegisterWrittenExam();
   });
 
   
