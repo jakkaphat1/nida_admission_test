@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator , expect } from '@playwright/test';
 
 export interface StudentInfo {
   firstEngName: string;
@@ -254,7 +254,8 @@ export class AdmissionPage {
 
   async clickRegister(projectName: string) {
     const projectCard = this.page.locator('div[aria-label="card"]')
-      .filter({ has: this.page.locator('h3', { hasText: projectName }) });
+      .filter({ has: this.page.locator('h3', { hasText: projectName }) })
+      .first();
 
     await projectCard.waitFor({ state: 'visible', timeout: 15000 });
 
@@ -472,6 +473,170 @@ export class AdmissionPage {
 
     await this.saveButton.click();
   }
+
+
+  // method for verify step4
+  async verifyApplicationSummary(data: any, fileName: string) {
+
+        // ---------------------------------------------------------
+        // Section 1: ข้อมูลทั่วไป
+        // ---------------------------------------------------------
+        const checkRow = async (label: string, value: string) => {
+        // หา Element ที่มี class 'formItem_vertical'
+        const row = this.page.locator('.formItem_vertical').filter({ hasText: label }).first();
+        // เช็คว่าใน Row นั้น มีค่า Value ที่เราต้องการ
+        await expect(row.getByText(value)).toBeVisible();
+        };
+        await checkRow('Name', data.firstEngName);      // หา box ที่มีคำว่า Name และ Nueyyy
+        await checkRow('Last Name', data.lastEngName);    // หา box ที่มีคำว่า Last Name และ Todsob
+
+        await checkRow('เลขประจำตัวประชาชน', data.idCard);
+        await checkRow('วัน/เดือน/ปีเกิด', data.birthDate);
+        await checkRow('สัญชาติ', 'ไทย'); 
+        await checkRow('อีเมล', data.email);
+
+        // ---------------------------------------------------------
+        // Section 2: ข้อมูลที่อยู่ปัจจุบัน
+        // ---------------------------------------------------------
+        //เช็คที่อยู่
+        await checkRow('รายละเอียด', data.address);
+        await checkRow('จังหวัด', data.province);
+        await checkRow('เขต/อำเภอ', data.district);
+        await checkRow('แขวง/ตำบล', data.subDistrict);
+        await checkRow('รหัสไปรษณีย์', '10900');
+        await this.page.waitForTimeout(1000);
+
+        // ---------------------------------------------------------
+        // Section 3: ข้อมูลประวัติการศึกษา
+        // ---------------------------------------------------------
+        //เช็คประวัติการศึกษา
+        const eduSection = this.page.locator('.grid')
+            .filter({ has: this.page.getByText('ข้อมูลประวัติการศึกษาปัจจุบัน') })
+            .first();
+
+        await eduSection.scrollIntoViewIfNeeded();
+
+        const checkEduRow = async (label: string, value: string) => {
+             const row = eduSection.locator('.formItem_vertical').filter({ hasText: label }).first();
+             await expect(row).toContainText(value);
+        };
+
+        await checkEduRow('รายละเอียด', data.graduatedInCountry);
+        await checkEduRow('ระดับการศึกษาที่ใช้ในการสมัคร', 'ปริญญาตรี');
+        await checkEduRow('วันที่สำเร็จการศึกษา (พ.ศ.)', data.graduatedDate);
+        await checkEduRow('วุฒิการศึกษาที่ใช้ในการสมัคร', data.educationalQualification);
+        await checkEduRow('ชื่อสถาบันการศึกษา', data.universityName);
+        await checkEduRow('คะแนนเฉลี่ยสะสม (GPA)', data.gpa);
+        await checkEduRow('เกียรตินิยม', data.honor);
+
+
+        // ---------------------------------------------------------
+        // Section 4: ข้อมูลประวัติการทำงาน
+        // ---------------------------------------------------------
+        const workSection = this.page.locator('.formLayout_container').filter({ hasText: 'ประสบการณ์การทำงาน' }).first();
+
+        const checkWorkRow = async (label: string, value: string) => {
+          // .first() จะทำให้เช็คเจอ งานปัจจุบัน (ที่อยู่ด้านบน) ก่อนเสมอ
+          const row = workSection.locator('.formItem_vertical').filter({ hasText: label }).first();
+          const inputPart = row.locator('.formItem_input');
+          await expect(inputPart).toContainText(value);
+        };
+
+        await checkWorkRow('สถานภาพการทำงาน', 'ทำงาน'); 
+        await checkWorkRow('ประเภทอาชีพ', data.careerType);
+
+        // จัด Format ปี/เดือน ให้ตรงกับหน้าเว็บ (เช่น "1 ปี 6 เดือน")
+        const expText = `${data.experienceYear} ปี ${data.experienceMonth} เดือน`;
+        await checkWorkRow('ประสบการณ์ทำงานหลังสำเร็จการศึกษา', expText);
+
+        let totalExpText = `${data.allExperienceYear} ปี`;
+        if (data.allExperienceMonth && data.allExperienceMonth !== '0') {
+            totalExpText += ` ${data.allExperienceMonth} เดือน`;
+        }
+        await checkWorkRow('ประสบการณ์ทำงานทั้งหมด', totalExpText);
+
+        // ส่วนที่ 4.2: รายละเอียดงานปัจจุบัน
+        await checkWorkRow('สถานที่ทำงานปัจจุบัน', data.currentWorkPlace);
+
+        // เงินเดือน (ต้อง Format เป็น 50,000.00)
+        const formattedSalary = Number(data.salary).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        await checkWorkRow('เงินเดือน', formattedSalary);
+
+        // ตำแหน่ง & ธุรกิจ
+        await checkWorkRow('ตำแหน่งงาน', data.workPosition);
+        await checkWorkRow('ประเภทธุรกิจ', data.workType);
+
+        await checkWorkRow('โทรศัพท์', data.workTelNumber);
+
+
+        // ---------------------------------------------------------
+        // Section 5: ข้อมูลคะแนนสอบภาษาอังกฤษ
+        // ---------------------------------------------------------
+        const scoreSection = this.page.locator('.space-y-4.rounded-xl.border').last();
+
+        const checkTestScore = async (testName: string, score: string) => {
+        const row = scoreSection.locator('.flex.justify-between').filter({ hasText: testName }).first();
+        
+        await expect(row).toBeVisible();
+
+        await expect(row.getByText(score, { exact: true })).toBeVisible();
+        };  
+
+        await checkTestScore('IELTS', '9');
+        await checkTestScore('TOEIC', '990');
+        await checkTestScore('TOEFL CBT', '300');
+        await checkTestScore('TOEFL IBT', '95');
+        await checkTestScore('TOEFL ITP (NIDA)', '600');
+        await checkTestScore('GMAT', '800');
+        await checkTestScore('NIDA TEAP', '120');
+
+        // ---------------------------------------------------------
+        // Section 6: ข้อมูลแบบสอบถาม
+        // ---------------------------------------------------------
+        const surveySection = this.page.locator('.formLayout_container')
+        .filter({ hasText: 'สถาบันขอความอนุเคราะห์' })
+        .first();
+
+        const checkSurveyRow = async (questionPart: string, answer: string) => {
+            const row = surveySection.locator('.formItem_vertical').filter({ hasText: questionPart }).first();
+            
+            await expect(row.getByText(answer)).toBeVisible();
+        };
+
+        await checkSurveyRow('ท่านเป็นบุคคลแรก', 'ใช่'); 
+        await checkSurveyRow('ท่านทราบข่าวจากสื่อใด', 'เว็บไซต์สถาบัน');
+
+
+        // ---------------------------------------------------------
+        // Section 7: ตรวจสอบเอกสารแนบ (Uploaded Documents)
+        // ---------------------------------------------------------
+        const checkUploadedFile = async (docName: string) => {
+        
+        // ใช้ locator ที่เจาะจง class 'flex' ร่วมกับการ filter
+        const fileRow = this.page.locator('.flex.items-center')
+            .filter({ hasText: docName })    
+            .filter({ has: this.page.locator('svg.text-success') }) // ต้องมีไอคอนเขียว
+            .first();
+
+        // ยืนยันว่าเจอแถวนี้จริงๆ
+        await expect(fileRow).toBeVisible();
+    };
+        
+        // เช็ค "สำเนาบัตรประชาชน"
+        await checkUploadedFile('สำเนาบัตรประชาชน');
+    }
+
+
+
+
+
+
+
+
+
 
 
 }

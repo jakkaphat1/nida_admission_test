@@ -188,7 +188,70 @@ test.describe('NIDA Admission Test Suite', () => {
 
     await admissionPage.uploadIdCard(idCardFilePath);
 
-    await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
+     await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
   });
+
+
+  test('TC-06 ทดสอบส่งใบสมัครที่ Step 4: ส่งใบสมัคร', async ({ admissionPage, page }) => {
+    test.setTimeout(60000);
+
+    const myStudentData = {
+        //ข้อมูลทั่วไป 
+        firstEngName: 'Nueyyy',
+        lastEngName: 'Todsob',
+        idCard: '7088581998434', 
+        birthDate: '30/01/2547',
+        email: 'jakkaphat.dev@hotmail.com',
+
+        //ที่อยู่
+        inCountryAddress: true,
+        address: '123 ถนนสุขุมวิท',
+        province: 'กรุงเทพมหานคร',
+        district: 'จตุจักร',
+        subDistrict: 'จอมพล',
+
+        //การศึกษา
+        graduatedInCountry: 'จบการศึกษาในประเทศ',
+        graduatedDate: '01/01/2569',
+        universityName: 'จุฬาลงกรณ์มหาวิทยาลัย',
+        educationalQualification: 'สัตวแพทยศาสตรบัณฑิต',
+        gpa: '3.50',
+        honor: 'เกียรตินิยมอันดับ 1',
+
+        //ประสบการณ์ทำงาน
+        experienceYear: '1', 
+        experienceMonth: '6',
+        allExperienceYear: '2', 
+        allExperienceMonth: '0',
+        
+        careerType: 'พนักงานหน่วยงานเอกชน/ลูกจ้างหน่วยงานเอกชน',
+        currentWorkPlace: '333/11 ต.ในเมือง อ.เมือง จ.ขอนแก่น 40000',
+        salary: '50000', 
+        workPosition: 'QA Tester',
+        workType: 'บริการโซลูชันระบบเทคโนโลยีสารสนเทศและดิจิทัล',
+        workTelNumber: '021234567',
+    };
+
+      const expectedFileName = 'สำเนาบัตรประชาชน';
+          
+    // go to admissions-uat.nida.ac.th/programs
+      await admissionPage.gotoPrograms();
+      await page.waitForLoadState('networkidle');
+
+      const projectName = 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)';
+      await admissionPage.clickRegister(projectName);
+      await admissionPage.handleDuplicateProjectPopup();
+
+      await admissionPage.verifyApplicationSummary(myStudentData, expectedFileName);
+  });
+
+
+
+
+
+
+
+
+
 
 });
