@@ -65,8 +65,6 @@ export class AdmissionPage {
 
   firstEngNameInput: Locator;
   lastEngNameInput: Locator;
-  // TelNumberInput: Locator;
-  // emailInput: Locator;
   inCountryAddressRadio: Locator;
 
   addressInput : Locator;
@@ -162,8 +160,6 @@ export class AdmissionPage {
     // fill Student Info locators
     this.firstEngNameInput = page.locator('#first_name_en');
     this.lastEngNameInput = page.locator('#last_name_en');
-    // this.TelNumberInput = page.locator('#mobile');
-    // this.emailInput = page.locator('#email');
     this.inCountryAddressRadio = page.getByRole('radio', { name: 'ที่อยู่ในประเทศ' });
     this.addressInput = page.locator('[id="address.addr_detail"]');
     this.provinceInput = page.locator('.react-select__control').filter({ hasText: 'จังหวัด' }).locator('input');
@@ -243,16 +239,12 @@ export class AdmissionPage {
     const projectCard = this.page.locator('div[aria-label="card"]')
       .filter({ has: this.page.locator('h3', { hasText: projectName }) });
 
-    // ตรวจสอบสถานะการมองเห็น และการมีอยู่ของข้อมูล
     await projectCard.waitFor({ state: 'visible', timeout: 15000 });
 
-    // สั่ง Scroll แบบบังคับเพื่อให้ Card มาอยู่กลางจอ
     await projectCard.scrollIntoViewIfNeeded();
 
-    // หาปุ่ม "สมัครเรียน" ภายใน Card นั้นโดยตรง
     const registerBtn = projectCard.getByRole('button', { name: 'สมัครเรียน' });
     
-    // คลิก
     await registerBtn.click();
   
   }
@@ -267,34 +259,24 @@ export class AdmissionPage {
   }
 
   async selectEducationLevel(levelName: string) {
-    // 1. ระบุตำแหน่ง Dropdown
     const dropdown = this.page.locator('.react-select__control')
       .filter({ hasText: 'เลือกระดับการศึกษา' });
 
-    // สั่ง Scroll ไปหาและคลิกเพื่อเปิดเมนู
     await dropdown.scrollIntoViewIfNeeded();
     await dropdown.click();
-
-    // 2. เลือก Option จากเมนูที่เด้งขึ้นมา
-    // ใช้ getByText และ exact: true เพื่อความแม่นยำ (กันกรณีมีคำว่า "ปริญญาตรีต่อเนื่อง" โผล่มา)
     const option = this.page.getByText(levelName, { exact: true });
     await option.click();
 
-    // 3. กดปุ่ม บันทึก
     await this.saveButton.click();
 
-    // 4. กดปุ่ม ถัดไป
     await this.nextButton.click();
   }
 
   async handleDuplicateProjectPopup() {
     try { 
-      //รอให้ข้อความ popup ปรากฏขึ้นมาภายใน 2 วิ
       await this.duplicateProjectPopupText.waitFor({ state: 'visible' , timeout : 2000 });
       await this.confirmProjectDuplicateButton.click();
     }catch (e) {
-      // ถ้าเกิน 2 วินาทีแล้ว Popup ไม่ขึ้น จะเข้า catch 
-      // ไม่ต้องทำอะไร ปล่อยผ่านไป 
       console.log('ไม่เจอ Popup สมัครซ้ำ: ดำเนินการต่อตามปกติ')
     }
   }
@@ -306,25 +288,13 @@ export class AdmissionPage {
     await this.addressInput.fill(data.address);
 
     if (data.inCountryAddress) {
-      // CASE: เป็นที่อยู่ในประเทศ
-      
-      // 1. กดปุ่ม Radio "ในประเทศ"
       await this.inCountryAddressRadio.check();
-
-      // 2. กรอกข้อมูลจังหวัด -> อำเภอ -> ตำบล
-      // ต้องเช็คว่ามีข้อมูลส่งมาไหมก่อนกรอก เพื่อกัน error
       if (data.province) {
-        // 1. คลิกไปที่ช่องก่อนเพื่อให้ Focus
         await this.provinceInput.click();
-
-        // 2. พิมพ์ชื่อจังหวัดลงไปทีละตัว (ใช้ .pressSequentially จะเหมือนคนพิมพ์จริงและเสถียรกว่าสำหรับ React-Select)
         await this.provinceInput.pressSequentially(data.province, { delay: 100 });
 
-        // 3. รอให้เมนูตัวเลือกปรากฏขึ้น (React-Select จะสร้าง list ขึ้นมาใหม่)
-        // แล้วกด Enter เพื่อเลือกตัวเลือกแรก
         await this.page.keyboard.press('Enter');
-        
-        // ป้องกันจังหวะหน่วงของระบบ
+      
         await this.page.waitForTimeout(500); 
       }
 
@@ -341,9 +311,6 @@ export class AdmissionPage {
     }  
 
     await this.page.getByRole('radio', { name: data.graduatedInCountry }).check();
-    // await this.graduatedDateInput.fill(data.graduatedDate);
-
-    // ใน method fillStudentInfo(data: StudentInfo)
 
     if (data.graduatedDate) {
         const targetDay = data.graduatedDate.split('/')[0];
@@ -384,41 +351,34 @@ export class AdmissionPage {
     await this.gpaInput.fill(data.gpa);
 
     if (data.honor) {
-      // 1. คลิกที่กล่องเพื่อให้รายการกางออก (Dropdown)
       await this.honorInput.click();
 
-      // 2. รอให้เมนูตัวเลือกปรากฏขึ้นมา
       const menu = this.page.locator('.react-select__menu');
       await menu.waitFor({ state: 'visible' });
 
-      // 3. คลิกเลือกรายการที่มีข้อความตรงกับ data.honor
       await menu.getByText(data.honor, { exact: true }).click();
       await this.page.waitForTimeout(500);
     }
 
     if (data.experienceYear) {
-        await this.experienceYearInput.click(); // คลิกเปิดช่องปี
-        // เลือกจากรายการที่เด้งขึ้นมา
+        await this.experienceYearInput.click(); 
         await this.page.getByRole('option', { name: data.experienceYear, exact: true }).click();
         await this.page.waitForTimeout(300);
     }
 
     if (data.experienceMonth) {
-        await this.experienceMonthInput.click(); // คลิกเปิดช่องเดือน
-        // เลือกจากรายการที่เด้งขึ้นมา
+        await this.experienceMonthInput.click(); 
         await this.page.getByRole('option', { name: data.experienceMonth, exact: true }).click();
     }
 
     if (data.allExperienceYear) {
-        await this.allexperienceYearInput.click(); // คลิกเปิดช่องปี
-        // เลือกจากรายการที่เด้งขึ้นมา
+        await this.allexperienceYearInput.click();
         await this.page.getByRole('option', { name: data.allExperienceYear, exact: true }).click();
         await this.page.waitForTimeout(300);
     }
 
     if (data.allExperienceMonth) {
-        await this.allexperienceMonthInput.click(); // คลิกเปิดช่องเดือน
-        // เลือกจากรายการที่เด้งขึ้นมา
+        await this.allexperienceMonthInput.click();
         await this.page.getByRole('option', { name: data.allExperienceMonth, exact: true }).click();
     }
 
