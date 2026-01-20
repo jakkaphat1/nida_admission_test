@@ -63,6 +63,9 @@ export class AdmissionPage {
   duplicateProjectPopupText: Locator;
   confirmProjectDuplicateButton: Locator;
 
+  /**
+ * STEP 2 LOCATORS SECTION
+ * ---------------------------------------------------------------- */
   firstEngNameInput: Locator;
   lastEngNameInput: Locator;
   inCountryAddressRadio: Locator;
@@ -108,10 +111,16 @@ export class AdmissionPage {
   toeflitpScoreInput: Locator;
   gmatScoreInput: Locator;
   nidateapScoreInput: Locator;
-
-
   question1Radio: Locator;
   question2Radio: Locator;
+
+/**
+ * STEP 3 LOCATORS SECTION
+ * ---------------------------------------------------------------- */
+  idCardUploadInput: Locator;
+
+
+
   /**
  * TEST DATA SECTION
  * ---------------------------------------------------------------- */
@@ -146,6 +155,7 @@ export class AdmissionPage {
  * ---------------------------------------------------------------- */
   constructor(page: Page) {
     //ผูก Selector เข้ากับ Locator
+    // step1 constructor locators
     this.page = page;
     this.loginEmailInput = page.locator(this.emailSelector);
     this.loginButton = page.locator(this.loginButtonSelector);
@@ -157,7 +167,7 @@ export class AdmissionPage {
     this.duplicateProjectPopupText = page.getByText('คุณสมัครโครงการนี้แล้ว!');
     this.confirmProjectDuplicateButton = page.getByRole('button', { name: 'ยืนยัน' });
 
-    // fill Student Info locators
+    // step2 constructor locators
     this.firstEngNameInput = page.locator('#first_name_en');
     this.lastEngNameInput = page.locator('#last_name_en');
     this.inCountryAddressRadio = page.getByRole('radio', { name: 'ที่อยู่ในประเทศ' });
@@ -213,6 +223,13 @@ export class AdmissionPage {
 
     this.question1Radio = page.locator('[id="question[0].choice_id-7"]');
     this.question2Radio = page.locator('[id="question[1].choice_id-16"]');
+
+
+    // step3 constructor locators
+    this.idCardUploadInput = page
+            .locator('div', { hasText: 'สำเนาบัตรประชาชน' }) // หาโซนบัตรประชาชน
+            .getByRole('button', { name: 'เลือกไฟล์' });      // หาปุ่มในโซนนั้น
+    
   }
 
   // Method
@@ -439,6 +456,19 @@ export class AdmissionPage {
 
     await this.question1Radio.check();
     await this.question2Radio.check();
+
+    await this.saveButton.click();
+  }
+
+
+  async uploadIdCard(filePath: string) {
+    const fileChooserPromise = this.page.waitForEvent('filechooser');
+
+    await this.idCardUploadInput.click();
+  
+    const fileChooser = await fileChooserPromise;
+
+    await fileChooser.setFiles(filePath);
 
     await this.saveButton.click();
   }

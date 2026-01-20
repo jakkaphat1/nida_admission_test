@@ -1,5 +1,6 @@
 import { test, expect } from '../fixtures/baseTest';
 import { AdmissionPage } from '../pages/AdmissionPage';
+import path from 'path';
 
 // test.use({ storageState: 'playwright/.auth/user.json' });
 
@@ -161,6 +162,33 @@ test.describe('NIDA Admission Test Suite', () => {
       await admissionPage.fillStudentInfo(myStudentData);
       await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
 
+  });
+
+  test('TC-05 ทดสอบแนบเอกสารที่ Step 3: แนบเอกสาร', async ({ admissionPage, page }) => {
+    test.setTimeout(60000);
+    
+    // go to admissions-uat.nida.ac.th/programs
+    await admissionPage.gotoPrograms();
+
+    // รอให้หน้าโหลดเสร็จสมบูรณ์
+    await page.waitForLoadState('networkidle');
+    
+    // กำหนดชื่อโครงการที่ต้องการทดสอบ
+    const projectName = 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)';
+    await admissionPage.clickRegister(projectName);
+
+    await expect(page.getByText(projectName)).toBeVisible();
+    await page.waitForLoadState('networkidle');
+
+    // handle duplicate project popup
+    await admissionPage.handleDuplicateProjectPopup();
+
+    // ใช้ method uploadIdCard เพื่ออัปโหลดไฟล์บัตรประชาชน
+    const idCardFilePath = 'C:\\Users\\Lenovo\\Downloads\\สำเนาบัตรประชาน - ทดสอบ.jpg';
+
+    await admissionPage.uploadIdCard(idCardFilePath);
+
+    await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
   });
 
 });
