@@ -91,6 +91,8 @@ test.describe('NIDA Admission Test Suite', () => {
   });
 
   test('TC-04 ทดสอบกรอกข้อมูล Step 2: กรอกข้อมูลเบื้องต้น ', async ({ admissionPage, page }) => {
+    test.setTimeout(60000);
+    
     // go to admissions-uat.nida.ac.th/programs
     await admissionPage.gotoPrograms();
 
@@ -110,7 +112,7 @@ test.describe('NIDA Admission Test Suite', () => {
 
     // mock data ของ นศ
     const myStudentData = {
-        firstEngName: 'Nuey',
+        firstEngName: 'Nueyyy',
         lastEngName: 'Todsob',
         // TelNumber: '0812345678',
         // email: 'jakkaphatz2004@gmail.com',
@@ -124,17 +126,40 @@ test.describe('NIDA Admission Test Suite', () => {
 
         // การศึกษา
         graduatedInCountry: 'จบการศึกษาในประเทศ', // ต้องตรงกับ Label ปุ่ม Radio
-        graduatedDate: '01012565',
+        graduatedDate: '01/01/2569',
         universityName: 'จุฬาลงกรณ์มหาวิทยาลัย',
         educationalQualification: 'สัตวแพทยศาสตรบัณฑิต',
         gpa: '3.50',
+        honor: 'เกียรตินิยมอันดับ 1',
         experienceYear: '1 ปี',
         experienceMonth: '6 เดือน',
+        allExperienceYear: '2 ปี',
+        allExperienceMonth: '0 เดือน',
+        careerType: 'พนักงานหน่วยงานเอกชน/ลูกจ้างหน่วยงานเอกชน',
 
+        currentWorkPlace: '333/11 ต.ในเมือง อ.เมือง จ.ขอนแก่น 40000',
+        salary: '50000',
+        workPosition: 'QA Tester',
+        workType: 'บริการโซลูชันระบบเทคโนโลยีสารสนเทศและดิจิทัล',
+        workTelNumber: '021234567',
 
+        currentWorkPlace2: '123 ต.ศิลา อ.เมือง จ.ขอนแก่น 40000',
+        salary2: '100000',
+        workPosition2: 'Senior QA Tester',
+        workType2: 'บริการโซลูชันระบบเทคโนโลยีสารสนเทศและดิจิทัล',
+        workTelNumber2: '0435001234',
+
+        ieltsScore: '9',
+        toeicScore: '990',
+        toeflcbtScore: '300',
+        toeflibtScore: '95',
+        toeflitpScore: '600',
+        gmatScore: '800',
+        nidateapScore: '120',
       }
 
       await admissionPage.fillStudentInfo(myStudentData);
+      await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
 
   });
 

@@ -17,9 +17,34 @@ export interface StudentInfo {
   universityName: string;
   educationalQualification: string;
   gpa: string;
+  honor : string;
 
   experienceYear: string;
   experienceMonth: string;
+  allExperienceYear?: string;
+  allExperienceMonth?: string;
+  careerType: string;
+
+  currentWorkPlace: string;
+  salary: string;
+  workPosition: string;
+  workType : string;
+  workTelNumber: string;
+
+  currentWorkPlace2: string;
+  salary2: string;
+  workPosition2: string;
+  workType2 : string;
+  workTelNumber2: string;
+
+  ieltsScore: string;
+  toeicScore: string;
+  toeflcbtScore: string;
+  toeflibtScore: string;
+  toeflitpScore: string;
+  gmatScore: string;
+  nidateapScore: string;
+
 }
 
 
@@ -51,13 +76,41 @@ export class AdmissionPage {
 
   graduatedInCountryRadio: Locator;
   graduatedDateInput: Locator;
+  graduatedDateIcon: Locator;
+  calendarPopup: Locator;
   universityNameInput: Locator;
   educationalQualificationInput: Locator;
   gpaInput: Locator;
+  honorInput : Locator;
 
   workStatusRadio: Locator;
   experienceYearInput: Locator;
   experienceMonthInput: Locator;
+  allexperienceYearInput: Locator;
+  allexperienceMonthInput: Locator;
+  careerTypeInput: Locator;
+
+  currentWorkPlaceInput: Locator;
+  salaryInput: Locator;
+  workPositionInput: Locator;
+  workTypeInput: Locator;
+  workTelNumberInput: Locator;
+  addWorkExperienceButton: Locator;
+
+  currentWorkPlaceInput2: Locator;
+  salaryInput2: Locator;
+  workPositionInput2: Locator;
+  workTypeInput2: Locator;
+  workTelNumberInput2: Locator;
+  
+  ieltsScoreInput: Locator;
+  toeicScoreInput: Locator;
+  toeflcbtScoreInput: Locator;
+  toeflibtScoreInput: Locator;
+  toeflitpScoreInput: Locator;
+  gmatScoreInput: Locator;
+  nidateapScoreInput: Locator;
+
 
   question1Radio: Locator;
   question2Radio: Locator;
@@ -118,16 +171,50 @@ export class AdmissionPage {
     this.subDistrictInput = page.locator('.react-select__control').filter({ hasText: 'แขวง/ตำบล' }).locator('input');
     
     this.graduatedInCountryRadio = page.getByRole('radio', { name: 'จบการศึกษาในประเทศ' });
+
     this.graduatedDateInput = page.locator('[id="edu_history[0].grad_date"]');
+    const dateContainer = page.locator('div')
+        .filter({ has: this.graduatedDateInput })
+        .last();
+    this.graduatedDateIcon = dateContainer.locator('.prefix_suffix_box svg');
+    this.calendarPopup = page.locator('.react-datepicker');
+
     this.universityNameInput = page.locator('[id="edu_history[0].edu_sch_code"] input.react-select__input');
     this.educationalQualificationInput = page.locator('.unext-form-control').filter({ hasText: 'เลือกวุฒิการศึกษา' }).locator('input.react-select__input');
     this.gpaInput = page.locator('[id="edu_history[0].edu_gpa"]');
+    this.honorInput = page.locator('.react-select__control').filter({ hasText: 'เลือกเกียรตินิยม' });
 
     const workExpSection = page.locator('div').filter({ hasText: /^ประสบการณ์ทำงานหลังสำเร็จการศึกษา$/ }).locator('..');
     this.experienceYearInput = workExpSection.locator('.react-select__control').filter({ hasText: 'เลือกปี' });
     this.experienceMonthInput = workExpSection.locator('.react-select__control').filter({ hasText: 'เลือกเดือน' });
     
+    const allworkExpSection = page.locator('div').filter({ hasText: /^ประสบการณ์ทำงานทั้งหมด$/ }).locator('..');
+    this.allexperienceYearInput = allworkExpSection.locator('.react-select__control').filter({ hasText: 'เลือกปี' });
+    this.allexperienceMonthInput = allworkExpSection.locator('.react-select__control').filter({ hasText: 'เลือกเดือน' });
+    this.careerTypeInput = page.locator('.react-select__control').filter({ hasText: 'ประเภทอาชีพ' });
     this.workStatusRadio = page.locator('[id="question[0].choice_id-7"]');
+
+    this.currentWorkPlaceInput = page.locator('[id="work_experience[0].comp_name"]');
+    this.salaryInput = page.locator('[id="work_experience[0].salary"]');
+    this.workPositionInput = page.locator('[id="work_experience[0].comp_position"]');
+    this.workTypeInput = page.locator('[id="work_experience[0].biz_type_name"]');
+    this.workTelNumberInput = page.locator('[id="work_experience[0].comp_tel"]');
+    this.addWorkExperienceButton = page.getByRole('button', { name: 'เพิ่มข้อมูลการทำงาน' });
+
+    this.currentWorkPlaceInput2 = page.locator('[id="work_experience[1].comp_name"]');
+    this.salaryInput2 = page.locator('[id="work_experience[1].salary"]');
+    this.workPositionInput2 = page.locator('[id="work_experience[1].comp_position"]');
+    this.workTypeInput2 = page.locator('[id="work_experience[1].biz_type_name"]');
+    this.workTelNumberInput2 = page.locator('[id="work_experience[1].comp_tel"]');
+
+    this.ieltsScoreInput = page.locator('[id="exam_score[0].exam_code"]');
+    this.toeicScoreInput = page.locator('[id="exam_score[1].exam_code"]');
+    this.toeflcbtScoreInput = page.locator('[id="exam_score[2].exam_code"]');
+    this.toeflibtScoreInput = page.locator('[id="exam_score[3].exam_code"]');
+    this.toeflitpScoreInput = page.locator('[id="exam_score[4].exam_code"]');
+    this.gmatScoreInput = page.locator('[id="exam_score[5].exam_code"]');
+    this.nidateapScoreInput = page.locator('[id="exam_score[6].exam_code"]');
+
     this.question1Radio = page.locator('[id="question[0].choice_id-7"]');
     this.question2Radio = page.locator('[id="question[1].choice_id-16"]');
   }
@@ -153,7 +240,6 @@ export class AdmissionPage {
   }
 
   async clickRegister(projectName: string) {
-    // เจาะจงไปที่ div ที่มี aria-label="card" และมีชื่อโครงการภายใน h3
     const projectCard = this.page.locator('div[aria-label="card"]')
       .filter({ has: this.page.locator('h3', { hasText: projectName }) });
 
@@ -216,8 +302,6 @@ export class AdmissionPage {
   async fillStudentInfo(data: StudentInfo){
     await this.firstEngNameInput.fill(data.firstEngName);
     await this.lastEngNameInput.fill(data.lastEngName);
-    // await this.TelNumberInput.fill(data.TelNumber);
-    // await this.emailInput.fill(data.email);
 
     await this.addressInput.fill(data.address);
 
@@ -257,7 +341,29 @@ export class AdmissionPage {
     }  
 
     await this.page.getByRole('radio', { name: data.graduatedInCountry }).check();
-    await this.graduatedDateInput.fill(data.graduatedDate);
+    // await this.graduatedDateInput.fill(data.graduatedDate);
+
+    // ใน method fillStudentInfo(data: StudentInfo)
+
+    if (data.graduatedDate) {
+        const targetDay = data.graduatedDate.split('/')[0];
+        const dayToClick = parseInt(targetDay).toString();
+
+        await this.graduatedDateInput.click();
+        await this.graduatedDateInput.fill(data.graduatedDate);
+        await this.page.waitForTimeout(500);
+
+        await this.graduatedDateIcon.click({ force: true });
+
+        const calendar = this.page.locator('.rmdp-calendar');
+        await calendar.waitFor({ state: 'visible' });
+        await calendar.locator('.rmdp-day:not(.rmdp-deactive)')
+            .getByText(dayToClick, { exact: true })
+            .click({ force: true });
+        await calendar.waitFor({ state: 'hidden' });
+    }
+
+    await this.page.keyboard.press('Enter');
     await this.universityNameInput.fill(data.universityName);
     await this.page.keyboard.press('Enter');
 
@@ -277,6 +383,19 @@ export class AdmissionPage {
     await this.page.keyboard.press('Enter');
     await this.gpaInput.fill(data.gpa);
 
+    if (data.honor) {
+      // 1. คลิกที่กล่องเพื่อให้รายการกางออก (Dropdown)
+      await this.honorInput.click();
+
+      // 2. รอให้เมนูตัวเลือกปรากฏขึ้นมา
+      const menu = this.page.locator('.react-select__menu');
+      await menu.waitFor({ state: 'visible' });
+
+      // 3. คลิกเลือกรายการที่มีข้อความตรงกับ data.honor
+      await menu.getByText(data.honor, { exact: true }).click();
+      await this.page.waitForTimeout(500);
+    }
+
     if (data.experienceYear) {
         await this.experienceYearInput.click(); // คลิกเปิดช่องปี
         // เลือกจากรายการที่เด้งขึ้นมา
@@ -290,13 +409,79 @@ export class AdmissionPage {
         await this.page.getByRole('option', { name: data.experienceMonth, exact: true }).click();
     }
 
+    if (data.allExperienceYear) {
+        await this.allexperienceYearInput.click(); // คลิกเปิดช่องปี
+        // เลือกจากรายการที่เด้งขึ้นมา
+        await this.page.getByRole('option', { name: data.allExperienceYear, exact: true }).click();
+        await this.page.waitForTimeout(300);
+    }
 
+    if (data.allExperienceMonth) {
+        await this.allexperienceMonthInput.click(); // คลิกเปิดช่องเดือน
+        // เลือกจากรายการที่เด้งขึ้นมา
+        await this.page.getByRole('option', { name: data.allExperienceMonth, exact: true }).click();
+    }
+
+    if (data.careerType) {
+        await this.careerTypeInput.click();
+
+        const careerMenu = this.page.locator('.react-select__menu');
+        await careerMenu.waitFor({ state: 'visible' });
+
+        await careerMenu.getByText(data.careerType, { exact: true }).click();
+        await this.page.waitForTimeout(300);
+    }
 
     await this.workStatusRadio.check();
+
+    if (data.currentWorkPlace) 
+      await this.currentWorkPlaceInput.fill(data.currentWorkPlace);
+    if (data.salary) 
+      await this.salaryInput.fill(data.salary);
+    if (data.workPosition) 
+      await this.workPositionInput.fill(data.workPosition);
+    if (data.workType) 
+      await this.workTypeInput.fill(data.workType);
+    if (data.workTelNumber) 
+      await this.workTelNumberInput.fill(data.workTelNumber);
+  
+    // กดปุ่ม เพิ่มข้อมูลการทำงาน
+    await this.addWorkExperienceButton.waitFor({ state: 'visible' });
+    await this.addWorkExperienceButton.click();
+
+    // กรอกข้อมูลที่ทำงานที่ 2 (ถ้ามี)
+    if (data.currentWorkPlace2) 
+      await this.currentWorkPlaceInput2.fill(data.currentWorkPlace2);
+    if (data.salary2) 
+      await this.salaryInput2.fill(data.salary2);
+    if (data.workPosition2) 
+      await this.workPositionInput2.fill(data.workPosition2);
+    if (data.workType2) 
+      await this.workTypeInput2.fill(data.workType2);
+    if (data.workTelNumber2) 
+      await this.workTelNumberInput2.fill(data.workTelNumber2);
+
+    // กรอกคะแนนสอบภาษาอังกฤษ
+    if (data.ieltsScore)
+      await this.ieltsScoreInput.fill(data.ieltsScore);
+    if (data.toeicScore)
+      await this.toeicScoreInput.fill(data.toeicScore);
+    if (data.toeflcbtScore)
+      await this.toeflcbtScoreInput.fill(data.toeflcbtScore); 
+    if (data.toeflibtScore)
+      await this.toeflibtScoreInput.fill(data.toeflibtScore);
+    if (data.toeflitpScore)
+      await this.toeflitpScoreInput.fill(data.toeflitpScore);
+    if (data.gmatScore)
+      await this.gmatScoreInput.fill(data.gmatScore);
+    if (data.nidateapScore)
+      await this.nidateapScoreInput.fill(data.nidateapScore);
+
     await this.question1Radio.check();
     await this.question2Radio.check();
-  }
 
+    await this.saveButton.click();
+  }
 
 
 }
