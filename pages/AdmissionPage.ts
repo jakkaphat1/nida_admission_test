@@ -722,7 +722,88 @@ export class AdmissionPage {
     }
         
 
+    async payWithBillPayment() {
+      const highlightAndCheck = async (locator: any) => {
+            await locator.scrollIntoViewIfNeeded();
+            await expect(locator).toBeVisible();
+            await locator.evaluate((node: HTMLElement) => {
+                node.style.transition = 'all 0.3s ease'; 
+                node.style.outline = '3px solid red';    
+                node.style.backgroundColor = '#ffff00';
+                node.style.boxShadow = '0 0 15px rgba(255,0,0,0.7)';
+            });
+            await this.page.waitForTimeout(500); 
+        };
 
+        const feeSummaryCard = this.page.locator('div')
+            .filter({ hasText: 'ชำระค่าสมัครอย่างเดียว' })
+            .filter({ hasText: '200.00 บาท' }) 
+            .last(); // เอาตัวล่าสุดเผื่อมีหลายอัน
+
+        await highlightAndCheck(feeSummaryCard);
+
+        const checkboxLocator = this.page.locator('svg[viewBox="0 0 20 21"]');
+
+        const billPaymentCard = this.page.locator('div')
+          .filter({ hasText: 'Bill Payment' })
+            .filter({ has: checkboxLocator }) 
+            .last();
+          
+        const checkBoxSVG = billPaymentCard.locator('svg[viewBox="0 0 20 21"]').first();    
+        await checkBoxSVG.scrollIntoViewIfNeeded();
+        await checkBoxSVG.evaluate((node: HTMLElement) => {
+            node.style.transition = 'all 0.2s';
+            node.style.border = '3px solid red';      
+            node.style.borderRadius = '50%';          
+            node.style.backgroundColor = 'yellow';   
+            node.style.transform = 'scale(1.5)';   
+        });
+        await this.page.waitForTimeout(500);
+        await checkBoxSVG.click();
+
+        // จ่ายเงิน
+        const payButton = this.page.locator('button.button_primary')
+            .filter({ hasText: 'ชำระเงิน' })
+            .first();
+        await expect(payButton).toBeEnabled();
+        await payButton.scrollIntoViewIfNeeded();
+
+        await payButton.evaluate((node: HTMLElement) => {
+             node.style.transition = 'all 0.2s';
+             node.style.border = '3px solid red';
+             node.style.backgroundColor = '#00ff00'; 
+             node.style.color = 'black';
+             node.style.boxShadow = '0 0 20px #00ff00';
+             node.style.transform = 'scale(1.05)';
+        });
+        await this.page.waitForTimeout(800);
+
+        await payButton.click();
+
+        // popup จ่ายเงิน
+        const modalPopup = this.page.locator('.modalAlert_container');
+        await expect(modalPopup).toBeVisible({ timeout: 2000 });
+
+        const confirmButton = modalPopup.locator('button.button_primary')
+            .filter({ hasText: 'ยืนยัน' })
+            .first();
+
+        await expect(confirmButton).toBeVisible();
+        await expect(confirmButton).toBeEnabled();
+
+        await confirmButton.evaluate((node: HTMLElement) => {
+            node.style.transition = 'all 0.2s';
+            node.style.border = '3px solid red';
+            node.style.backgroundColor = '#00ff00'; 
+            node.style.color = 'black';
+            node.style.fontWeight = 'bold';
+            node.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.8)';
+            node.style.transform = 'scale(1.1)';    
+        });
+
+        await this.page.waitForTimeout(800);
+        await confirmButton.click();
+    }
 
 
 

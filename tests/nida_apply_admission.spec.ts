@@ -253,6 +253,16 @@ test.describe('NIDA Admission Test Suite', () => {
   test('TC-07 ทดสอบชำระเงินที่ Step 5: ชำระเงิน', async ({ admissionPage, page }) => {
     test.setTimeout(60000);
 
+    await admissionPage.gotoPrograms();
+    await page.waitForLoadState('networkidle');
+
+    const projectName = 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)';
+    await admissionPage.clickRegister(projectName);
+    await admissionPage.handleDuplicateProjectPopup();
+    
+    await admissionPage.payWithBillPayment();
+
+    await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
   });
 
 
