@@ -267,6 +267,22 @@ test.describe('NIDA Admission Test Suite', () => {
     await admissionPage.downloadPaymentInvoice();
   });
 
+  test('TC-08 ทดสอบดูสถานะการสมัครเรียน', async ({ admissionPage, page }) => {
+    test.setTimeout(60000);
+
+    await admissionPage.gotoPrograms();
+    await page.waitForLoadState('networkidle');
+
+    const projectName = 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)';
+    await admissionPage.clickRegister(projectName);
+    await admissionPage.handleDuplicateProjectPopup();
+    
+    await admissionPage.payWithBillPayment();
+
+    await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
+
+    await admissionPage.checkApplicationStatus();
+  });
 
 
 
