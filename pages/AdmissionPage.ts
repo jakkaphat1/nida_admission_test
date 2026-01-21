@@ -476,24 +476,41 @@ export class AdmissionPage {
 
 
   // method for verify step4
-  async verifyApplicationSummary(data: any, fileName: string) {
+  async verifyApplicationSummary(data: any, fileName: string , expectedFee?: string) {
+        await this.page.waitForLoadState('networkidle');
 
+        // ทำ higlight แต่ยังไม่ได้ส่งไปเรียกใช้
+        const highlightAndCheck = async (locator: any) => {
+            await locator.scrollIntoViewIfNeeded();
+
+            await locator.evaluate((node: HTMLElement) => {
+                node.style.transition = 'all 0.3s ease'; 
+                node.style.outline = '3px solid red';    
+                node.style.backgroundColor = '#ffff00';  
+                node.style.color = '#000000';            
+                node.style.boxShadow = '0 0 10px rgba(255,0,0,0.5)'; 
+            });
+
+            await this.page.waitForTimeout(500);
+            await expect(locator).toBeVisible();
+        };      
         // ---------------------------------------------------------
         // Section 1: ข้อมูลทั่วไป
         // ---------------------------------------------------------
         const checkRow = async (label: string, value: string) => {
-        // หา Element ที่มี class 'formItem_vertical'
-        const row = this.page.locator('.formItem_vertical').filter({ hasText: label }).first();
-        // เช็คว่าใน Row นั้น มีค่า Value ที่เราต้องการ
-        await expect(row.getByText(value)).toBeVisible();
+            const row = this.page.locator('div.flex.items-center.gap-2.break-all')
+                .filter({ hasText: value }) 
+                .first();
+            await expect(row).toBeVisible({ timeout: 2000 });
         };
         await checkRow('Name', data.firstEngName);      // หา box ที่มีคำว่า Name และ Nueyyy
         await checkRow('Last Name', data.lastEngName);    // หา box ที่มีคำว่า Last Name และ Todsob
 
+
         await checkRow('เลขประจำตัวประชาชน', data.idCard);
-        await checkRow('วัน/เดือน/ปีเกิด', data.birthDate);
+        await checkRow('วัน/เดือน/ปีเกิด (พ.ศ.)', data.birthDate);
         await checkRow('สัญชาติ', 'ไทย'); 
-        await checkRow('อีเมล', data.email);
+        await checkRow('อีเมล (ที่ใช้สำหรับการติดต่อ)', data.email);
 
         // ---------------------------------------------------------
         // Section 2: ข้อมูลที่อยู่ปัจจุบัน
@@ -534,6 +551,8 @@ export class AdmissionPage {
         // Section 4: ข้อมูลประวัติการทำงาน
         // ---------------------------------------------------------
         const workSection = this.page.locator('.formLayout_container').filter({ hasText: 'ประสบการณ์การทำงาน' }).first();
+
+        await workSection.scrollIntoViewIfNeeded(); 
 
         const checkWorkRow = async (label: string, value: string) => {
           // .first() จะทำให้เช็คเจอ งานปัจจุบัน (ที่อยู่ด้านบน) ก่อนเสมอ
@@ -627,11 +646,45 @@ export class AdmissionPage {
         
         // เช็ค "สำเนาบัตรประชาชน"
         await checkUploadedFile('สำเนาบัตรประชาชน');
+
+
+        // ---------------------------------------------------------
+        // Section 8: ค่าธรรมเนียมการสมัคร
+        // ---------------------------------------------------------
+
+        if (expectedFee) {
+            const feeCard = this.page.locator('div')
+                .filter({ has: this.page.getByText('ค่าธรรมเนียมการสมัคร') })
+                .first();
+
+            // Scroll ไปหา
+            await feeCard.scrollIntoViewIfNeeded();
+            await expect(feeCard).toBeVisible();
+
+            await expect(feeCard).toContainText(expectedFee);
+
+        }
     }
 
+    async clickSendApplication() {
+        const sendBtn = this.page.locator('button.button_primary')
+            .filter({ hasText: 'ส่งใบสมัคร' })
+            .first();
 
+        await sendBtn.waitFor({ state: 'visible', timeout: 5000 });
+        await sendBtn.scrollIntoViewIfNeeded();
 
-
+        await sendBtn.evaluate((node: HTMLElement) => {
+            node.style.transition = 'all 0.2s';
+            node.style.border = '3px solid red';      
+            node.style.boxShadow = '0 0 15px red';    
+            node.style.backgroundColor = '#ffeb3b';   
+            node.style.color = 'black';               
+        });
+        await this.page.waitForTimeout(500); 
+        await sendBtn.click();
+    }
+        
 
 
 

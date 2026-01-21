@@ -233,6 +233,7 @@ test.describe('NIDA Admission Test Suite', () => {
     };
 
       const expectedFileName = 'สำเนาบัตรประชาชน';
+      const expectedFee = '200.00';
           
     // go to admissions-uat.nida.ac.th/programs
       await admissionPage.gotoPrograms();
@@ -242,9 +243,14 @@ test.describe('NIDA Admission Test Suite', () => {
       await admissionPage.clickRegister(projectName);
       await admissionPage.handleDuplicateProjectPopup();
 
-      await admissionPage.verifyApplicationSummary(myStudentData, expectedFileName);
+      await admissionPage.verifyApplicationSummary(myStudentData, expectedFileName , expectedFee);
   });
 
+
+  test('TC-07 ทดสอบชำระเงินที่ Step 5: ชำระเงิน', async ({ admissionPage, page }) => {
+    test.setTimeout(60000);
+
+  });
 
 
 
