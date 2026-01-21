@@ -188,7 +188,7 @@ test.describe('NIDA Admission Test Suite', () => {
 
     await admissionPage.uploadIdCard(idCardFilePath);
 
-     await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
+    await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
   });
 
 
@@ -244,6 +244,9 @@ test.describe('NIDA Admission Test Suite', () => {
       await admissionPage.handleDuplicateProjectPopup();
 
       await admissionPage.verifyApplicationSummary(myStudentData, expectedFileName , expectedFee);
+      await admissionPage.clickSendApplication();
+
+      await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
   });
 
 

@@ -511,6 +511,7 @@ export class AdmissionPage {
         await checkRow('วัน/เดือน/ปีเกิด (พ.ศ.)', data.birthDate);
         await checkRow('สัญชาติ', 'ไทย'); 
         await checkRow('อีเมล (ที่ใช้สำหรับการติดต่อ)', data.email);
+        await this.page.waitForTimeout(1000);
 
         // ---------------------------------------------------------
         // Section 2: ข้อมูลที่อยู่ปัจจุบัน
@@ -545,7 +546,7 @@ export class AdmissionPage {
         await checkEduRow('ชื่อสถาบันการศึกษา', data.universityName);
         await checkEduRow('คะแนนเฉลี่ยสะสม (GPA)', data.gpa);
         await checkEduRow('เกียรตินิยม', data.honor);
-
+        await this.page.waitForTimeout(1000);
 
         // ---------------------------------------------------------
         // Section 4: ข้อมูลประวัติการทำงาน
@@ -589,7 +590,7 @@ export class AdmissionPage {
         await checkWorkRow('ประเภทธุรกิจ', data.workType);
 
         await checkWorkRow('โทรศัพท์', data.workTelNumber);
-
+        await this.page.waitForTimeout(1000);
 
         // ---------------------------------------------------------
         // Section 5: ข้อมูลคะแนนสอบภาษาอังกฤษ
@@ -598,7 +599,7 @@ export class AdmissionPage {
 
         const checkTestScore = async (testName: string, score: string) => {
         const row = scoreSection.locator('.flex.justify-between').filter({ hasText: testName }).first();
-        
+        await row.scrollIntoViewIfNeeded();
         await expect(row).toBeVisible();
 
         await expect(row.getByText(score, { exact: true })).toBeVisible();
@@ -611,6 +612,7 @@ export class AdmissionPage {
         await checkTestScore('TOEFL ITP (NIDA)', '600');
         await checkTestScore('GMAT', '800');
         await checkTestScore('NIDA TEAP', '120');
+        await this.page.waitForTimeout(1000);
 
         // ---------------------------------------------------------
         // Section 6: ข้อมูลแบบสอบถาม
@@ -618,7 +620,7 @@ export class AdmissionPage {
         const surveySection = this.page.locator('.formLayout_container')
         .filter({ hasText: 'สถาบันขอความอนุเคราะห์' })
         .first();
-
+        await surveySection.scrollIntoViewIfNeeded();
         const checkSurveyRow = async (questionPart: string, answer: string) => {
             const row = surveySection.locator('.formItem_vertical').filter({ hasText: questionPart }).first();
             
@@ -627,7 +629,7 @@ export class AdmissionPage {
 
         await checkSurveyRow('ท่านเป็นบุคคลแรก', 'ใช่'); 
         await checkSurveyRow('ท่านทราบข่าวจากสื่อใด', 'เว็บไซต์สถาบัน');
-
+        await this.page.waitForTimeout(1000);
 
         // ---------------------------------------------------------
         // Section 7: ตรวจสอบเอกสารแนบ (Uploaded Documents)
@@ -639,14 +641,15 @@ export class AdmissionPage {
             .filter({ hasText: docName })    
             .filter({ has: this.page.locator('svg.text-success') }) // ต้องมีไอคอนเขียว
             .first();
-
+        
+        await fileRow.scrollIntoViewIfNeeded();   
         // ยืนยันว่าเจอแถวนี้จริงๆ
         await expect(fileRow).toBeVisible();
     };
         
         // เช็ค "สำเนาบัตรประชาชน"
         await checkUploadedFile('สำเนาบัตรประชาชน');
-
+        await this.page.waitForTimeout(1000);
 
         // ---------------------------------------------------------
         // Section 8: ค่าธรรมเนียมการสมัคร
@@ -662,8 +665,8 @@ export class AdmissionPage {
             await expect(feeCard).toBeVisible();
 
             await expect(feeCard).toContainText(expectedFee);
-
         }
+        await this.page.waitForTimeout(1000);
     }
 
     async clickSendApplication() {
@@ -683,6 +686,39 @@ export class AdmissionPage {
         });
         await this.page.waitForTimeout(500); 
         await sendBtn.click();
+        
+
+        // popup handling steps
+        const checkbox = this.page.locator('input.checkbox_input_box').first();
+        await expect(checkbox).toBeVisible();
+
+        await checkbox.evaluate((node: HTMLElement) => {
+             node.style.transition = 'all 0.2s';
+             node.style.outline = '3px solid red';        
+             node.style.boxShadow = '0 0 10px red';      
+             node.style.transform = 'scale(1.5)';         
+             node.style.accentColor = 'yellow';
+        });
+        await this.page.waitForTimeout(500); 
+
+        // สั่งกดที่ตัว Checkbox โดยตรง
+        await checkbox.click();
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' });
+
+        await expect(confirmBtn).toBeEnabled();
+
+        await confirmBtn.evaluate((node: HTMLElement) => {
+             node.style.transition = 'all 0.2s';
+             node.style.border = '3px solid red';
+             node.style.backgroundColor = '#00ff00';
+             node.style.color = 'black';
+        });
+        await this.page.waitForTimeout(500);
+
+        // กดปุ่มยืนยัน
+        await confirmBtn.click();
+
+
     }
         
 
