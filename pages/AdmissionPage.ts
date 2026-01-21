@@ -805,6 +805,27 @@ export class AdmissionPage {
         await confirmButton.click();
     }
 
+    async downloadPaymentInvoice() {
+      await this.page.waitForLoadState('networkidle');
+      await this.page.waitForTimeout(2000);
+
+      const downloadBtn = this.page.getByRole('button', { name: 'ดาวน์โหลดใบแจ้งหนี้' });
+      await expect(downloadBtn).toBeVisible();
+
+      const downloadPromise = this.page.waitForEvent('download');
+      await downloadBtn.click();
+
+      const download = await downloadPromise;
+
+      const fileName = download.suggestedFilename();
+      const filePath = `./downloads/${fileName}`;
+      
+      await download.saveAs(filePath);
+
+      console.log(`Downloaded file saved to: ${filePath}`);
+      return filePath;
+};
+
 
 
 

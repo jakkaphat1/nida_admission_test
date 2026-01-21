@@ -263,6 +263,8 @@ test.describe('NIDA Admission Test Suite', () => {
     await admissionPage.payWithBillPayment();
 
     await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
+
+    await admissionPage.downloadPaymentInvoice();
   });
 
 
