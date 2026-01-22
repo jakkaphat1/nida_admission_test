@@ -25,6 +25,7 @@ export class ExamsPage {
  * LOCATORS SECTION
  * ---------------------------------------------------------------- */
     examsUrl = 'https://admissions-uat.nida.ac.th/exams';
+    examsUrlEdit = 'https://admissions-uat.nida.ac.th/application-status/apply-exam';
     searchSubjectInput: Locator;
     selectSubjectDropdown: Locator;
     selectEduLevelDropdown: Locator;
@@ -32,6 +33,8 @@ export class ExamsPage {
     examCard: Locator;
     applyExamButton2: Locator;
     editExamButton : Locator;
+    editInfoButton : Locator;
+    expandButton : Locator;
 
     //หน้ากรอกข้อมูลสมัครสอบ
     firstNameEngInput: Locator;
@@ -48,7 +51,13 @@ export class ExamsPage {
     educationalQualifications : Locator;
     gpa : Locator;
     sureveyRadio1 : Locator;
-    
+    selectNewSubjectButton : Locator;
+
+    // ตรวจสอบวิชา
+    subject9Card:Locator
+    popupConfirmBtn : Locator;
+
+
     // Handle Button
     saveButton : Locator;
     nextButton : Locator;
@@ -68,7 +77,12 @@ export class ExamsPage {
         this.applyExamButton = page.getByRole('button', { name: 'สมัครสอบข้อเขียน' }).first();
         this.examCard = page.locator('div[aria-label="card"]');
         this.applyExamButton2 = page.getByRole('button', { name: 'สมัครสอบข้อเขียน' });
-        this.editExamButton = page.getByRole('button', { name: 'แก้ไข' });
+        this.editExamButton = page.getByRole('button', { name: 'แก้ไข'  ,exact : true });
+        this.editInfoButton = page.getByRole('button', { name: 'แก้ไขข้อมูล' }).nth(1);
+        this.expandButton = page.locator('div')
+            .filter({ hasText: /^รายละเอียดสถานะการสมัคร$/ })
+            .locator('button, svg')
+            .last();
 
         // Fill Exam Application Page 
         this.firstNameEngInput = page.getByPlaceholder('ชื่อ (ภาษาอังกฤษ)');
@@ -93,6 +107,15 @@ export class ExamsPage {
         this.saveButton = page.getByRole('button', { name: 'บันทึก' });
         this.nextButton = page.getByRole('button', { name: 'ถัดไป' });
     
+        // step 2
+        this.selectNewSubjectButton = page.getByRole('button', { name: 'เลือกวิชาใหม่', exact: true });
+        this.subject9Card = page.locator('div[aria-label="card"]')
+            .filter({ hasText: 'วิชาเฉพาะ 9' })
+            .filter({ hasText: '10/2568' });
+        this.popupConfirmBtn = page.getByRole('button', { name: 'ยืนยัน', exact: true });
+
+
+
     }
 
     /**
@@ -102,6 +125,12 @@ export class ExamsPage {
     async gotoExamsPage() {
         await this.page.goto(this.examsUrl);
         await expect(this.page).toHaveURL(/.*exams/);
+        await this.page.waitForLoadState('networkidle');
+    }
+
+    async gotoEditExamPage() {
+        await this.page.goto(this.examsUrlEdit);
+        await expect(this.page).toHaveURL(/.*apply-exam/);
         await this.page.waitForLoadState('networkidle');
     }
 
@@ -143,6 +172,7 @@ export class ExamsPage {
         await expect(this.applyExamButton2).toBeVisible();
         await this.applyExamButton2.click();
     }
+
 
     async fillExamApplicationForm(data : StudentInfoForApplyExam) {
         await this.page.waitForLoadState('networkidle');
@@ -232,11 +262,59 @@ export class ExamsPage {
 
     async saveButtonClick() {
         await this.saveButton.scrollIntoViewIfNeeded();
+        await this.saveButton.evaluate(el => el.style.border = '4px solid green');
         await this.saveButton.click();
     }
 
     async nextButtonClick() {
         await expect(this.nextButton).toBeEnabled({ timeout: 2000 });
         await this.nextButton.click();
+    }
+
+    async editExamBtn(){
+        await this.page.waitForLoadState('networkidle');
+        await this.editExamButton.scrollIntoViewIfNeeded();
+        await this.editExamButton.click();    
+    }
+
+    async expandButtonClick() {
+        await this.expandButton.scrollIntoViewIfNeeded();
+        await expect(this.expandButton).toBeVisible({ timeout: 5000 });
+        await this.expandButton.click({ force: true });
+        await this.page.waitForTimeout(500);
+    }
+
+    async editExamApplication() {
+        await this.page.waitForLoadState('networkidle');
+        await this.editInfoButton.scrollIntoViewIfNeeded();
+        await expect(this.editInfoButton).toBeEnabled({ timeout: 2000 });
+        await this.editInfoButton.evaluate(el => el.style.border = '3px solid red');
+        await this.editInfoButton.click({force : true});
+        await this.page.waitForTimeout(1000); 
+    }
+
+    async clickSelectNewSubject() {
+        await this.page.waitForLoadState('networkidle');
+
+        await this.selectNewSubjectButton.scrollIntoViewIfNeeded();
+        await expect(this.selectNewSubjectButton).toBeVisible({ timeout: 5000 });
+
+        await this.selectNewSubjectButton.evaluate(el => el.style.border = '3px solid red');
+
+        await this.selectNewSubjectButton.click({ force: true });
+    }
+
+    async selectSubject9() {
+        await this.page.waitForLoadState('networkidle');
+        await this.subject9Card.scrollIntoViewIfNeeded();
+        await this.subject9Card.evaluate(el => el.style.border = '3px solid green');
+
+        const radio = this.subject9Card.locator('input[type="radio"]');
+        await radio.click({ force: true });
+
+        await expect(radio).toBeChecked();
+        await this.popupConfirmBtn.evaluate(el => el.style.border = '4px solid green');
+        await this.popupConfirmBtn.click();
+
     }
 }

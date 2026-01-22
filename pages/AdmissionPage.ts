@@ -313,7 +313,7 @@ export class AdmissionPage {
 
         await this.page.keyboard.press('Enter');
       
-        await this.page.waitForTimeout(500); 
+        await this.page.waitForTimeout(500);
       }
 
       if (data.district) {

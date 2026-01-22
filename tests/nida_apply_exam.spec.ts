@@ -54,5 +54,20 @@ test.describe('NIDA Apply Exam Tests', () => {
         await examsPage.nextButtonClick();
     });
 
+    test('TC-04 ทดสอบตรวจสอบข้อมูลที่ Step 2: ตรวจสอบวิชา', async ({ admissionPage, examsPage, page }) => {
+        await examsPage.gotoEditExamPage();
+        await examsPage.expandButtonClick();
+        await examsPage.editExamApplication();
+
+        await examsPage.editExamBtn();
+        await expect(page.getByText('วิชาเฉพาะ 2')).toBeVisible();
+        // await examsPage.saveButtonClick();
+        // await expect(page.getByText('ทำรายการสำเร็จ !')).toBeVisible();
+        await examsPage.clickSelectNewSubject();
+        await examsPage.selectSubject9();
+        await examsPage.saveButtonClick();
+        await examsPage.nextButtonClick();
+    });
+
 
 });
