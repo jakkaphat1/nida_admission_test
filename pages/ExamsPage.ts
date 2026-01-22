@@ -48,7 +48,11 @@ export class ExamsPage {
     educationalQualifications : Locator;
     gpa : Locator;
     sureveyRadio1 : Locator;
+    
+    // Handle Button
     saveButton : Locator;
+    nextButton : Locator;
+
 
 
     /**
@@ -87,6 +91,7 @@ export class ExamsPage {
         this.gpa = page.getByPlaceholder('คะแนนเฉลี่ยสะสม (GPA)');
         this.sureveyRadio1 = page.locator('label').filter({ hasText: 'เว็บไซต์สถาบัน' });
         this.saveButton = page.getByRole('button', { name: 'บันทึก' });
+        this.nextButton = page.getByRole('button', { name: 'ถัดไป' });
     
     }
 
@@ -228,5 +233,10 @@ export class ExamsPage {
     async saveButtonClick() {
         await this.saveButton.scrollIntoViewIfNeeded();
         await this.saveButton.click();
+    }
+
+    async nextButtonClick() {
+        await expect(this.nextButton).toBeEnabled({ timeout: 2000 });
+        await this.nextButton.click();
     }
 }

@@ -50,6 +50,8 @@ test.describe('NIDA Apply Exam Tests', () => {
         await examsPage.saveButtonClick();
 
         await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible();
+
+        await examsPage.nextButtonClick();
     });
 
 
