@@ -23,5 +23,5 @@ test.describe('NIDA Apply Exam Tests', () => {
         await examsPage.chooseExam('วิชาเฉพาะ 2','ครั้งที่ 10/2568');
     });
 
-
+    
 });

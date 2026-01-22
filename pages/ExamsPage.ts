@@ -11,6 +11,7 @@ export class ExamsPage {
     selectEduLevelDropdown: Locator;
     applyExamButton: Locator;
     examCard: Locator;
+    applyExamButton2: Locator;
 
     /**
  * Constructor SECTION
@@ -22,6 +23,7 @@ export class ExamsPage {
         this.selectEduLevelDropdown = page.locator('.react-select__control').filter({ hasText: 'เลือกระดับการศึกษา' });
         this.applyExamButton = page.getByRole('button', { name: 'สมัครสอบข้อเขียน' }).first();
         this.examCard = page.locator('div[aria-label="card"]');
+        this.applyExamButton2 = page.getByRole('button', { name: 'สมัครสอบข้อเขียน' });
 
     }
 
@@ -68,6 +70,13 @@ export class ExamsPage {
         await applyBtn.click();
 
         await this.page.waitForLoadState('networkidle');
+        await this.page.waitForTimeout(1000);
+
+        await expect(this.applyExamButton2).toBeVisible();
+        await this.applyExamButton2.click();
     }
 
+    async fillExamApplicationForm() {
+
+    }
 }
