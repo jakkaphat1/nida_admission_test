@@ -33,7 +33,9 @@ export class ExamsPage {
     examCard: Locator;
     applyExamButton2: Locator;
     editExamButton : Locator;
+    editExamButton2 : Locator;
     editInfoButton : Locator;
+    editInfoButton2 : Locator;
     expandButton : Locator;
 
     //หน้ากรอกข้อมูลสมัครสอบ
@@ -61,6 +63,9 @@ export class ExamsPage {
     // Handle Button
     saveButton : Locator;
     nextButton : Locator;
+    sendApplicationButton : Locator;
+
+                
 
 
 
@@ -78,7 +83,9 @@ export class ExamsPage {
         this.examCard = page.locator('div[aria-label="card"]');
         this.applyExamButton2 = page.getByRole('button', { name: 'สมัครสอบข้อเขียน' });
         this.editExamButton = page.getByRole('button', { name: 'แก้ไข'  ,exact : true });
+        this.editExamButton2 = page.getByRole('button', { name: 'แก้ไข'  ,exact : true });
         this.editInfoButton = page.getByRole('button', { name: 'แก้ไขข้อมูล' }).nth(1);
+        this.editInfoButton2 = page.getByRole('button', { name: 'แก้ไขข้อมูล' }).nth(2);
         this.expandButton = page.locator('div')
             .filter({ hasText: /^รายละเอียดสถานะการสมัคร$/ })
             .locator('button, svg')
@@ -113,6 +120,7 @@ export class ExamsPage {
             .filter({ hasText: 'วิชาเฉพาะ 9' })
             .filter({ hasText: '10/2568' });
         this.popupConfirmBtn = page.getByRole('button', { name: 'ยืนยัน', exact: true });
+        this.sendApplicationButton =  page.getByRole('button', { name: 'ส่งใบสมัคร' , exact : true});
 
 
 
@@ -271,10 +279,10 @@ export class ExamsPage {
         await this.nextButton.click();
     }
 
-    async editExamBtn(){
+    async editExamBtn2(){
         await this.page.waitForLoadState('networkidle');
-        await this.editExamButton.scrollIntoViewIfNeeded();
-        await this.editExamButton.click();    
+        await this.editExamButton2.scrollIntoViewIfNeeded();
+        await this.editExamButton2.click();    
     }
 
     async expandButtonClick() {
@@ -290,6 +298,15 @@ export class ExamsPage {
         await expect(this.editInfoButton).toBeEnabled({ timeout: 2000 });
         await this.editInfoButton.evaluate(el => el.style.border = '3px solid red');
         await this.editInfoButton.click({force : true});
+        await this.page.waitForTimeout(1000); 
+    }
+
+    async editExamApplication3() {
+        await this.page.waitForLoadState('networkidle');
+        await this.editInfoButton2.scrollIntoViewIfNeeded();
+        await expect(this.editInfoButton2).toBeEnabled({ timeout: 2000 });
+        await this.editInfoButton2.evaluate(el => el.style.border = '3px solid red');
+        await this.editInfoButton2.click({force : true});
         await this.page.waitForTimeout(1000); 
     }
 
@@ -317,4 +334,36 @@ export class ExamsPage {
         await this.popupConfirmBtn.click();
 
     }
+
+    async sendApplicationBtn(){
+        await this.sendApplicationButton.scrollIntoViewIfNeeded();
+        await this.page.waitForTimeout(1000)
+        await this.sendApplicationButton.evaluate(el => el.style.border = '4px solid green');
+        await this.sendApplicationButton.click()
+    }
+
+    async handleConfirmExamPopup() {
+        const agreementText = this.page.getByText('ข้าพเจ้ายอมรับเงื่อนไขการสมัครสอบของระบบ');
+        await agreementText.waitFor({ state: 'visible', timeout: 10000 });
+
+        const container = this.page.locator('div.flex.justify-center').filter({ hasText: 'ข้าพเจ้ายอมรับเงื่อนไขการสมัครสอบของระบบ' });
+        const labelToClick = container.locator('label').first();
+        const visualBox = container.locator('div.rounded.grid').first(); 
+
+        await visualBox.evaluate((node: HTMLElement) => {
+            node.style.outline = '3px solid red';
+            node.style.boxShadow = '0 0 15px red';
+        });
+
+        await labelToClick.click();
+        const confirmBtn = this.page.getByRole('button', { name: 'สมัครสอบข้อเขียน' });
+        await expect(confirmBtn).toBeEnabled({ timeout: 5000 });
+        await confirmBtn.evaluate((node: HTMLElement) => {
+            node.style.border = '3px solid red';
+            node.style.backgroundColor = '#00ff00';
+        });
+        await this.page.waitForTimeout(300);
+        await confirmBtn.click();
+    }
+        
 }

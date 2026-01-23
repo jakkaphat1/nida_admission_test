@@ -59,13 +59,69 @@ test.describe('NIDA Apply Exam Tests', () => {
         await examsPage.expandButtonClick();
         await examsPage.editExamApplication();
 
-        await examsPage.editExamBtn();
+        await examsPage.editExamBtn2();
         await expect(page.getByText('วิชาเฉพาะ 2')).toBeVisible();
         // await examsPage.saveButtonClick();
         // await expect(page.getByText('ทำรายการสำเร็จ !')).toBeVisible();
         await examsPage.clickSelectNewSubject();
         await examsPage.selectSubject9();
         await examsPage.saveButtonClick();
+        await examsPage.nextButtonClick();
+    });
+
+    test('TC-05 ทดสอบส่งใบสมัครที่ Step 3: ส่งใบสมัคร', async ({ admissionPage, examsPage, page }) => {
+        test.setTimeout(30000);
+
+        const studentData = {
+            idCard: '7088581998434',
+            firstNameEng: 'NUEYY',
+            lastNameEng: 'TODSOB',
+            email: 'jakkaphat.dev@hotmail.com',
+            marriageStatus: 'โสด',
+            homeProvince: 'กรุงเทพมหานคร',
+            nationality: 'ไทย',
+            religion: 'พุทธ',
+            inCountryGraduate: 'จบการศึกษาในประเทศ',
+            degreeLevel: 'ปริญญาตรี',
+            universityName: 'จุฬาลงกรณ์มหาวิทยาลัย',
+            graduatedYear: '01/01/2569',
+            educationalQualifications: 'สัตวแพทยศาสตรบัณฑิต',
+            gpa: '3.50',
+            subjectName: 'วิชาเฉพาะ 9 ครั้งที่ 10 ปี 2568'
+        };
+        
+        const expectedFee = '200.00 บาท';
+
+        await examsPage.gotoEditExamPage();
+        await page.waitForLoadState('networkidle');
+
+        await examsPage.expandButtonClick();
+        await examsPage.editExamApplication3();
+
+
+        // ตรวจสอบข้อมูล + highlight
+        const personalDataFields = [studentData.idCard, studentData.firstNameEng, studentData.lastNameEng,
+            studentData.email,studentData.marriageStatus,studentData.homeProvince,studentData.nationality,studentData.religion,
+            studentData.inCountryGraduate,studentData.degreeLevel,studentData.universityName,studentData.educationalQualifications,studentData.graduatedYear,studentData.gpa,studentData.subjectName];
+        for (const text of personalDataFields) {
+            const locator = page.getByText(text , {exact : true});
+            await locator.scrollIntoViewIfNeeded();
+            await locator.evaluate(el => el.style.backgroundColor = 'yellow');
+            await expect(locator).toBeVisible();
+        }
+
+        const subjectTitle = page.getByText(studentData.subjectName);
+        await subjectTitle.evaluate(el => el.style.border = '2px solid red');
+        await expect(subjectTitle).toBeVisible();
+
+
+        const feeAmount = page.getByText('200.00 บาท').last();
+        await feeAmount.evaluate(el => el.style.backgroundColor = 'yellow'); 
+        await expect(feeAmount).toBeVisible();
+
+        await examsPage.sendApplicationBtn()
+        await examsPage.handleConfirmExamPopup();
+
         await examsPage.nextButtonClick();
     });
 
