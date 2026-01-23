@@ -440,4 +440,18 @@ export class ExamsPage {
         return filePath;
     }
 
+    async checkApplicationStatus() {
+      await this.page.waitForLoadState('networkidle');
+      await this.page.waitForTimeout(2000);
+      
+      const statusBtn = this.page.getByRole('button', { name: 'สถานะการรับสมัคร' });
+      await expect(statusBtn).toBeVisible();
+
+      await statusBtn.click();
+
+      await this.page.waitForLoadState('networkidle'); 
+    
+      await expect(this.page).toHaveURL(/.*application-status\/apply-exam/); 
+    };
+
 }
