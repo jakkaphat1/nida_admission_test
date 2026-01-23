@@ -36,6 +36,7 @@ export class ExamsPage {
     editExamButton2 : Locator;
     editInfoButton : Locator;
     editInfoButton2 : Locator;
+    payApplicationFee : Locator;
     expandButton : Locator;
 
     //หน้ากรอกข้อมูลสมัครสอบ
@@ -86,6 +87,7 @@ export class ExamsPage {
         this.editExamButton2 = page.getByRole('button', { name: 'แก้ไข'  ,exact : true });
         this.editInfoButton = page.getByRole('button', { name: 'แก้ไขข้อมูล' }).nth(1);
         this.editInfoButton2 = page.getByRole('button', { name: 'แก้ไขข้อมูล' }).nth(2);
+        this.payApplicationFee = page.getByRole('button', { name : 'ชำระเงินค่าสมัคร'}).nth(0);
         this.expandButton = page.locator('div')
             .filter({ hasText: /^รายละเอียดสถานะการสมัคร$/ })
             .locator('button, svg')
@@ -365,5 +367,77 @@ export class ExamsPage {
         await this.page.waitForTimeout(300);
         await confirmBtn.click();
     }
+
+    async clickPayApplicationFee(){
+        await this.page.waitForLoadState('networkidle');
+        await this.payApplicationFee.click();
+        await this.page.waitForTimeout(1000)
+    }
+    
+    async payWithBillPayment() {
+        // Helper สำหรับ Highlight Element
+        const highlightElement = async (locator: any, color = 'red') => {
+            await locator.scrollIntoViewIfNeeded();
+            await expect(locator).toBeVisible();
+            await locator.evaluate((node: HTMLElement, boxColor: string) => {
+                node.style.transition = 'all 0.3s ease';
+                node.style.outline = `3px solid ${boxColor}`;
+                node.style.boxShadow = `0 0 15px ${boxColor}`;
+            }, color);
+            
+            await this.page.waitForTimeout(500);
+        };
+
+        const totalAmountRow = this.page.locator('div')
+            .filter({ hasText: 'รวมทั้งหมด' })
+            .filter({ hasText: '200.00 บาท' })
+            .last();
+
+        await highlightElement(totalAmountRow, '#ffff00');
+
+        const billPaymentCard = this.page.locator('div.cursor-pointer, div.rounded')
+            .filter({ hasText: 'Bill Payment' })
+            .last();
+
+        await highlightElement(billPaymentCard, 'red');
+
+        await billPaymentCard.click();
+        const payButton = this.page.getByRole('button', { name: 'ชำระเงิน' , exact : true});
         
+        await expect(payButton).toBeEnabled();
+        
+        await highlightElement(payButton, '#00ff00');
+        await payButton.click();
+
+        const confirmModalBtn = this.page.getByRole('button', { name: 'ยืนยัน' });
+        
+        if (await confirmModalBtn.isVisible({ timeout: 3000 })) {
+            await highlightElement(confirmModalBtn, 'blue');
+            await confirmModalBtn.click();
+        }
+    }
+
+    async downloadPaymentInvoice() {
+        await this.page.waitForLoadState('networkidle');
+        await this.page.waitForTimeout(1000);
+
+        const downloadBtn = this.page.getByRole('button', { name: 'ดาวน์โหลดใบแจ้งหนี้' });
+        
+        await expect(downloadBtn).toBeVisible({ timeout: 10000 });
+        
+        await downloadBtn.evaluate((node: HTMLElement) => {
+            node.style.border = '3px solid magenta';
+        });
+        const downloadPromise = this.page.waitForEvent('download');
+        await downloadBtn.click();
+        const download = await downloadPromise;
+        const fileName = download.suggestedFilename();
+        const filePath = `./downloads/${fileName}`;
+        
+        await download.saveAs(filePath);
+
+        console.log(`Downloaded Payment Invoice to: ${filePath}`);
+        return filePath;
+    }
+
 }

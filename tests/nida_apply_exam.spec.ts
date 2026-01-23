@@ -125,5 +125,20 @@ test.describe('NIDA Apply Exam Tests', () => {
         await examsPage.nextButtonClick();
     });
 
+    test('TC-06 ทดสอบชำระเงินที่ Step 4: ชำระเงิน', async ({ admissionPage, examsPage, page }) => {
+        test.setTimeout(30000);
+
+        // (1) ทดสอบชำระผ่าน Bill Payment
+        await examsPage.gotoEditExamPage();
+        await page.waitForLoadState('networkidle');
+
+        await examsPage.expandButtonClick();
+        await examsPage.clickPayApplicationFee();
+
+        await expect(page.getByText('การชำระเงิน', { exact: true }).first()).toBeVisible();
+        await examsPage.payWithBillPayment();   
+        await examsPage.downloadPaymentInvoice();
+    });
+
 
 });
