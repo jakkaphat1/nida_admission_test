@@ -40,7 +40,12 @@ export class ApplicationStatusPage {
     }
 
     async clickCheckApplyMenu(){
-        await this.checkApplyMenu.highlight()
+        //higtlight
+        await this.checkApplyMenu.evaluate((el) => {
+            el.style.backgroundColor = 'yellow';
+            el.style.border = '3px solid red';
+        })
+        await this.page.waitForTimeout(1000);
         await this.checkApplyMenu.click();
         await expect(this.checkApplyMenu).toBeVisible();
         await this.page.waitForTimeout(2000);
