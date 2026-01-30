@@ -11,6 +11,9 @@ export class ApplicationStatusPage {
     editInfoButton : Locator;
     expandDetailsButton : Locator;
     payApplicationButton : Locator;
+    cancelApplicationButton : Locator;
+    confirmCancelButton : Locator;
+
 
 /**
  * Constructor SECTION
@@ -36,6 +39,12 @@ export class ApplicationStatusPage {
         this.payApplicationButton = this.draftApplicationForm
             .locator('button')
             .filter({ hasText: 'ชำระเงินค่าสมัคร' });
+        this.cancelApplicationButton = this.draftApplicationForm
+            .locator('button')
+            .filter({ hasText: 'ยกเลิกใบสมัคร' });
+        this.confirmCancelButton = page.locator('.modalAlert_container button')
+            .filter({ hasText: 'ยืนยัน' });
+        
         
     
     
@@ -117,7 +126,26 @@ export class ApplicationStatusPage {
         await this.page.waitForTimeout(2000);
     }
 
+    async clickCancelApplicationButton() {
+        await this.cancelApplicationButton.scrollIntoViewIfNeeded();
 
+        await this.cancelApplicationButton.waitFor({ state: 'visible' });
+
+        await this.cancelApplicationButton.evaluate(el => el.style.border = '3px solid red');
+        await this.page.waitForTimeout(500);
+        await this.cancelApplicationButton.click();
+    }
+
+    async confirmCancelApplication() {
+        await this.confirmCancelButton.waitFor({ state: 'visible' });
+
+        await this.confirmCancelButton.evaluate(el => el.style.border = '3px solid green');
+        await this.page.waitForTimeout(500);
+
+        await this.confirmCancelButton.click();
+        
+        await this.confirmCancelButton.waitFor({ state: 'hidden' });
+    }
 
 
 
