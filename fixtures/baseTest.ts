@@ -1,9 +1,12 @@
 import { test as base } from '@playwright/test';
 import { AdmissionPage } from '../pages/AdmissionPage';
 import { ExamsPage } from '../pages/ExamsPage';
+import { ApplicationStatusPage } from '../pages/ApplicationStatusPage';
+
 type MyFixtures = {
   admissionPage: AdmissionPage;
   examsPage: ExamsPage;
+  applicationStatusPage : ApplicationStatusPage
 };
 
 export const test = base.extend<MyFixtures>({
@@ -15,6 +18,11 @@ export const test = base.extend<MyFixtures>({
     const examsPage = new ExamsPage(page);
     await use(examsPage);
   },
+  applicationStatusPage: async ({ page }, use) => {
+    const applicationStatusPage = new ApplicationStatusPage(page);
+    await use(applicationStatusPage);
+  },
+
 });
 
 export { expect } from '@playwright/test';
