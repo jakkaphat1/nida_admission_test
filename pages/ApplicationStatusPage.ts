@@ -9,6 +9,8 @@ export class ApplicationStatusPage {
     checkApplyMenu : Locator;
     draftApplicationForm : Locator;
     editInfoButton : Locator;
+    expandDetailsButton : Locator;
+    payApplicationButton : Locator;
 
 /**
  * Constructor SECTION
@@ -19,13 +21,21 @@ export class ApplicationStatusPage {
         this.checkApplyMenu = page.locator('a[href="/application-status/apply-study"]').filter({ hasText : 'สมัครเรียน' });
         
         const cardHeader = page.locator('div.border-success')
-            .filter({ hasText: 'ใบสมัครฉบับร่าง' })
+            .filter({ hasText: /ใบสมัครฉบับร่าง|นำส่งใบสมัครแล้ว|รอชำระเงิน/ })
             .first();
         this.draftApplicationForm = cardHeader.locator('xpath=..');
         this.editInfoButton = this.draftApplicationForm
             .locator('button.bg-primary')
             .filter({ hasText: /แก้ไขข้อมูล/ })
             .nth(1);
+        this.expandDetailsButton = page.locator('div')
+            .filter({ hasText: 'นำส่งใบสมัครแล้ว' })
+            .locator('xpath=..')
+            .locator('div[aria-label="collapse-toggle"]')
+            .nth(0);
+        this.payApplicationButton = this.draftApplicationForm
+            .locator('button')
+            .filter({ hasText: 'ชำระเงินค่าสมัคร' });
         
     
     
@@ -83,8 +93,29 @@ export class ApplicationStatusPage {
         await this.page.waitForTimeout(1000);
         await this.editInfoButton.click();
     }
-    
 
+    async clickExpandDetailsButton() {
+        await this.expandDetailsButton.scrollIntoViewIfNeeded();
+
+        await this.expandDetailsButton.waitFor({ state: 'visible' });
+
+        await this.expandDetailsButton.evaluate(el => el.style.border = '2px solid orange');
+        await this.page.waitForTimeout(500);
+
+        await this.expandDetailsButton.click();
+    }
+    
+    async clickPaymentButton() {
+        await this.payApplicationButton.scrollIntoViewIfNeeded();
+
+        await this.payApplicationButton.waitFor({ state: 'visible', timeout: 5000 });
+
+        await this.payApplicationButton.evaluate(el => el.style.border = '3px solid red')
+            .catch(() => {}); 
+        await this.page.waitForTimeout(2000);
+        await this.payApplicationButton.click();
+        await this.page.waitForTimeout(2000);
+    }
 
 
 

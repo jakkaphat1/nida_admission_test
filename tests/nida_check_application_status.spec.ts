@@ -37,15 +37,20 @@ test.describe('NIDA Check Application Status' , () => {
     //     await applicationStatusPage.clickCheckApplyMenu();
     // });
 
-    // test('TC-03.3 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (2) ทดสอบยกเลิกใบสมัคร' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+
+    test('TC-03.3 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (3) ทดสอบชำระเงินค่าสมัคร' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+        await admissionPage.gotoPrograms();
+        await applicationStatusPage.clickCheckApplicationStatus();
+        await applicationStatusPage.clickCheckApplyMenu();
+        await applicationStatusPage.clickExpandDetailsButton();
+        await applicationStatusPage.clickPaymentButton();
+    });
+
+    // test('TC-03.4 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (2) ทดสอบยกเลิกใบสมัคร' , async ({admissionPage , examsPage , applicationStatusPage}) => {
     //     await admissionPage.gotoPrograms();
     //     await applicationStatusPage.clickCheckApplicationStatus();
     //     await applicationStatusPage.clickCheckApplyMenu();
     // });
 
-    // test('TC-03.4 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (3) ทดสอบชำระเงินค่าสมัคร' , async ({admissionPage , examsPage , applicationStatusPage}) => {
-    //     await admissionPage.gotoPrograms();
-    //     await applicationStatusPage.clickCheckApplicationStatus();
-    //     await applicationStatusPage.clickCheckApplyMenu();
-    // });
+    
 });
