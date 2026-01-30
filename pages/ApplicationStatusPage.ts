@@ -7,6 +7,8 @@ export class ApplicationStatusPage {
  * ---------------------------------------------------------------- */
     checkApplicationMenu: Locator;
     checkApplyMenu : Locator;
+    draftApplicationForm : Locator;
+    editInfoButton : Locator;
 
 /**
  * Constructor SECTION
@@ -15,7 +17,16 @@ export class ApplicationStatusPage {
         this.page = page;
         this.checkApplicationMenu = page.locator('div.cursor-pointer').filter({ hasText: 'ตรวจสอบใบสมัคร' });
         this.checkApplyMenu = page.locator('a[href="/application-status/apply-study"]').filter({ hasText : 'สมัครเรียน' });
-    
+        
+        const cardHeader = page.locator('div.border-success')
+            .filter({ hasText: 'ใบสมัครฉบับร่าง' })
+            .first();
+        this.draftApplicationForm = cardHeader.locator('xpath=..');
+        this.editInfoButton = this.draftApplicationForm
+            .locator('button.bg-primary')
+            .filter({ hasText: /แก้ไขข้อมูล/ })
+            .nth(1);
+        
     
     
     
@@ -49,6 +60,28 @@ export class ApplicationStatusPage {
         await this.checkApplyMenu.click();
         await expect(this.checkApplyMenu).toBeVisible();
         await this.page.waitForTimeout(2000);
+    }
+
+
+    async clickEditDraftInfo() {
+        await this.draftApplicationForm.scrollIntoViewIfNeeded();
+
+        const statusTag = this.draftApplicationForm
+            .locator('.tag_box')
+            .filter({ hasText: 'ใบสมัครฉบับร่าง' })
+            .first();
+
+        await statusTag.evaluate(el => el.style.outline = '3px solid lime').catch(() => {});
+
+        await this.editInfoButton.waitFor({ state: 'visible', timeout: 10000 });
+
+        await this.editInfoButton.evaluate(el => {
+            el.style.backgroundColor = 'yellow';
+            el.style.border = '2px solid red';
+        });
+
+        await this.page.waitForTimeout(1000);
+        await this.editInfoButton.click();
     }
     
 
