@@ -18,7 +18,7 @@ test.describe('NIDA Check Application Status' , () => {
         // await applicationStatusPage.clickCheckApplyMenu();
     });
 
-    test('TC-03 ทดสอบเข้าใช้งานเมนูตรวจสอบสถานะสมัคร' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+    test('TC-03 ทดสอบตรวจสอบสถานะการสมัครเรียน' , async ({admissionPage , examsPage , applicationStatusPage}) => {
         await admissionPage.gotoPrograms();
         await applicationStatusPage.clickCheckApplicationStatus();
         await applicationStatusPage.clickCheckApplyMenu();
