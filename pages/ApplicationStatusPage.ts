@@ -126,6 +126,7 @@ export class ApplicationStatusPage {
         await this.page.waitForTimeout(2000);
     }
 
+
     async clickCancelApplicationButton() {
         await this.cancelApplicationButton.scrollIntoViewIfNeeded();
 

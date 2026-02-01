@@ -38,7 +38,7 @@ test.describe('NIDA Check Application Status' , () => {
     // });
 
 
-    test('TC-03.3 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (3) ทดสอบชำระเงินค่าสมัคร' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+    test('TC-03.3 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (3) ทดสอบชำระเงินค่าสมัคร' , async ({admissionPage , examsPage , applicationStatusPage,page}) => {
         await admissionPage.gotoPrograms();
         await applicationStatusPage.clickCheckApplicationStatus();
         await applicationStatusPage.clickCheckApplyMenu();
@@ -46,12 +46,24 @@ test.describe('NIDA Check Application Status' , () => {
         await applicationStatusPage.clickPaymentButton();
     });
 
-    test('TC-03.4 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (2) ทดสอบยกเลิกใบสมัคร' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+    test('TC-03.4 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (2) ทดสอบยกเลิกใบสมัคร' , async ({admissionPage , examsPage , applicationStatusPage,page}) => {
         await admissionPage.gotoPrograms();
         await applicationStatusPage.clickCheckApplicationStatus();
         await applicationStatusPage.clickCheckApplyMenu();
         await applicationStatusPage.clickCancelApplicationButton();
         await applicationStatusPage.confirmCancelApplication();
+    });
+
+    test('TC-03.5 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัคร และชำระเงินค่าสมัครแล้ว | (1) ทดสอบพิมพ์ใบเสร็จ' , async ({admissionPage , examsPage , applicationStatusPage,page}) => {
+        test.setTimeout(50000)
+        await admissionPage.gotoPrograms();
+        await applicationStatusPage.clickCheckApplicationStatus();
+        await applicationStatusPage.clickCheckApplyMenu();
+        await applicationStatusPage.clickExpandDetailsButton();
+        await applicationStatusPage.clickPaymentButton();
+        await admissionPage.payWithBillPayment();
+        await expect(page.getByText('บันทึกรายการเรียบร้อยแล้ว')).toBeVisible();
+        await admissionPage.downloadPaymentInvoice();
     });
 
     
