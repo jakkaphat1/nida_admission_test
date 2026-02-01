@@ -66,5 +66,10 @@ test.describe('NIDA Check Application Status' , () => {
         await admissionPage.downloadPaymentInvoice();
     });
 
-    
+
+    test('TC-04 ทดสอบตรวจสอบสถานะการสมัครสอบข้อเขียน ' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+        await admissionPage.gotoPrograms();
+        await applicationStatusPage.clickCheckApplicationStatus();
+        await applicationStatusPage.clickWrittenExamButtom();
+    });
 });

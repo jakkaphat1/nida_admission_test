@@ -15,6 +15,10 @@ export class ApplicationStatusPage {
     confirmCancelButton : Locator;
 
 
+    // สมัครสอบข้อเขียน
+    writtenExamButton : Locator;
+
+
 /**
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -46,7 +50,8 @@ export class ApplicationStatusPage {
             .filter({ hasText: 'ยืนยัน' });
         
         
-    
+        //สมัครสอบข้อเขียน
+        this.writtenExamButton = page.locator('a[href="/application-status/apply-exam"]').filter({ hasText : 'สมัครสอบข้อเขียน' });
     
     
     
@@ -146,6 +151,18 @@ export class ApplicationStatusPage {
         await this.confirmCancelButton.click();
         
         await this.confirmCancelButton.waitFor({ state: 'hidden' });
+    }
+
+
+    // สมัครสอบข้อเขียน //
+    async clickWrittenExamButtom(){
+        
+        await this.writtenExamButton.evaluate((el) => {
+            el.style.backgroundColor = 'yellow';
+            el.style.border = '3px solid red';
+        })
+        await this.writtenExamButton.click();
+        await this.page.waitForTimeout(1000);
     }
 
 
