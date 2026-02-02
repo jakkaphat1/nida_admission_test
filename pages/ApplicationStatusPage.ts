@@ -17,6 +17,8 @@ export class ApplicationStatusPage {
 
     // สมัครสอบข้อเขียน
     writtenExamButton : Locator;
+    cancelWrittenApplyExamButton : Locator;
+    draftWrittenExamForm : Locator;
 
 
 /**
@@ -52,7 +54,14 @@ export class ApplicationStatusPage {
         
         //สมัครสอบข้อเขียน
         this.writtenExamButton = page.locator('a[href="/application-status/apply-exam"]').filter({ hasText : 'สมัครสอบข้อเขียน' });
-    
+        
+        const writtenExamcardHeader = page.locator('div.border-success')
+            .filter({ hasText: 'ยังไม่ได้รับเลขที่ใบสมัคร' })
+            .first();
+        this.draftWrittenExamForm = writtenExamcardHeader.locator('xpath=..');    
+        this.cancelWrittenApplyExamButton = this.draftWrittenExamForm
+            .locator('button')
+            .filter({ hasText: 'ยกเลิกใบสมัคร' });
     
     
     
@@ -165,6 +174,14 @@ export class ApplicationStatusPage {
         await this.page.waitForTimeout(1000);
     }
 
+    async clickCancelWrittenExamButton() {
+        await this.cancelWrittenApplyExamButton.scrollIntoViewIfNeeded();
 
+        await this.cancelWrittenApplyExamButton.waitFor({ state: 'visible' });
+
+        await this.cancelWrittenApplyExamButton.evaluate(el => el.style.border = '3px solid red');
+        await this.page.waitForTimeout(500);
+        await this.cancelWrittenApplyExamButton.click();
+    }
 
 }
