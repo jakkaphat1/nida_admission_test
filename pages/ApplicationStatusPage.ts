@@ -20,6 +20,8 @@ export class ApplicationStatusPage {
     cancelWrittenApplyExamButton : Locator;
     draftWrittenExamForm : Locator;
     editWrittenExamInfoButton : Locator;
+    editWrittenExamInfoButton3 : Locator;
+
 
 /**
  * Constructor SECTION
@@ -69,6 +71,13 @@ export class ApplicationStatusPage {
             .locator('button.bg-primary')
             .filter({ hasText: 'แก้ไขข้อมูล' })
             .first();
+
+        this.editWrittenExamInfoButton3 = this.draftWrittenExamForm
+            .locator('div.bg-\\[\\#FAFBFD\\]')
+            .locator('button.bg-primary')
+            .filter({ has: page.locator('svg') })
+            .filter({ hasText: 'แก้ไขข้อมูล' })
+            .first();    
     
     
     
@@ -214,5 +223,32 @@ export class ApplicationStatusPage {
 
         await editButton.click();
         await this.page.waitForTimeout(1000)
+    }
+
+    async clickEditDraftWrittenExamInfo3() {
+        await this.draftWrittenExamForm.scrollIntoViewIfNeeded();
+
+        // Highlight status tag (optional)
+        await this.draftWrittenExamForm
+            .locator('span.text-danger')
+            .filter({ hasText: 'ยังไม่ได้รับเลขที่ใบสมัคร' })
+            .evaluate(el => el.style.outline = '3px solid lime')
+            .catch(() => {});
+
+        // รอให้ปุ่มพร้อม
+        await this.editWrittenExamInfoButton3.waitFor({ 
+            state: 'visible', 
+            timeout: 10000 
+        });
+
+        // Highlight ปุ่ม
+        await this.editWrittenExamInfoButton3.evaluate(el => {
+            el.style.backgroundColor = 'yellow';
+            el.style.border = '2px solid red';
+        }).catch(() => {});
+
+        // กดปุ่ม
+        await this.editWrittenExamInfoButton3.click();
+        await this.page.waitForTimeout(1000);
     }
 }
