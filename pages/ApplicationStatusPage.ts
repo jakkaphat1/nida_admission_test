@@ -19,7 +19,7 @@ export class ApplicationStatusPage {
     writtenExamButton : Locator;
     cancelWrittenApplyExamButton : Locator;
     draftWrittenExamForm : Locator;
-
+    editWrittenExamInfoButton : Locator;
 
 /**
  * Constructor SECTION
@@ -58,11 +58,17 @@ export class ApplicationStatusPage {
         const writtenExamcardHeader = page.locator('div.border-success')
             .filter({ hasText: 'ยังไม่ได้รับเลขที่ใบสมัคร' })
             .first();
-        this.draftWrittenExamForm = writtenExamcardHeader.locator('xpath=..');    
+
+        this.draftWrittenExamForm = writtenExamcardHeader.locator('xpath=../..');    
         this.cancelWrittenApplyExamButton = this.draftWrittenExamForm
             .locator('button')
             .filter({ hasText: 'ยกเลิกใบสมัคร' });
-    
+
+        this.editWrittenExamInfoButton = this.draftWrittenExamForm
+            .locator('div.bg-\\[\\#FAFBFD\\]')
+            .locator('button.bg-primary')
+            .filter({ hasText: 'แก้ไขข้อมูล' })
+            .first();
     
     
     
@@ -184,4 +190,29 @@ export class ApplicationStatusPage {
         await this.cancelWrittenApplyExamButton.click();
     }
 
+    async clickEditDraftWrittenExamInfo() {
+        await this.draftWrittenExamForm.scrollIntoViewIfNeeded();
+
+        await this.draftWrittenExamForm
+            .locator('span.text-danger')
+            .filter({ hasText: 'ยังไม่ได้รับเลขที่ใบสมัคร' })
+            .evaluate(el => el.style.outline = '3px solid lime')
+            .catch(() => {});
+
+        const editButton = this.draftWrittenExamForm
+            .locator('div.bg-\\[\\#FAFBFD\\]')
+            .locator('button.bg-primary')
+            .filter({ hasText: 'แก้ไขข้อมูล' })
+            .first();
+
+        await editButton.waitFor({ state: 'visible', timeout: 10000 });
+
+        await editButton.evaluate(el => {
+            el.style.backgroundColor = 'yellow';
+            el.style.border = '2px solid red';
+        }).catch(() => {});
+
+        await editButton.click();
+        await this.page.waitForTimeout(1000)
+    }
 }
