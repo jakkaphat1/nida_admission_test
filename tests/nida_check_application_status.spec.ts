@@ -121,7 +121,13 @@ test.describe('NIDA Check Application Status' , () => {
 
 
     //ปรับปรุงใบสมัคร
-    test('TC-05 ทดสอบเข้าใช้งานเมนูตรวจสอบใบสมัคร / ปรับปรุงใบสมัคร ' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+    test('TC-05 ทดสอบเข้าใช้งานเมนูตรวจสอบใบสมัคร / ปรับปรุงใบสมัคร | ทดสอบตรวจสอบ / ปรับปรุงใบสมัครเรียน' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+        await admissionPage.gotoPrograms();
+        await applicationStatusPage.clickCheckApplicationStatus();
+        await applicationStatusPage.clickupdateApplicationButton();
+    });
+
+    test('TC-05.1 ทดสอบเข้าใช้งานเมนูตรวจสอบใบสมัคร / ปรับปรุงใบสมัคร | (1) ทดสอบแก้ไขข้อมูลเบื้องต้น : ข้อมูลทั่วไป' , async ({admissionPage , examsPage , applicationStatusPage}) => {
         await admissionPage.gotoPrograms();
         await applicationStatusPage.clickCheckApplicationStatus();
         await applicationStatusPage.clickupdateApplicationButton();
