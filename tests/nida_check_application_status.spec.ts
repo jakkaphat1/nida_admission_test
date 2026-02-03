@@ -118,4 +118,12 @@ test.describe('NIDA Check Application Status' , () => {
         await applicationStatusPage.confirmPaymentFlow();
         await admissionPage.downloadPaymentInvoice();
     });
+
+
+    //ปรับปรุงใบสมัคร
+    test('TC-05 ทดสอบเข้าใช้งานเมนูตรวจสอบใบสมัคร / ปรับปรุงใบสมัคร ' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+        await admissionPage.gotoPrograms();
+        await applicationStatusPage.clickCheckApplicationStatus();
+        await applicationStatusPage.clickupdateApplicationButton();
+    });
 });

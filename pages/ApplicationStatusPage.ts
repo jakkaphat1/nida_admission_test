@@ -27,6 +27,14 @@ export class ApplicationStatusPage {
     payButton: Locator;
     confirmButton: Locator;
 
+
+    // ปรับปรุงใบสมัคร
+    updateApplicationButton : Locator;
+
+
+
+
+
 /**
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -91,7 +99,10 @@ export class ApplicationStatusPage {
         this.payButton = page.locator('button').filter({ hasText: 'ชำระเงิน' });
         this.confirmButton = page.locator('button').filter({ hasText: 'ยืนยัน' });
     
-    
+        // ปรับปรุงใบสมัคร
+        this.updateApplicationButton = page.locator('a[href="/application-status/check"]').filter({ hasText : 'ปรับปรุงใบสมัคร' });
+
+
     }
 
 
@@ -311,5 +322,9 @@ export class ApplicationStatusPage {
         await this.confirmButton.waitFor({ state: 'visible', timeout: 5000 });
         await this.confirmButton.evaluate(el => el.style.border = '2px solid red');
         await this.confirmButton.click();
+    }
+
+    async clickupdateApplicationButton(){
+        await this.updateApplicationButton.click();
     }
 }
