@@ -21,6 +21,8 @@ export class ApplicationStatusPage {
     draftWrittenExamForm : Locator;
     editWrittenExamInfoButton : Locator;
     editWrittenExamInfoButton3 : Locator;
+    payWrittenExamButton : Locator;
+    selectPaymentGateWayWording : Locator;
 
 
 /**
@@ -78,9 +80,11 @@ export class ApplicationStatusPage {
             .filter({ has: page.locator('svg') })
             .filter({ hasText: 'แก้ไขข้อมูล' })
             .first();    
-    
-    
-    
+        this.payWrittenExamButton = this.draftWrittenExamForm
+            .locator('button.bg-primary')
+            .filter({ has: page.locator('svg') })
+            .filter({ hasText: 'ชำระเงินค่าสมัคร' });    
+        this.selectPaymentGateWayWording = page.locator('h5').filter({ hasText : 'เลือกช่องทางการชำระเงิน'});
     
     
     
@@ -155,7 +159,6 @@ export class ApplicationStatusPage {
         await this.page.waitForTimeout(2000);
     }
 
-
     async clickCancelApplicationButton() {
         await this.cancelApplicationButton.scrollIntoViewIfNeeded();
 
@@ -228,7 +231,6 @@ export class ApplicationStatusPage {
     async clickEditDraftWrittenExamInfo3() {
         await this.draftWrittenExamForm.scrollIntoViewIfNeeded();
 
-        // Highlight status tag (optional)
         await this.draftWrittenExamForm
             .locator('span.text-danger')
             .filter({ hasText: 'ยังไม่ได้รับเลขที่ใบสมัคร' })
@@ -250,5 +252,36 @@ export class ApplicationStatusPage {
         // กดปุ่ม
         await this.editWrittenExamInfoButton3.click();
         await this.page.waitForTimeout(1000);
+    }
+
+    async clickPayWrittenExamButton() {
+        await this.draftWrittenExamForm.scrollIntoViewIfNeeded();
+        await this.payWrittenExamButton.waitFor({ 
+            state: 'visible', 
+            timeout: 10000 
+        });
+
+        // Highlight ปุ่ม
+        await this.payWrittenExamButton.evaluate(el => {
+            el.style.backgroundColor = 'yellow';
+            el.style.border = '2px solid red';
+        }).catch(() => {});
+
+        // กดปุ่ม
+        await this.payWrittenExamButton.click();
+        await this.page.waitForTimeout(1000);
+    }
+
+    async highlightPaymentWording() {
+        await this.selectPaymentGateWayWording.waitFor({ state: 'visible' });
+
+        await this.selectPaymentGateWayWording.evaluate((el) => {
+            el.style.backgroundColor = 'yellow';
+            el.style.border = '2px solid red';
+            el.style.padding = '5px';
+            el.scrollIntoView();
+        });
+        
+        await this.page.waitForTimeout(1000); 
     }
 }

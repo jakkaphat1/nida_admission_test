@@ -89,6 +89,24 @@ test.describe('NIDA Check Application Status' , () => {
         await applicationStatusPage.clickEditDraftWrittenExamInfo3();
     });
 
+    test('TC-04.3 ทดสอบตรวจสอบสถานะการสมัครสอบข้อเขียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (3) ทดสอบชำระเงินค่าสมัคร' , async ({admissionPage , examsPage , applicationStatusPage,page}) => {
+        await admissionPage.gotoPrograms();
+        await applicationStatusPage.clickCheckApplicationStatus();
+        await applicationStatusPage.clickWrittenExamButtom();
+        await examsPage.expandButtonClick();
+        await applicationStatusPage.clickPayWrittenExamButton();
+        await applicationStatusPage.highlightPaymentWording();
+    });
+
+
+    // test('TC-03.3 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (3) ทดสอบชำระเงินค่าสมัคร' , async ({admissionPage , examsPage , applicationStatusPage,page}) => {
+    //     await admissionPage.gotoPrograms();
+    //     await applicationStatusPage.clickCheckApplicationStatus();
+    //     await applicationStatusPage.clickCheckApplyMenu();
+    //     await applicationStatusPage.clickExpandDetailsButton();
+    //     await applicationStatusPage.clickPaymentButton();
+    // });
+
     test('TC-04.4 ทดสอบตรวจสอบสถานะการสมัครสอบข้อเขียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (2) ทดสอบยกเลิกใบสมัคร' , async ({admissionPage , examsPage , applicationStatusPage,page}) => {
         await admissionPage.gotoPrograms();
         await applicationStatusPage.clickCheckApplicationStatus();
