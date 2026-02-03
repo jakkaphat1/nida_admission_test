@@ -23,7 +23,9 @@ export class ApplicationStatusPage {
     editWrittenExamInfoButton3 : Locator;
     payWrittenExamButton : Locator;
     selectPaymentGateWayWording : Locator;
-
+    clickWrittenExamPaymentGateway : Locator;
+    payButton: Locator;
+    confirmButton: Locator;
 
 /**
  * Constructor SECTION
@@ -85,9 +87,9 @@ export class ApplicationStatusPage {
             .filter({ has: page.locator('svg') })
             .filter({ hasText: 'ชำระเงินค่าสมัคร' });    
         this.selectPaymentGateWayWording = page.locator('h5').filter({ hasText : 'เลือกช่องทางการชำระเงิน'});
-    
-    
-    
+        this.clickWrittenExamPaymentGateway = page.locator('p.text_level_2').filter({ hasText: 'Bill Payment' });
+        this.payButton = page.locator('button').filter({ hasText: 'ชำระเงิน' });
+        this.confirmButton = page.locator('button').filter({ hasText: 'ยืนยัน' });
     
     
     }
@@ -283,5 +285,31 @@ export class ApplicationStatusPage {
         });
         
         await this.page.waitForTimeout(1000); 
+    }
+
+    async clickWrittenExamBillPayment() {
+        console.log('Select Bill Payment');
+
+        await this.clickWrittenExamPaymentGateway.waitFor({ state: 'visible', timeout: 10000 });
+
+        await this.clickWrittenExamPaymentGateway.scrollIntoViewIfNeeded();
+
+        await this.clickWrittenExamPaymentGateway.evaluate(el => el.style.border = '2px solid red');
+
+        await this.clickWrittenExamPaymentGateway.click();
+    }
+
+    async confirmPaymentFlow() {
+        console.log('กดปุ่มชำระเงิน');
+        
+        await this.payButton.waitFor({ state: 'visible' });
+        await this.payButton.evaluate(el => el.style.border = '2px solid blue');
+        await this.payButton.click();
+
+        console.log('กดยืนยันใน popup');
+        
+        await this.confirmButton.waitFor({ state: 'visible', timeout: 5000 });
+        await this.confirmButton.evaluate(el => el.style.border = '2px solid red');
+        await this.confirmButton.click();
     }
 }

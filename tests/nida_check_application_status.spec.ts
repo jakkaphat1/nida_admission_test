@@ -67,6 +67,7 @@ test.describe('NIDA Check Application Status' , () => {
     });
 
 
+    //สมัครสอบข้อเขียน
     test('TC-04 ทดสอบตรวจสอบสถานะการสมัครสอบข้อเขียน ' , async ({admissionPage , examsPage , applicationStatusPage}) => {
         await admissionPage.gotoPrograms();
         await applicationStatusPage.clickCheckApplicationStatus();
@@ -98,20 +99,23 @@ test.describe('NIDA Check Application Status' , () => {
         await applicationStatusPage.highlightPaymentWording();
     });
 
-
-    // test('TC-03.3 ทดสอบตรวจสอบสถานะการสมัครเรียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (3) ทดสอบชำระเงินค่าสมัคร' , async ({admissionPage , examsPage , applicationStatusPage,page}) => {
-    //     await admissionPage.gotoPrograms();
-    //     await applicationStatusPage.clickCheckApplicationStatus();
-    //     await applicationStatusPage.clickCheckApplyMenu();
-    //     await applicationStatusPage.clickExpandDetailsButton();
-    //     await applicationStatusPage.clickPaymentButton();
-    // });
-
     test('TC-04.4 ทดสอบตรวจสอบสถานะการสมัครสอบข้อเขียน | กรณีส่งใบสมัครเเล้ว แต่ยังไม่ชำระเงินค่าสมัคร | (2) ทดสอบยกเลิกใบสมัคร' , async ({admissionPage , examsPage , applicationStatusPage,page}) => {
         await admissionPage.gotoPrograms();
         await applicationStatusPage.clickCheckApplicationStatus();
         await applicationStatusPage.clickWrittenExamButtom();
         await applicationStatusPage.clickCancelWrittenExamButton();
         await applicationStatusPage.confirmCancelApplication();
+    });
+
+    test('TC-04.5 ทดสอบตรวจสอบสถานะการสมัครสอบข้อเขียน | กรณีส่งใบสมัคร และชำระเงินค่าสมัครแล้ว | (1) ทดสอบพิมพ์ใบเสร็จ' , async ({admissionPage , examsPage , applicationStatusPage,page}) => {
+        await admissionPage.gotoPrograms();
+        await applicationStatusPage.clickCheckApplicationStatus();
+        await applicationStatusPage.clickWrittenExamButtom();
+        await examsPage.expandButtonClick();
+        await applicationStatusPage.clickPayWrittenExamButton();
+        await applicationStatusPage.highlightPaymentWording();
+        await applicationStatusPage.clickWrittenExamBillPayment();
+        await applicationStatusPage.confirmPaymentFlow();
+        await admissionPage.downloadPaymentInvoice();
     });
 });
