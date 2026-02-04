@@ -41,7 +41,7 @@ export class BackOffice {
     popup_eduLevel : Locator;
     explainBox : Locator;
     popup_saveBtn : Locator;
-
+    addInputInformationBtn : Locator;
 
 
 
@@ -68,7 +68,6 @@ export class BackOffice {
     
         this.nextPageButton = this.page.getByRole('button', { name: 'ถัดไป' })
         this.writtenExamRadio = this.page.locator('#regis_exam_type').getByText('สอบข้อเขียน', { exact: true })
-        
 
         this.subjectDropdown1 = this.page.getByText('เลือกวิชาที่สอบ')
         this.specificSubject2 = this.page.getByRole('option', { name: 'วิชาเฉพาะ 2' })
@@ -103,7 +102,7 @@ export class BackOffice {
         this.explainBox = this.page.getByRole('textbox', { name: 'คำอธิบาย*' })
 
         this.popup_saveBtn = this.page.locator('#portal').getByRole('button', { name: 'บันทึก' })
-
+        this.addInputInformationBtn = this.page.getByRole('button', { name: 'เพิ่มเอกสารที่ผู้สมัครต้องแนบ' })
     }
 
 /**
@@ -261,8 +260,7 @@ export class BackOffice {
 
             await this.page.waitForTimeout(500); 
             console.log(`Deleted: ${title}`);
-        }
-        
+        } 
     }
 
     async addQualificationsButton(){
@@ -281,4 +279,69 @@ export class BackOffice {
         await this.explainBox.fill(exaplainWord)
         await this.popup_saveBtn.click()
     }
-}
+
+    async deleteInformationFile(informationKeyword: string[]) {
+        
+        for (const title of informationKeyword){
+            const information_card = this.page.locator('.card-container').filter({hasText : title}).first();
+            await information_card.waitFor({ state : 'visible'})
+            await information_card.evaluate(el => el.style.border = '2px solid blue');
+    
+            const deleteBtn = information_card.locator('button.delete-button').first();
+            
+            await deleteBtn.waitFor({ state: 'visible' });
+            await deleteBtn.evaluate(el => el.style.border = '3px solid red');
+            await deleteBtn.click();
+
+            await this.page.waitForTimeout(500); 
+            console.log(`Deleted: ${title}`);
+        } 
+    }
+
+    async clickAddInputerInformation(){
+        await this.addInputInformationBtn.waitFor({timeout:500})
+        await this.addInputInformationBtn.click()
+    }
+
+    async chooseInformationFile(index : number ,infoFileDropdown : string){
+        const information_card = this.page.locator('.card-container').filter({ hasText: index.toString() }).first();
+        await information_card.waitFor({ state : 'visible'})
+        await information_card.evaluate(el => el.style.border = '2px solid blue');
+
+        const selectinfoFileDropdown = information_card.locator('input.react-select__input');
+        await selectinfoFileDropdown.waitFor({ state: 'visible' });
+        await selectinfoFileDropdown.evaluate(el => el.style.border = '3px solid red');
+        await selectinfoFileDropdown.fill(infoFileDropdown);
+            
+        const option = this.page.getByRole('option', { name: infoFileDropdown, exact: true });
+        await option.waitFor({ state: 'visible' });
+        await option.click();
+    }
+
+    async swapCard(sourceIndex: number, targetIndex: number) {
+        // 1. หา Card ต้นทาง โดยเจาะจงหาเลขใน div.round
+        const sourceCard = this.page.locator('.card-container').filter({
+            has: this.page.locator('.round', { hasText: new RegExp(`^${sourceIndex}$`) })
+        }).first();
+
+        // 2. หา Card ปลายทาง แบบเดียวกัน
+        const targetCard = this.page.locator('.card-container').filter({
+            has: this.page.locator('.round', { hasText: new RegExp(`^${targetIndex}$`) })
+        }).first();
+
+        // เช็คว่าเจอทั้งคู่ไหมก่อนเริ่มลาก
+        await sourceCard.waitFor({ state: 'visible' });
+        await targetCard.waitFor({ state: 'visible' });
+
+        // 3. หาปุ่ม Handle สำหรับลาก (ปุ่มแรกของการ์ด)
+        const sourceHandle = sourceCard.locator('button[aria-roledescription="sortable"]').first();
+
+        // 4. ทำการลาก (Drag and Drop) 
+        await sourceHandle.hover();
+        await this.page.mouse.down();
+        
+        await targetCard.hover();
+        await this.page.mouse.up();
+        await this.page.waitForTimeout(1000);
+    }
+}   

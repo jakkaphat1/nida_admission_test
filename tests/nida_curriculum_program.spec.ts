@@ -67,8 +67,19 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.addQualificationsButton()
         await backOfficePage.selectEducatuinLevel('ปริญญาตรี','ต้องสำเร็จการศึกษาระดับปริญญาตรีเท่านั้น')
         await backOfficePage.clickSaveButton()
+    });
 
-
+    test('TC-08 ทดสอบเพิ่มหลักสูตร | Step 4: การแนบเอกสาร', async ({ admissionPage, page , backOfficePage }) => {
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickEditProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickConfirmPopup()
+        await backOfficePage.clickNextButton()
+        await backOfficePage.deleteInformationFile(['ใบเปลี่ยนชื่อ-สกุลหรือทะเบียนสมรส', 'ผลคะแนนสอบ' , 'หนังสือรับรองผู้สมัคร' ,'หนังสือรับรองมาตรฐาน'])
+        await backOfficePage.clickAddInputerInformation()
+        await backOfficePage.chooseInformationFile(6,'หนังสือรับรองผู้สมัคร')
+        await backOfficePage.swapCard(6,5)
     });
 
 
