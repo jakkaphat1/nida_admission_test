@@ -33,6 +33,22 @@ export class BackOffice {
     deleteAgeButton : Locator;
     deleteEducationLevelButton : Locator;
     deleteEducationalQualificationsButton : Locator
+
+    qualificationsButton : Locator
+    selectEducatuinLevelButton : Locator
+    eduLevel : Locator;
+    defineProperties : Locator;
+    popup_eduLevel : Locator;
+    explainBox : Locator;
+    popup_saveBtn : Locator;
+
+
+
+
+
+
+
+
 /** 
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -73,7 +89,21 @@ export class BackOffice {
         this.deleteAgeButton = this.page.getByRole('button').filter({ hasText: /^$/ }).nth(2)
         this.deleteEducationLevelButton = this.page.getByRole('button').filter({ hasText: /^$/ }).nth(4)
         this.deleteEducationalQualificationsButton = this.page.locator('div:nth-child(3) > div > .card-container > .header-box > .status-box > .status > .buttonAction_list > div:nth-child(2) > .buttonAction_button')
-    
+        
+
+        this.qualificationsButton = this.page.getByRole('button', { name: 'เพิ่มคุณสมบัติ' })
+
+        this.selectEducatuinLevelButton = this.page.locator('div').filter({ hasText: /^เลือกคุณสมบัติ$/ }).nth(2)
+
+        this.eduLevel = this.page.getByRole('option', { name: 'ระดับการศึกษา' })
+
+        this.defineProperties = this.page.getByRole('button', { name: 'กำหนดคุณสมบัติ' }).first()
+        this.popup_eduLevel = this.page.locator('.react-select__value-container.react-select__value-container--is-multi > .react-select__input-container')
+
+        this.explainBox = this.page.getByRole('textbox', { name: 'คำอธิบาย*' })
+
+        this.popup_saveBtn = this.page.locator('#portal').getByRole('button', { name: 'บันทึก' })
+
     }
 
 /**
@@ -233,5 +263,22 @@ export class BackOffice {
             console.log(`Deleted: ${title}`);
         }
         
+    }
+
+    async addQualificationsButton(){
+        await this.qualificationsButton.click()
+    }
+
+    async selectEducatuinLevel(levelName : string , exaplainWord : string ){
+        const selecteduLevel = this.page.locator('div').filter({ hasText: /^เลือกคุณสมบัติ$/ }).nth(2)
+        await selecteduLevel.evaluate(el => el.style.border = '2px solid blue');
+        await selecteduLevel.click()
+        await this.eduLevel.click()
+        await this.defineProperties.click()
+        await this.popup_eduLevel.click()
+        await this.page.getByRole('option', { name: levelName }).click();
+
+        await this.explainBox.fill(exaplainWord)
+        await this.popup_saveBtn.click()
     }
 }

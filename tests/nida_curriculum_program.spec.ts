@@ -64,6 +64,11 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.clickNextButton()
         await backOfficePage.deleteQualificationByTitle(['อายุ','ระดับการศึกษา'
             ,'วุฒิการศึกษา','ประสบการณ์ทำงาน','เกรดเฉลี่ย','คะแนนสอบ','เกียรตินิยม']);
+        await backOfficePage.addQualificationsButton()
+        await backOfficePage.selectEducatuinLevel('ปริญญาตรี','ต้องสำเร็จการศึกษาระดับปริญญาตรีเท่านั้น')
+        await backOfficePage.clickSaveButton()
+
+
     });
 
 
