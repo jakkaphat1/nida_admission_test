@@ -8,7 +8,7 @@ type MyFixtures = {
   admissionPage: AdmissionPage;
   examsPage: ExamsPage;
   applicationStatusPage : ApplicationStatusPage
-  backOffice : BackOffice
+  backOfficePage : BackOffice
 };
 
 export const test = base.extend<MyFixtures>({
@@ -24,9 +24,9 @@ export const test = base.extend<MyFixtures>({
     const applicationStatusPage = new ApplicationStatusPage(page);
     await use(applicationStatusPage);
   },
-  backOffice: async ({ page }, use) => {
-    const backOffice = new BackOffice(page);
-    await use(backOffice);
+  backOfficePage: async ({ page }, use) => {
+    const backOfficePage = new BackOffice(page);
+    await use(backOfficePage);
   },
 
 });
