@@ -30,6 +30,9 @@ export class BackOffice {
     editButton : Locator;
     interviewExam : Locator;
 
+    deleteAgeButton : Locator;
+    deleteEducationLevelButton : Locator;
+    deleteEducationalQualificationsButton : Locator
 /** 
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -66,6 +69,11 @@ export class BackOffice {
         this.editButton = this.page.getByRole('button', { name: 'แก้ไข' })
 
         this.interviewExam = this.page.getByText('สอบสัมภาษณ์', { exact: true })
+
+        this.deleteAgeButton = this.page.getByRole('button').filter({ hasText: /^$/ }).nth(2)
+        this.deleteEducationLevelButton = this.page.getByRole('button').filter({ hasText: /^$/ }).nth(4)
+        this.deleteEducationalQualificationsButton = this.page.locator('div:nth-child(3) > div > .card-container > .header-box > .status-box > .status > .buttonAction_list > div:nth-child(2) > .buttonAction_button')
+    
     }
 
 /**
@@ -208,5 +216,22 @@ export class BackOffice {
     async clickinterviewExam(){
         await this.interviewExam.waitFor({ state : 'visible'})
         await this.interviewExam.click()
+    }
+    
+    async deleteQualificationByTitle(titleKeyword: string[]) {
+        for (const title of titleKeyword){
+            const card = this.page.locator('.card-container').filter({hasText : title}).first();
+            await card.evaluate(el => el.style.border = '2px solid blue');
+    
+            const deleteBtn = card.locator('button.delete-button').first();
+            
+            await deleteBtn.waitFor({ state: 'visible' });
+            await deleteBtn.evaluate(el => el.style.border = '3px solid red');
+            await deleteBtn.click();
+
+            await this.page.waitForTimeout(500); 
+            console.log(`Deleted: ${title}`);
+        }
+        
     }
 }

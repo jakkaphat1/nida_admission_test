@@ -55,5 +55,16 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.clickSaveButton()
     });
 
+    test('TC-07 ทดสอบเพิ่มหลักสูตร | Step 3: คุณสมบัติ', async ({ admissionPage, page , backOfficePage }) => {
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickEditProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickConfirmPopup()
+        await backOfficePage.clickNextButton()
+        await backOfficePage.deleteQualificationByTitle(['อายุ','ระดับการศึกษา'
+            ,'วุฒิการศึกษา','ประสบการณ์ทำงาน','เกรดเฉลี่ย','คะแนนสอบ','เกียรตินิยม']);
+    });
+
 
 });
