@@ -44,5 +44,16 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.clickSaveButton()
     });
 
+    test('TC-06.2 ทดสอบเพิ่มหลักสูตร | Step 2: ประเภทการสอบของโครงการ | B. สอบสัมภาษณ์', async ({ admissionPage, page , backOfficePage }) => {
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickEditProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickConfirmPopup()
+        await backOfficePage.clickEditButton()
+        await backOfficePage.clickinterviewExam()
+        await backOfficePage.clickSaveButton()
+    });
+
 
 });

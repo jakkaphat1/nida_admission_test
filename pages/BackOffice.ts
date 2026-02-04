@@ -27,6 +27,8 @@ export class BackOffice {
     standardPass2 : Locator;
     GSBAButton : Locator;
     saveButton : Locator;
+    editButton : Locator;
+    interviewExam : Locator;
 
 /** 
  * Constructor SECTION
@@ -61,6 +63,9 @@ export class BackOffice {
         this.subjectDropdown2 = this.page.locator('#exam_subject_1 > .unext-form-control')
 
         this.saveButton = this.page.getByRole('button', { name: 'บันทึก' })
+        this.editButton = this.page.getByRole('button', { name: 'แก้ไข' })
+
+        this.interviewExam = this.page.getByText('สอบสัมภาษณ์', { exact: true })
     }
 
 /**
@@ -193,5 +198,15 @@ export class BackOffice {
     async clickSaveButton(){
         await this.saveButton.waitFor({ state: 'visible' });
         await this.saveButton.click();
+    }
+
+    async clickEditButton(){
+        await this.editButton.waitFor({ state: 'visible' });
+        await this.editButton.click();
+    }
+
+    async clickinterviewExam(){
+        await this.interviewExam.waitFor({ state : 'visible'})
+        await this.interviewExam.click()
     }
 }
