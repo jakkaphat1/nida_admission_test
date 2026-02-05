@@ -108,5 +108,17 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.verifyAfterClickSaveBtn('ข้อมูลหลักสูตรและโครงการ')  
     });
 
+    test('TC-12 ทดสอบแก้ไขรายละเอียดโครงการ | แก้ไข Step 1: ข้อมูลโครงการ', async ({ admissionPage, page , backOfficePage }) => {
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickEditProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickEditButton()
+
+        const myFilePath = 'C:/Users/Lenovo/Downloads/NIDA_Logo.png';
+        await backOfficePage.editProgramStep1(myFilePath)
+         
+    });
+
 
 });

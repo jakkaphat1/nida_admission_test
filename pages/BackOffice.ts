@@ -1,4 +1,5 @@
-import { Page, Locator , expect } from '@playwright/test'; 
+import { Page, Locator , expect } from '@playwright/test';
+import fs from 'fs';
 
 export class BackOffice {
     page : Page;    
@@ -52,6 +53,7 @@ export class BackOffice {
     officer_contactTel : Locator;
     officer_contactName2 : Locator; 
     officer_contactTel2 : Locator; 
+    clearSelectionBtn : Locator; 
 /** 
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -106,7 +108,8 @@ export class BackOffice {
 
         this.popup_saveBtn = this.page.locator('#portal').getByRole('button', { name: 'บันทึก' })
         this.addInputInformationBtn = this.page.getByRole('button', { name: 'เพิ่มเอกสารที่ผู้สมัครต้องแนบ' })
-    
+        this.clearSelectionBtn = this.page.locator('.react-select__indicators > div').first();
+
         this.contactTel = this.page.locator('#contact_tel')
         this.contactLine = this.page.locator('#contact_line')
         this.contactFacebook = this.page.locator('#contact_facebook')
@@ -208,6 +211,22 @@ export class BackOffice {
         await this.page.getByRole('button', { name: 'บันทึก' }).click();
         await this.nextPageButton.click()
     }
+
+    async editProgramStep1(filePath: string) {
+        await this.page.getByRole('textbox', { name: 'ชื่อโครงการ*' }).clear()
+        await this.page.getByRole('textbox', { name: 'ชื่อโครงการ*' }).pressSequentially('สาขาวิชาจัดการการลงทุน และบริหารความเสี่ยง');
+        await this.page.getByRole('textbox', { name: 'ชื่อโครงการ (ภาษาอังกฤษ)' }).clear()
+        await this.page.getByRole('textbox', { name: 'ชื่อโครงการ (ภาษาอังกฤษ)' }).pressSequentially('Investment Management and Risk Management');
+        
+        const fileInput = this.page.locator('.image-container input[type="file"]');
+        console.log('Checking file at:', filePath);
+        console.log('File exists?', fs.existsSync(filePath));
+        await fileInput.setInputFiles(filePath);
+        
+        await this.page.getByRole('button', { name: 'บันทึก' }).click();
+        await this.nextPageButton.click()
+    }
+
 
     async clickEditProgramByName(programName: string) {
         const programCard = this.page.locator('.flex.flex-col.gap-3 > div > div')
