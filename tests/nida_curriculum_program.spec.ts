@@ -108,6 +108,49 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.verifyAfterClickSaveBtn('ข้อมูลหลักสูตรและโครงการ')  
     });
 
+    test('E2E - ทดสอบเพิ่มหลักสูตรใหม่ตั้งแต่ต้นจนจบ (Step 1 - 6) | (TC-05 -> TC-10)', async ({ backOfficePage,page }) => {
+        test.setTimeout(120000)
+        // step1
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickAddProgram()
+        await backOfficePage.clickAddProgramStep1()
+        await page.waitForTimeout(1000)
+        // step2
+        await backOfficePage.clickAndFillAddProgramStep2_WrittenExam('100','50')
+        await backOfficePage.clickSaveButton()
+
+        // step3
+        await backOfficePage.clickNextButton()
+        await backOfficePage.deleteQualificationByTitle(['อายุ','ระดับการศึกษา'
+            ,'วุฒิการศึกษา','ประสบการณ์ทำงาน','เกรดเฉลี่ย','คะแนนสอบ','เกียรตินิยม']);
+        await backOfficePage.addQualificationsButton()
+        await backOfficePage.selectEducatuinLevel('ปริญญาตรี','ต้องสำเร็จการศึกษาระดับปริญญาตรีเท่านั้น')
+        await backOfficePage.clickSaveButton()
+
+        // step4
+        await backOfficePage.clickNextButton()
+        await backOfficePage.deleteInformationFile(['ใบเปลี่ยนชื่อ-สกุลหรือทะเบียนสมรส', 'ผลคะแนนสอบ' , 'หนังสือรับรองผู้สมัคร' ,'หนังสือรับรองมาตรฐาน'])
+        await backOfficePage.clickAddInputerInformation()
+        await backOfficePage.chooseInformationFile(6,'หนังสือรับรองผู้สมัคร')
+        await backOfficePage.swapCard(6,5)
+        await backOfficePage.clickSaveButton()
+
+        // step5
+        await backOfficePage.clickNextButton()
+        await backOfficePage.chooseApplicationPrice('ค่าสมัครสอบ ป.โท (1,000)')
+        await backOfficePage.chooseTuitonFees('อัตราค่าธรรมเนียมคณะบริหารธุรกิจ (ภาคปกติ)')
+        await backOfficePage.clickSaveButton()
+
+        //step6
+        await backOfficePage.clickNextButton()
+        await backOfficePage.fillContactInformation('02-7273671-2','@gsba_nida'
+            ,'https://www.facebook.com/GSBANIDA','gsba@nida.ac.th','https://gsba.nida.ac.th/th/','ชั้น 2 อาคารราชพฤกษ์ 148 สถาบันบัณฑิตพัฒนบริหารศาสตร์ ถนนเสรีไทย คลองจั่น บางกะปิ กทม. 10240')
+        await backOfficePage.fillOfficerContactInformation('นางอุมาวรรณ เอี่ยมสะอาด','027273689','นางสาวเจ้าหน้าที่ ทดสอบ','0834567890')  
+        await backOfficePage.clickSaveButton()
+        await backOfficePage.verifyAfterClickSaveBtn('ข้อมูลหลักสูตรและโครงการ')  
+    });
+
     test('TC-12.1 ทดสอบแก้ไขรายละเอียดโครงการ | แก้ไข Step 1: ข้อมูลโครงการ', async ({ admissionPage, page , backOfficePage }) => {
         await backOfficePage.gotoBackOffice();
         await backOfficePage.clickToFacultyInformation()

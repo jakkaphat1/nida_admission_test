@@ -77,7 +77,7 @@ export class BackOffice {
         this.fillCurriculumBox =  this.page.getByRole('textbox', { name: 'ค้นหาจากรหัส หรือชื่อหลักสูตรและโครงการ' })
     
         this.nextPageButton = this.page.getByRole('button', { name: 'ถัดไป' })
-        this.writtenExamRadio = this.page.locator('#regis_exam_type').getByText('สอบข้อเขียน', { exact: true })
+        this.writtenExamRadio = this.page.getByText('สอบข้อเขียน', { exact: true })
 
         this.subjectDropdown1 = this.page.getByText('เลือกวิชาที่สอบ')
         this.specificSubject2 = this.page.getByRole('option', { name: 'วิชาเฉพาะ 2' })
@@ -270,6 +270,7 @@ export class BackOffice {
     }
 
     async clickAndFillAddProgramStep2_WrittenExam(standardPoint : string , standardPoint2 : string){
+        this.page.waitForLoadState('networkidle');
         await this.writtenExamRadio.click();
         await this.subjectDropdown1.click();
         await this.page.waitForTimeout(500)
