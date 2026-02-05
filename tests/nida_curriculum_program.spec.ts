@@ -108,7 +108,7 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.verifyAfterClickSaveBtn('ข้อมูลหลักสูตรและโครงการ')  
     });
 
-    test('TC-12 ทดสอบแก้ไขรายละเอียดโครงการ | แก้ไข Step 1: ข้อมูลโครงการ', async ({ admissionPage, page , backOfficePage }) => {
+    test('TC-12.1 ทดสอบแก้ไขรายละเอียดโครงการ | แก้ไข Step 1: ข้อมูลโครงการ', async ({ admissionPage, page , backOfficePage }) => {
         await backOfficePage.gotoBackOffice();
         await backOfficePage.clickToFacultyInformation()
         await backOfficePage.clickGSBAButton()
@@ -118,6 +118,18 @@ test.describe('NIDA Check Application Status' , () => {
         const myFilePath = 'C:/Users/Lenovo/Downloads/NIDA_Logo.png';
         await backOfficePage.editProgramStep1(myFilePath)
          
+    });
+
+    test('TC-12.2 ทดสอบแก้ไขรายละเอียดโครงการ | แก้ไข Step 2: ประเภทการสอบ', async ({ admissionPage, page , backOfficePage }) => {
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickEditProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickGoToStep('ประเภทการสอบ')
+        await backOfficePage.clickEditButton()
+
+        await backOfficePage.clickAndFillAddProgramStep2_WrittenExam('80','70')
+        await backOfficePage.clickSaveButton() 
     });
 
 

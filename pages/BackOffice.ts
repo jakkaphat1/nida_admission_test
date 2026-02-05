@@ -54,6 +54,11 @@ export class BackOffice {
     officer_contactName2 : Locator; 
     officer_contactTel2 : Locator; 
     clearSelectionBtn : Locator; 
+
+
+
+
+
 /** 
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -121,6 +126,7 @@ export class BackOffice {
         this.officer_contactTel = this.page.locator('[id="officers[0].contact_tel"]')
         this.officer_contactName2 = this.page.locator('[id="officers[1].contact_name"]')
         this.officer_contactTel2 = this.page.locator('[id="officers[1].contact_tel"]')
+
     }
 
 /**
@@ -227,6 +233,10 @@ export class BackOffice {
         await this.nextPageButton.click()
     }
 
+    async clickGoToStep(stepName : string){
+        const gotoStep = this.page.getByRole('button', { name: stepName });
+        await gotoStep.click();
+    }
 
     async clickEditProgramByName(programName: string) {
         const programCard = this.page.locator('.flex.flex-col.gap-3 > div > div')
