@@ -253,6 +253,14 @@ export class BackOffice {
         await popupCard.getByRole('button', { name: 'ยืนยัน' }).click();
     }
 
+    async clickConfirmDeletePopup(){
+        const popupCard = this.page.locator('div')
+        .filter({ hasText: 'ยืนยันลบโครงการ ?' })
+        .nth(2)
+        await popupCard.evaluate(el => el.style.border = '2px solid blue');
+        await popupCard.getByRole('button', { name: 'ยืนยัน' }).click();
+    }    
+
     async clickNextButton(){
         await this.nextPageButton.click()
     }
@@ -519,6 +527,13 @@ export class BackOffice {
         await this.officer_contactTel2.focus();
         await this.officer_contactTel2.waitFor({ state: 'visible' });
         await this.officer_contactTel2.clear()
+    }
+
+    async clickDeleteProgramByName(programName:string){
+        const programCard = this.page.locator('.flex.flex-col.gap-3 > div > div')
+            .filter({ hasText: programName });
+        await programCard.evaluate(el => el.style.border = '4px solid blue');
+        await programCard.locator('button.delete-button').click();
     }
 
 

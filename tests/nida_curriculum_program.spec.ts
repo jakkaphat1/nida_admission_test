@@ -190,4 +190,14 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.verifyAfterClickSaveBtn('ข้อมูลหลักสูตรและโครงการ')  
     });
 
+    test('TC-13 ทดสอบลบข้อมูลหลักสูตรและโครงการ', async ({ admissionPage, page , backOfficePage }) => {
+        test.setTimeout(15000)
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickDeleteProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickConfirmDeletePopup()
+        await page.waitForTimeout(1500)
+    });
+
 });
