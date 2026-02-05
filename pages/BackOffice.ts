@@ -476,6 +476,51 @@ export class BackOffice {
         }
     }
 
+    async clearContactAllField(){
+        await this.contactTel.waitFor({ state: 'visible' });
+        await this.contactTel.clear()
+
+        await this.contactLine.waitFor({ state: 'visible' });
+        await this.contactLine.clear()
+
+        //Facebook
+        await this.contactFacebook.focus();
+        await this.contactFacebook.waitFor({ state: 'visible' });
+        await this.contactFacebook.clear()
+
+        //Email
+        await this.contactEmail.focus();
+        await this.contactEmail.waitFor({ state: 'visible' });
+        await this.contactEmail.clear()
+
+        //website
+        await this.contactWebsite.focus();
+        await this.contactWebsite.waitFor({ state: 'visible' });
+        await this.contactWebsite.clear()
+
+        //ที่อยู่
+        await this.contactAddress.focus();
+        await this.contactAddress.waitFor({ state: 'visible' });
+        await this.contactAddress.clear()
+        
+        await this.officer_contactName.waitFor({ state: 'visible' });
+        await this.officer_contactName.clear()
+
+        //officer 1 tel contact
+        await this.officer_contactTel.waitFor({ state: 'visible' });
+        await this.officer_contactTel.clear()
+
+        // officer 2  name contact
+        await this.officer_contactName2.focus();
+        await this.officer_contactName2.waitFor({ state: 'visible' });
+        await this.officer_contactName2.clear()
+
+        //officer 2 tel contact
+        await this.officer_contactTel2.focus();
+        await this.officer_contactTel2.waitFor({ state: 'visible' });
+        await this.officer_contactTel2.clear()
+    }
+
 
 
 

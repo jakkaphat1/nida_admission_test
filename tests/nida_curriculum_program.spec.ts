@@ -173,4 +173,21 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.clickNextButton()
     });
 
+    test('TC-12.6 ทดสอบแก้ไขรายละเอียดโครงการ | แก้ไข Step 6: ข้อมูลติดต่อ', async ({ admissionPage, page , backOfficePage }) => {
+        test.setTimeout(50000)
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickEditProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickGoToStep('ข้อมูลติดต่อ')
+        await backOfficePage.clickEditButton()
+
+        await backOfficePage.clearContactAllField()
+        await backOfficePage.fillContactInformation('02-7273671-3','@GSBA_nida'
+            ,'https://www.facebook.com/GSBANIDA','gsba@nida.ac.th','https://gsba.nida.ac.th/index/','ชั้น 2 อาคารราชพฤกษ์ 148 สถาบันบัณฑิตพัฒนบริหารศาสตร์ ถนนเสรีไทย คลองจั่น บางกะปิ กทม. 10240')
+        await backOfficePage.fillOfficerContactInformation('นางอุมาวรรณ เอี่ยมสะอาด','027273689','นางสาวเจ้าหน้าที่ ทดสอบ','0834567890')    
+        await backOfficePage.clickSaveButton()
+        await backOfficePage.verifyAfterClickSaveBtn('ข้อมูลหลักสูตรและโครงการ')  
+    });
+
 });
