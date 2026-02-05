@@ -2,13 +2,13 @@ import { test as base } from '@playwright/test';
 import { AdmissionPage } from '../pages/AdmissionPage';
 import { ExamsPage } from '../pages/ExamsPage';
 import { ApplicationStatusPage } from '../pages/ApplicationStatusPage';
-import { BackOffice } from '../pages/BackOffice';
+import { CourseAndProgramInformationPage } from '../pages/CourseAndProgramInformationPage';
 
 type MyFixtures = {
   admissionPage: AdmissionPage;
   examsPage: ExamsPage;
   applicationStatusPage : ApplicationStatusPage
-  backOfficePage : BackOffice
+  courseAndprogramInformationPage : CourseAndProgramInformationPage
 };
 
 export const test = base.extend<MyFixtures>({
@@ -24,9 +24,9 @@ export const test = base.extend<MyFixtures>({
     const applicationStatusPage = new ApplicationStatusPage(page);
     await use(applicationStatusPage);
   },
-  backOfficePage: async ({ page }, use) => {
-    const backOfficePage = new BackOffice(page);
-    await use(backOfficePage);
+  courseAndprogramInformationPage: async ({ page }, use) => {
+    const courseAndprogramInformationPage = new CourseAndProgramInformationPage(page);
+    await use(courseAndprogramInformationPage);
   },
 
 });

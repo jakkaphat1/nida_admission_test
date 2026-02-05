@@ -1,7 +1,7 @@
 import { Page, Locator , expect } from '@playwright/test';
 import fs from 'fs';
 
-export class BackOffice {
+export class CourseAndProgramInformationPage {
     page : Page;    
 
 /**
