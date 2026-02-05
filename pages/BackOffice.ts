@@ -432,5 +432,16 @@ export class BackOffice {
 
 
     }
+
+    async verifyAfterClickSaveBtn(pageIndicator:string){
+        const indicator = this.page.getByText(pageIndicator).first();
+
+        try {
+            await expect(indicator).toBeVisible({ timeout: 10000 });
+            console.log(`redirected to : ${pageIndicator}`);
+        } catch (error) {
+            throw new Error(` Could not find "${pageIndicator}" after clicking save.`);
+        }
+    }
 }   
 
