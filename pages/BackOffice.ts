@@ -329,7 +329,10 @@ export class BackOffice {
         for (const title of informationKeyword){
             const information_card = this.page.locator('.card-container').filter({hasText : title}).first();
             await information_card.waitFor({ state : 'visible'})
+            await information_card.scrollIntoViewIfNeeded()
             await information_card.evaluate(el => el.style.border = '2px solid blue');
+            await this.page.waitForTimeout(1000)
+            
     
             const deleteBtn = information_card.locator('button.delete-button').first();
             
@@ -482,6 +485,6 @@ export class BackOffice {
 
 
 
-    
+
 }   
 

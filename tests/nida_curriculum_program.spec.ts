@@ -147,4 +147,16 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.clickNextButton()
     });    
 
+    test('TC-12.4 ทดสอบแก้ไขรายละเอียดโครงการ | แก้ไข Step 4: การแนบเอกสาร', async ({ admissionPage, page , backOfficePage }) => {
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickEditProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickGoToStep('การแนบเอกสาร')
+        await backOfficePage.clickEditButton()
+        await backOfficePage.deleteInformationFile(['สำเนาใบปริญญาบัตร'])
+        await backOfficePage.clickSaveButton()
+        await backOfficePage.clickNextButton()
+    });
+
 });
