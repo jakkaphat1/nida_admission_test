@@ -129,8 +129,22 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.clickEditButton()
 
         await backOfficePage.clickAndFillAddProgramStep2_WrittenExam('80','70')
-        await backOfficePage.clickSaveButton() 
+        await backOfficePage.clickSaveButton()
+        await backOfficePage.clickNextButton()
     });
 
+    test('TC-12.3 ทดสอบแก้ไขรายละเอียดโครงการ | แก้ไข Step 3: คุณสมบัติ', async ({ admissionPage, page , backOfficePage }) => {
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickEditProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickGoToStep('คุณสมบัติผู้สมัคร')
+        await backOfficePage.clickEditButton()
+        await backOfficePage.deleteQualificationByTitle(['ระดับการศึกษา']);
+        await backOfficePage.addQualificationsButton()
+        await backOfficePage.selectEducatuinLevel('ปริญญาตรี','ต้องสำเร็จการศึกษาระดับมัธยมศึกษา และระดับปริญญาตรีเท่านั้น')
+        await backOfficePage.clickSaveButton()
+        await backOfficePage.clickNextButton()
+    });    
 
 });
