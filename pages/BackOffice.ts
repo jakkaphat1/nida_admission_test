@@ -42,12 +42,16 @@ export class BackOffice {
     explainBox : Locator;
     popup_saveBtn : Locator;
     addInputInformationBtn : Locator;
-
-
-
-
-
-
+    contactTel : Locator;
+    contactLine : Locator;
+    contactFacebook : Locator;
+    contactEmail : Locator;
+    contactWebsite : Locator;
+    contactAddress : Locator;
+    officer_contactName : Locator;
+    officer_contactTel : Locator;
+    officer_contactName2 : Locator; 
+    officer_contactTel2 : Locator; 
 /** 
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -103,9 +107,17 @@ export class BackOffice {
         this.popup_saveBtn = this.page.locator('#portal').getByRole('button', { name: 'บันทึก' })
         this.addInputInformationBtn = this.page.getByRole('button', { name: 'เพิ่มเอกสารที่ผู้สมัครต้องแนบ' })
     
-    
-    
-    
+        this.contactTel = this.page.locator('#contact_tel')
+        this.contactLine = this.page.locator('#contact_line')
+        this.contactFacebook = this.page.locator('#contact_facebook')
+        this.contactEmail = this.page.locator('#contact_email')
+        this.contactWebsite = this.page.locator('#contact_website')
+        this.contactAddress = this.page.locator('#contact_addr')
+
+        this.officer_contactName = this.page.locator('[id="officers[0].contact_name"]')
+        this.officer_contactTel = this.page.locator('[id="officers[0].contact_tel"]')
+        this.officer_contactName2 = this.page.locator('[id="officers[1].contact_name"]')
+        this.officer_contactTel2 = this.page.locator('[id="officers[1].contact_tel"]')
     }
 
 /**
@@ -367,4 +379,58 @@ export class BackOffice {
         await tutuionFeesOption.click();
         console.log(`เลือกค่าเล่าเรียน: ${feeNameOrPrice}`);
     }
+
+    async fillContactInformation(phoneNumber:string , lineID:string ,facebookContact:string ,
+         emailContact:string , websiteContact:string , addressContact:string ){
+        // เบอร์โทรสำนักงาน
+        await this.contactTel.waitFor({ state: 'visible' });
+        await this.contactTel.pressSequentially(phoneNumber, { delay: 100 });
+
+        // line ID
+        await this.contactLine.waitFor({ state: 'visible' });
+        await this.contactLine.pressSequentially(lineID, { delay: 100 });
+
+        //Facebook
+        await this.contactFacebook.focus();
+        await this.contactFacebook.waitFor({ state: 'visible' });
+        await this.contactFacebook.pressSequentially(facebookContact, { delay: 100 });
+
+        //Email
+        await this.contactEmail.focus();
+        await this.contactEmail.waitFor({ state: 'visible' });
+        await this.contactEmail.pressSequentially(emailContact, { delay: 100 });
+
+        //website
+        await this.contactWebsite.focus();
+        await this.contactWebsite.waitFor({ state: 'visible' });
+        await this.contactWebsite.pressSequentially(websiteContact, { delay: 100 });   
+
+        //ที่อยู่
+        await this.contactAddress.focus();
+        await this.contactAddress.waitFor({ state: 'visible' });
+        await this.contactAddress.fill(addressContact)     
+    }
+
+    async fillOfficerContactInformation(officer_name1 : string , officer_tel1 : string , officer_name2 : string , officer_tel2 : string){
+        //officer 1  name contact
+        await this.officer_contactName.waitFor({ state: 'visible' });
+        await this.officer_contactName.fill(officer_name1);
+
+        //officer 1 tel contact
+        await this.officer_contactTel.waitFor({ state: 'visible' });
+        await this.officer_contactTel.pressSequentially(officer_tel1, { delay: 100 });
+
+        // officer 2  name contact
+        await this.officer_contactName2.focus();
+        await this.officer_contactName2.waitFor({ state: 'visible' });
+        await this.officer_contactName2.fill(officer_name2);
+
+        //officer 2 tel contact
+        await this.officer_contactTel2.focus();
+        await this.officer_contactTel2.waitFor({ state: 'visible' });
+        await this.officer_contactTel2.pressSequentially(officer_tel2, { delay: 100 });
+
+
+    }
 }   
+
