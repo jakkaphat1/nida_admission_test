@@ -159,4 +159,18 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.clickNextButton()
     });
 
+    test('TC-12.5 ทดสอบแก้ไขรายละเอียดโครงการ | แก้ไข Step 5: ค่าสมัคร', async ({ admissionPage, page , backOfficePage }) => {
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickEditProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickGoToStep('ค่าธรรมเนียม')
+        await backOfficePage.clickEditButton()
+
+        await backOfficePage.chooseApplicationPrice('บริหารธุรกิจ RMBA (นักศึกษาต่างชาติ)')
+        await backOfficePage.chooseTuitonFees('บริหารธุรกิจ RMBA (นักศึกษาอาเซียน)')
+        await backOfficePage.clickSaveButton()
+        await backOfficePage.clickNextButton()
+    });
+
 });
