@@ -48,7 +48,6 @@ export class BackOffice {
 
 
 
-
 /** 
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -103,6 +102,10 @@ export class BackOffice {
 
         this.popup_saveBtn = this.page.locator('#portal').getByRole('button', { name: 'บันทึก' })
         this.addInputInformationBtn = this.page.getByRole('button', { name: 'เพิ่มเอกสารที่ผู้สมัครต้องแนบ' })
+    
+    
+    
+    
     }
 
 /**
@@ -343,5 +346,25 @@ export class BackOffice {
         await targetCard.hover();
         await this.page.mouse.up();
         await this.page.waitForTimeout(1000);
+    }
+
+    async chooseApplicationPrice(priceText: string) {
+        const priceOption = this.page.locator('.flex.cursor-pointer.items-center').filter({
+            hasText: priceText
+        });
+        await priceOption.waitFor({ state: 'visible' });
+        await priceOption.click();
+        console.log(`เลือกค่าสมัครราคา: ${priceText}`);
+    }
+
+    async chooseTuitonFees(feeNameOrPrice: string) {
+
+        const tuitionSection = this.page.locator('div').filter({ hasText: /^ค่าธรรมเนียมการศึกษา$|^ค่าเล่าเรียน$/ }).first();
+        const tutuionFeesOption = this.page.locator('.flex.cursor-pointer.items-center').filter({
+            hasText: feeNameOrPrice
+        });
+        await tutuionFeesOption.waitFor({ state: 'visible' });
+        await tutuionFeesOption.click();
+        console.log(`เลือกค่าเล่าเรียน: ${feeNameOrPrice}`);
     }
 }   

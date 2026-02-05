@@ -82,5 +82,17 @@ test.describe('NIDA Check Application Status' , () => {
         await backOfficePage.swapCard(6,5)
     });
 
+    test('TC-09 ทดสอบเพิ่มหลักสูตร | Step 5: ค่าธรรมเนียม', async ({ admissionPage, page , backOfficePage }) => {
+        await backOfficePage.gotoBackOffice();
+        await backOfficePage.clickToFacultyInformation()
+        await backOfficePage.clickGSBAButton()
+        await backOfficePage.clickEditProgramByName('สาขาวิชาจัดการการลงทุน');
+        await backOfficePage.clickConfirmPopup()
+        await backOfficePage.clickNextButton()
+        await backOfficePage.chooseApplicationPrice('ค่าสมัครสอบ ป.โท (1,000)')
+        await backOfficePage.chooseTuitonFees('บริหารธุรกิจ RMBA (นักศึกษาไทย)')
+        await backOfficePage.clickSaveButton()
+    });
+
 
 });
