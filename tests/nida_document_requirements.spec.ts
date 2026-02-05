@@ -19,6 +19,17 @@ test.describe('NIDA Specific Document Information Requirement' , () => {
         await documentRequirementsPage.clickDocumentAttachmentMenu();
     });
 
+    test('TC-03 ทดสอบค้นหาข้อมูลกำหนดการแนบเอกสาร', async ({ admissionPage, page ,courseAndprogramInformationPage, documentRequirementsPage  }) => {
+        await courseAndprogramInformationPage.gotoBackOffice();
+        await documentRequirementsPage.clickDocumentAttachmentMenu();
+        await documentRequirementsPage.searchingInsearchBox('BA02000')
+        await documentRequirementsPage.clearSearchingBox()
+        await documentRequirementsPage.searchingInsearchBox('เอกสารเปิดรับสมัครสำหรับบริหารธุรกิจมหาบัณฑิต นานาขาติ Internation MBA')
+        await documentRequirementsPage.clearSearchingBox()
+        await documentRequirementsPage.clickFilterMoreInfo()
+        await documentRequirementsPage.searchByfilterBtn('ปริญญาโท','GSBA - คณะบริหารธุรกิจ', 'ภาคปกติ')
+    });
+
 
 
 
