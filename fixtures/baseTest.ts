@@ -4,6 +4,7 @@ import { ExamsPage } from '../pages/ExamsPage';
 import { ApplicationStatusPage } from '../pages/ApplicationStatusPage';
 import { CourseAndProgramInformationPage } from '../pages/CourseAndProgramInformationPage';
 import { DocumentRequirementPage } from '../pages/DocumentRequirementsPage';
+import { PaymentPage } from '../pages/PaymentPage'
 
 type MyFixtures = {
   admissionPage: AdmissionPage;
@@ -11,6 +12,7 @@ type MyFixtures = {
   applicationStatusPage : ApplicationStatusPage
   courseAndprogramInformationPage : CourseAndProgramInformationPage
   documentRequirementsPage : DocumentRequirementPage
+  paymentPage : PaymentPage
 };
 
 export const test = base.extend<MyFixtures>({
@@ -33,6 +35,10 @@ export const test = base.extend<MyFixtures>({
   documentRequirementsPage: async ({ page }, use) => {
     const documentRequirementsPage = new DocumentRequirementPage(page);
     await use(documentRequirementsPage);
+  },
+  paymentPage: async ({ page } , use) => {
+    const paymentPage = new PaymentPage(page)
+    await use(paymentPage)
   },
 
 
