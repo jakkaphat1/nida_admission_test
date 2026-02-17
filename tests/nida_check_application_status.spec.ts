@@ -121,15 +121,24 @@ test.describe('NIDA Check Application Status' , () => {
 
 
     //ปรับปรุงใบสมัคร
-    test('TC-05 ทดสอบเข้าใช้งานเมนูตรวจสอบใบสมัคร / ปรับปรุงใบสมัคร | ทดสอบตรวจสอบ / ปรับปรุงใบสมัครเรียน' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+    test('TC-05.2 ทดสอบเข้าใช้งานเมนูตรวจสอบใบสมัคร / ปรับปรุงใบสมัคร | ทดสอบตรวจสอบ / ปรับปรุงใบสมัครเรียน' , async ({page,admissionPage , examsPage , applicationStatusPage}) => {
         await admissionPage.gotoPrograms();
         await applicationStatusPage.clickCheckApplicationStatus();
         await applicationStatusPage.clickupdateApplicationButton();
+        await expect(page).toHaveURL(/\/application-status\/check/);
     });
 
-    test('TC-05.1 ทดสอบเข้าใช้งานเมนูตรวจสอบใบสมัคร / ปรับปรุงใบสมัคร | (1) ทดสอบแก้ไขข้อมูลเบื้องต้น : ข้อมูลทั่วไป' , async ({admissionPage , examsPage , applicationStatusPage}) => {
+    test('TC-05.3 ทดสอบเข้าใช้งานเมนูตรวจสอบใบสมัคร / ปรับปรุงใบสมัคร | (1) ทดสอบแก้ไขข้อมูลเบื้องต้น : ข้อมูลทั่วไป' , async ({page,admissionPage , examsPage , applicationStatusPage}) => {
         await admissionPage.gotoPrograms();
         await applicationStatusPage.clickCheckApplicationStatus();
         await applicationStatusPage.clickupdateApplicationButton();
+        await expect(page).toHaveURL(/\/application-status\/check/);
+        await applicationStatusPage.clickEditBasicInfo()
+        await expect(page).toHaveURL(/\/application-status\/check\/editApplicant/);
+        await applicationStatusPage.fillBasicInfo('Maiyak','Todsobb','089987654','todsom@gmail.com','กรีก')
+        await applicationStatusPage.fillAddressInfo('ไทย','123','กรุงเทพมหานคร','คลองสาน','คลองต้นไทร')
+        await applicationStatusPage.fillOtherScore('9','990','300','95','600','800','120')
+        await applicationStatusPage.clickSaveInfoAndSendRecheck()
+        await page.waitForTimeout(5000)
     });
 });

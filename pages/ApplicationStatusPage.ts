@@ -1,5 +1,11 @@
 import { Page, Locator , expect } from '@playwright/test'; 
 
+export interface editDataInfo {
+
+}
+
+
+
 export class ApplicationStatusPage {
     page : Page;
 /**
@@ -326,5 +332,78 @@ export class ApplicationStatusPage {
 
     async clickupdateApplicationButton(){
         await this.updateApplicationButton.click();
+    }
+
+    
+    // ปรับปรุงใบสมัคร
+    async clickEditBasicInfo(){
+        await this.page.locator('div')
+            .filter({ hasText: 'ข้อมูลเบื้องต้น' })
+            .getByRole('button', { name: 'แก้ไขข้อมูล' })
+            .click();
+    }
+
+    async fillBasicInfo(englishName:string , englishLastName:string , teleNumber:string ,contactEmail:string , nationOption : string){
+        const enName = this.page.getByRole('textbox', { name: 'ชื่อ (ภาษาอังกฤษ)*' })
+        const enLastName = this.page.getByRole('textbox', { name: 'นามสกุล (ภาษาอังกฤษ)*' })
+        const telNumber = this.page.getByRole('textbox', { name: 'กรุณากรอกหมายเลขโทรศัพท์มือถือ' })
+        const contactEmailBox =  this.page.getByRole('textbox', { name: 'อีเมล (ที่ใช้สำหรับการติดต่อ)*' })
+        const nationalDropdown = this.page.locator('.react-select__input-container').first()
+        const nationalOption = this.page.getByRole('option', {name: nationOption, exact: true })
+        const religionDropdown = this.page.locator('div').filter({ hasText: /^พุทธ$/ }).nth(3)
+        
+        await enName.fill(englishName)
+        await enLastName.fill(englishLastName)
+        await telNumber.fill(teleNumber)
+        await contactEmailBox.fill(contactEmail)
+        await nationalDropdown.click()
+        await nationalOption.click()
+    }
+
+    async fillAddressInfo(countryoption:string,homeadrress:string,provinceoption:string,subProvinceoption:string,districoption:string){
+        const countryDropdown  = this.page.locator('.sm\\:col-span-2 > .formItem_vertical > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control')
+        const countryOption = this.page.getByRole('option', { name: countryoption })
+        const homeAddress = this.page.getByRole('textbox', { name: 'ระบุบ้านเลขที่' }).first()
+        const province = this.page.locator('div:nth-child(8) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container')
+        const provinceOption = this.page.getByRole('option', { name: provinceoption})
+        const subProvince = this.page.locator('div:nth-child(9) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container')
+        const subProvinceOption = this.page.getByRole('option', { name: subProvinceoption })
+        const district = this.page.locator('div:nth-child(10) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container')
+        const districOption = this.page.getByRole('option', { name: districoption })
+
+        await countryDropdown.click()
+        await countryOption.click()
+        await homeAddress.fill(homeadrress)
+        await province.click()
+        await provinceOption.click()
+        await subProvince.click()
+        await subProvinceOption.click()
+        await district.click()
+        await districOption.click()
+    }
+
+    async fillOtherScore(ieltsScore:string , toeicScore:string , toeflCBTScore:string,  toeflIBTScore:string , toeflITPScore:string ,gmatScore:string , nidaTEAPScore:string  ){
+        const ielts = this.page.getByRole('textbox', { name: 'IELTS' })
+        const toeic = this.page.getByRole('textbox', { name: 'TOEIC' })
+        const toeflCBT = this.page.getByRole('textbox', { name: 'TOEFL CBT' })
+        const toeflIBT = this.page.getByRole('textbox', { name: 'TOEFL IBT' })
+        const toeflITP = this.page.getByRole('textbox', { name: 'TOEFL ITP (NIDA)' })
+        const gmat = this.page.getByRole('textbox', { name: 'GMAT' })
+        const nidaTEAP = this.page.getByRole('textbox', { name: 'NIDA TEAP' })
+
+        await ielts.fill(ieltsScore)
+        await toeic.fill(toeicScore)
+        await toeflCBT.fill(toeflCBTScore)
+        await toeflIBT.fill(toeflIBTScore)
+        await toeflITP.fill(toeflITPScore)
+
+        await gmat.fill(gmatScore)
+        await nidaTEAP.fill(nidaTEAPScore)
+
+    }
+
+    async clickSaveInfoAndSendRecheck(){
+        const SaveInfoAndSendRecheckBtn = this.page.getByRole('button', { name: 'บันทึกข้อมูลและส่งตรวจสอบ' })
+        await SaveInfoAndSendRecheckBtn.click()
     }
 }
