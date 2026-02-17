@@ -139,6 +139,7 @@ test.describe('NIDA Check Application Status' , () => {
         await applicationStatusPage.fillAddressInfo('ไทย','123','กรุงเทพมหานคร','คลองสาน','คลองต้นไทร')
         await applicationStatusPage.fillOtherScore('9','990','300','95','600','800','120')
         await applicationStatusPage.clickSaveInfoAndSendRecheck()
-        await page.waitForTimeout(5000)
+        await expect(page.getByRole('heading', { name: 'คุณต้องการบันทึกข้อมูลผู้สมัครหรือไม่ ?' })).toBeVisible()
+        await applicationStatusPage.clickConfirmPopupButton()
     });
 });

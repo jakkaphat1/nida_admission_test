@@ -406,4 +406,9 @@ export class ApplicationStatusPage {
         const SaveInfoAndSendRecheckBtn = this.page.getByRole('button', { name: 'บันทึกข้อมูลและส่งตรวจสอบ' })
         await SaveInfoAndSendRecheckBtn.click()
     }
+
+    async clickConfirmPopupButton(){
+        const confirmButton = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await confirmButton.click()
+    }
 }
