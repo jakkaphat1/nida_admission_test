@@ -120,7 +120,7 @@ test.describe('NIDA Check Application Status' , () => {
     });
 
 
-    //ปรับปรุงใบสมัคร
+    //ปรับปรุงใบสมัครเรียน
     test('TC-05.2 ทดสอบเข้าใช้งานเมนูตรวจสอบใบสมัคร / ปรับปรุงใบสมัคร | ทดสอบตรวจสอบ / ปรับปรุงใบสมัครเรียน' , async ({page,admissionPage , examsPage , applicationStatusPage}) => {
         await admissionPage.gotoPrograms();
         await applicationStatusPage.clickCheckApplicationStatus();
@@ -159,5 +159,26 @@ test.describe('NIDA Check Application Status' , () => {
         await applicationStatusPage.clickSaveInfoAndSendRecheck()
         await applicationStatusPage.clickConfirmPopupButton()
 
+    });
+
+
+    //ปรับปรุงใบสมัครสอบข้อเขียน
+    test('TC-06.1 ทดสอบตรวจสอบ / ปรับปรุงใบสมัครสอบ' , async ({page,admissionPage , examsPage , applicationStatusPage}) => {
+        await admissionPage.gotoPrograms();
+        await applicationStatusPage.clickCheckApplicationStatus();
+        await applicationStatusPage.clickupdateApplicationButton();
+        await applicationStatusPage.clickWrrittenExamLabel()
+        await expect(page).toHaveURL(/\/application-status\/check/);
+        await applicationStatusPage.clickEditBasicInfoInWrittenExam()
+        await applicationStatusPage.editBasicInfoInWrittenExam('ชาย','Maiyak','Todsobb','089987654','todsom@gmail.com','สมรส','กรีก')
+        await applicationStatusPage.editEducationInfoInWrittenExam({
+            educationRadio: 'จบการศึกษาในประเทศ',
+            eduLevel: 'ปริญญาโท',
+            qualification: 'กจ.บ. (การจัดการเทคโนโลยีการบิน)',
+            universityName: 'มหาวิทยาลัยกรุงเทพ',
+            grade: '3.70'
+        });
+        await applicationStatusPage.clickSaveInfoAndSendRecheck()
+        await expect(page.getByRole('heading', { name: 'ปรับปรุงข้อมูลสำเร็จแล้ว' })).toBeVisible()
     });
 });
