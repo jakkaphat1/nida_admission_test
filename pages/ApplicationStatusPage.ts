@@ -343,6 +343,28 @@ export class ApplicationStatusPage {
             .click();
     }
 
+    async clickEditInputFileInfo(){
+        await this.page.locator('div')
+            .filter({ hasText: 'แนบเอกสาร' })
+            .getByRole('button', { name: 'แก้ไขข้อมูล' })
+            .nth(1)
+            .click();
+    }
+
+    async hoverApplicationFile(Filename:string){
+        await this.page.getByText(Filename).hover()
+        // await this.page.locator('.attach-icon > svg').hover()
+    }
+    
+    async clickDeleteApplicationFileButton(){
+        await this.page.getByRole('button').filter({ hasText: /^$/ }).click()
+    }
+
+    async uploadFile(filePath: string) {
+        const fileInput = this.page.locator('.drop-file-box input[type="file"]');
+        await fileInput.setInputFiles(filePath);
+    }
+
     async fillBasicInfo(englishName:string , englishLastName:string , teleNumber:string ,contactEmail:string , nationOption : string){
         const enName = this.page.getByRole('textbox', { name: 'ชื่อ (ภาษาอังกฤษ)*' })
         const enLastName = this.page.getByRole('textbox', { name: 'นามสกุล (ภาษาอังกฤษ)*' })

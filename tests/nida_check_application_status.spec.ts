@@ -142,4 +142,22 @@ test.describe('NIDA Check Application Status' , () => {
         await expect(page.getByRole('heading', { name: 'คุณต้องการบันทึกข้อมูลผู้สมัครหรือไม่ ?' })).toBeVisible()
         await applicationStatusPage.clickConfirmPopupButton()
     });
+
+    test('TC-05.4 ทดสอบเข้าใช้งานเมนูตรวจสอบใบสมัคร / ปรับปรุงใบสมัคร | ทดสอบแก้ไขข้อมูลแนบเอกสาร' , async ({page,admissionPage , examsPage , applicationStatusPage}) => {
+        await admissionPage.gotoPrograms();
+        await applicationStatusPage.clickCheckApplicationStatus();
+        await applicationStatusPage.clickupdateApplicationButton();
+        await expect(page).toHaveURL(/\/application-status\/check/);
+        await applicationStatusPage.clickEditInputFileInfo()
+        await expect(page).toHaveURL(/\/editAttachmentApplicant\/\d+$/);
+        await applicationStatusPage.hoverApplicationFile('DOC003_1030120220262311306.')
+        await applicationStatusPage.clickDeleteApplicationFileButton()
+
+        const filePath = path.join(__dirname, '../downloads/สำเนาบัตรประชาน - ทดสอบ.jpg');
+        await applicationStatusPage.uploadFile(filePath);
+
+        await applicationStatusPage.clickSaveInfoAndSendRecheck()
+        await applicationStatusPage.clickConfirmPopupButton()
+
+    });
 });
