@@ -24,4 +24,16 @@ test.describe('NIDA Admission Test Suite - ยืนยันสิทธิ์�
         // await confirmRegistration.clickNextStepEnrollment()
         // await expect(page).toHaveURL(/.*reporting/);
     });   
+
+
+    test('TC-05 ทดสอบยืนยันสิทธิ์ (เงื่อนไข : ผู้สมัครต้องผ่านการคัดเลือกเข้าศึกษาต่อ อย่างน้อย 1 หลักสูตร)' , async ({ admissionPage , confirmRegistration, page}) => {
+        await admissionPage.gotoPrograms();
+        await confirmRegistration.clickConfirmEnrollmentBtn()
+        await expect(page).toHaveURL(/.*privilege/);
+        await confirmRegistration.checkConfirmEnrollmentPolicyPopup()
+        await confirmRegistration.clickCheckboxInPolicyPopup('หมายเหตุ : ผู้ผ่านการคัดเลือก','หากกองบริการการศึกษาตรวจสอบเอกสารขึ้นทะเบียนเป็นนักศึกษาแล้ว')
+        await confirmRegistration.clickAcceptEnrollmentPolicy()
+        await confirmRegistration.clickNextStepEnrollment()
+        await expect(page).toHaveURL(/.*reporting/);
+    });   
 });
