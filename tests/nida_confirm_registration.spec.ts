@@ -1,12 +1,27 @@
 import { test, expect } from '../fixtures/baseTest';
 
 test.describe('NIDA Admission Test Suite - ยืนยันสิทธิ์เข้าศึกษา' , () => {
-    test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)' , async ({ admissionPage , paymentPage, page}) => {
+    test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)' , async ({ admissionPage, page}) => {
         await admissionPage.goto();
         await admissionPage.loginButton.click();
         await admissionPage.fillEmail(admissionPage.email);
         await expect(page).toHaveURL(/.*admissions-uat.nida.ac.th/);
-    });
+    }); 
 
-    
+    test('TC-02 ทดสอบเข้าใช้งานเมนูยืนยันสิทธิ์' , async ({ admissionPage , confirmRegistration, page}) => {
+        await admissionPage.gotoPrograms();
+        await confirmRegistration.clickConfirmEnrollmentBtn()
+        await expect(page).toHaveURL(/.*privilege/);
+    });    
+
+    test('TC-03 ทดสอบยอมรับระเบียบข้อตกลง' , async ({ admissionPage , confirmRegistration, page}) => {
+        await admissionPage.gotoPrograms();
+        await confirmRegistration.clickConfirmEnrollmentBtn()
+        await expect(page).toHaveURL(/.*privilege/);
+        await confirmRegistration.checkConfirmEnrollmentPolicyPopup()
+        await confirmRegistration.clickCheckboxInPolicyPopup('หมายเหตุ : ผู้ผ่านการคัดเลือก','หากกองบริการการศึกษาตรวจสอบเอกสารขึ้นทะเบียนเป็นนักศึกษาแล้ว')
+        await confirmRegistration.clickAcceptEnrollmentPolicy()
+        // await confirmRegistration.clickNextStepEnrollment()
+        // await expect(page).toHaveURL(/.*reporting/);
+    });   
 });
