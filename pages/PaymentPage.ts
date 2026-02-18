@@ -82,4 +82,48 @@ export class PaymentPage{
         await expect(this.examApplicationHistoryPaid).toBeVisible()
         await expect(this.page.getByLabel('page-list')).toBeVisible()
     }
+
+    async checkPaidStatus(paidNumber:string,paidstatus:string){
+        // const invoiceNumber = this.page.locator('.p-4 ').filter({hasText : `เลขที่ใบแจ้งหนี้ : ${paidNumber}` })
+        // const paidStatus = this.page.getByText('ชำระเงินแล้ว')
+
+        // const isInvoiceVisible = await invoiceNumber.isVisible();
+        // const isPaidStatusVisible = await paidStatus.isVisible();
+        // if (isInvoiceVisible && isPaidStatusVisible) {
+        //     console.log(` ตรวจพบเลขที่ใบแจ้งหนี้: ${paidNumber} และชำระเงินเรียบร้อยแล้ว`);
+        // } else {
+        //     console.log(` ไม่พบข้อมูลการชำระเงินสำหรับเลขที่: ${paidNumber}`);
+        // }
+
+        const card = this.page.locator('.p-4').filter({ 
+            hasText: `เลขที่ใบแจ้งหนี้ : ${paidNumber}` 
+        });
+
+        await expect(card.getByText(paidstatus)).toBeVisible();
+        console.log(`Verification Passed for ${paidNumber}`);
+    }
+
+    async clickExpand(paidNumber:string){
+        const card = this.page.locator('.p-4').filter({ 
+            hasText: `เลขที่ใบแจ้งหนี้ : ${paidNumber}` 
+        });
+        const expandBtn = card.locator('.cursor-pointer');
+        await expandBtn.click();
+        console.log(`Clicked expand for ${paidNumber}`);
+        await this.page.waitForTimeout(1000)
+    }
+
+    async checkExpandCardDetail(paidNumber:string, amount:string,payment:string,owner:string){
+        const card = this.page.locator('.p-4').filter({ 
+            hasText: `เลขที่ใบแจ้งหนี้ : ${paidNumber}` 
+        });
+
+        const applyAmount = card.locator('div').filter({ hasText: `จำนวนเงิน:${amount} บาท` }).first()
+        const paymentWay = card.locator('div').filter({ hasText: `รูปแบบการชำระ:${payment}` }).first()
+        const transactionBy = card.locator('div').filter({ hasText: `ทำรายการโดย:${owner}` }).first()
+
+        await expect(applyAmount).toBeVisible()
+        await expect(paymentWay).toBeVisible()
+        await expect(transactionBy).toBeVisible()
+    }
 }

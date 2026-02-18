@@ -53,14 +53,28 @@ test.describe('NIDA Admission Test Suite' , () => {
         await paymentPage.clickConfirmPopupBtn()
     });
 
-    test('TC-05 ทดสอบดูประวัติการขำระเงิน' , async ({ admissionPage , paymentPage, page}) => {
+    test('TC-05.1 ทดสอบดูประวัติการขำระเงิน (1) ชำระเงินค่าธรรมเนียมการสมัครเรียนเเล้ว' , async ({ admissionPage , paymentPage, page}) => {
         await admissionPage.gotoPrograms();
         await paymentPage.clickPaymentModule()
         await paymentPage.checkPaymentModule()
         await paymentPage.clickHistoryPaid()
         await expect(page).toHaveURL(/\/payment\/history/);
         await paymentPage.checkHistoryPaid()
+        await paymentPage.checkPaidStatus('00006940002','ชำระเงินแล้ว')
+        await paymentPage.checkExpandCardDetail('00006940002','200.00','Bill Payment','ผู้ดูแลระบบ 1 แอดมิน')
+        
+    });
 
+    test('TC-05.2 ทดสอบดูประวัติการขำระเงิน (2) ยกเลิกการชำระเงินค่าธรรมเนียมการสมัคร' , async ({ admissionPage , paymentPage, page}) => {
+        await admissionPage.gotoPrograms();
+        await paymentPage.clickPaymentModule()
+        await paymentPage.checkPaymentModule()
+        await paymentPage.clickHistoryPaid()
+        await expect(page).toHaveURL(/\/payment\/history/);
+        await paymentPage.checkHistoryPaid()
+        await paymentPage.checkPaidStatus('00006940001','ยกเลิกการชำระเงิน')
+        // await paymentPage.clickExpand('00006940001')
+        await paymentPage.checkExpandCardDetail('00006940001','200.00','Bill Payment','ทดสอบ แอดมิชชั่น')
     });
 
 
