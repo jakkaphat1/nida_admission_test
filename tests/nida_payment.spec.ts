@@ -33,6 +33,20 @@ test.describe('NIDA Admission Test Suite' , () => {
         await expect(page).toHaveURL(/\/payment\/paid/);
         await paymentPage.checkPaymentCard('00006940001')
         await paymentPage.clickChangePaymentGateWayByCard('00006940001')
+        // await paymentPage.clickPaymentWay('Bill Payment')
+        // await paymentPage.clickPaidBtn()
+        // await expect(page.getByRole('heading', { name: 'ยืนยันการเปลี่ยนช่องทางการชำระเงิน' })).toBeVisible()
+        // await paymentPage.clickConfirmPopupBtn()
+    });
+
+    test('TC-04 ทดสอบเลือกช่องทางการขำระเงิน' , async ({ admissionPage , paymentPage, page}) => {
+        await admissionPage.gotoPrograms();
+        await paymentPage.clickPaymentModule()
+        await paymentPage.checkPaymentModule()
+        await paymentPage.clickToBePaid()
+        await expect(page).toHaveURL(/\/payment\/paid/);
+        await paymentPage.checkPaymentCard('00006940001')
+        await paymentPage.clickChangePaymentGateWayByCard('00006940001')
         await paymentPage.clickPaymentWay('Bill Payment')
         await paymentPage.clickPaidBtn()
         await expect(page.getByRole('heading', { name: 'ยืนยันการเปลี่ยนช่องทางการชำระเงิน' })).toBeVisible()
