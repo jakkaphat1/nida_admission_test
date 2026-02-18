@@ -1,11 +1,4 @@
 import { test, expect } from '../fixtures/baseTest';
-import { AdmissionPage } from '../pages/AdmissionPage';
-import { ExamsPage } from '../pages/ExamsPage';
-import { ApplicationStatusPage } from '../pages/ApplicationStatusPage';
-import { CourseAndProgramInformationPage } from '../pages/CourseAndProgramInformationPage';
-import { DocumentRequirementPage } from '../pages/DocumentRequirementsPage';
-import { PaymentPage } from '../pages/PaymentPage'
-import path from 'path';
 
 test.describe('NIDA Admission Test Suite' , () => {
     test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)' , async ({ admissionPage , paymentPage, page}) => {
