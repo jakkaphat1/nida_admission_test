@@ -53,5 +53,15 @@ test.describe('NIDA Admission Test Suite' , () => {
         await paymentPage.clickConfirmPopupBtn()
     });
 
+    test('TC-05 ทดสอบดูประวัติการขำระเงิน' , async ({ admissionPage , paymentPage, page}) => {
+        await admissionPage.gotoPrograms();
+        await paymentPage.clickPaymentModule()
+        await paymentPage.checkPaymentModule()
+        await paymentPage.clickHistoryPaid()
+        await expect(page).toHaveURL(/\/payment\/history/);
+        await paymentPage.checkHistoryPaid()
+
+    });
+
 
 });

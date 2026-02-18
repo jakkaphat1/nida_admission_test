@@ -12,6 +12,8 @@ export class PaymentPage{
     changePayment
     paidButton
     confirmPopupButton
+    studentApplicationHistoryPaid
+    examApplicationHistoryPaid
 /**
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -23,6 +25,9 @@ export class PaymentPage{
         this.changePayment = this.page.getByRole('button', { name: 'เปลี่ยนช่องทางการชำระเงิน' })
         this.paidButton = this.page.getByRole('button', { name: 'ชำระเงิน' })
         this.confirmPopupButton = this.page.getByRole('button', { name: 'ยืนยัน' })
+
+        this.studentApplicationHistoryPaid = this.page.getByRole('button', { name: 'สมัครเรียน' })
+        this.examApplicationHistoryPaid = this.page.getByRole('button', { name: 'สมัครสอบข้อเขียน' })
     }
 
  /**
@@ -34,6 +39,10 @@ export class PaymentPage{
 
     async clickToBePaid(){
         await this.toBePaid.click()
+    }
+
+    async clickHistoryPaid(){
+        await this.historyPaid.click()
     }
 
     async checkPaymentModule(){
@@ -68,4 +77,9 @@ export class PaymentPage{
         await this.confirmPopupButton.click()
     }
 
+    async checkHistoryPaid(){
+        await expect(this.studentApplicationHistoryPaid).toBeVisible()
+        await expect(this.examApplicationHistoryPaid).toBeVisible()
+        await expect(this.page.getByLabel('page-list')).toBeVisible()
+    }
 }
