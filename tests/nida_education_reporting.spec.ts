@@ -23,5 +23,24 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         // await educationReportingPage.clickAcceptTermPolicy()
         // await educationReportingPage.clickAcceptTermPolicyButton()
     });
+
+    test('TC-03 ทดสอบยืนยันตัวตน (2) ทดสอบ Verify for Foreiger (สำหรับนักศึกษาต่างชาติ) เป็นคนไทย' , async ({ admissionPage , educationReportingPage, page}) => {
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        await expect(page).toHaveURL(/.*reporting/);
+        await educationReportingPage.clickProcessByLabel('ยืนยันตัวตน')
+        await expect(page).toHaveURL(/.*reporting\/verification/);
+        await educationReportingPage.clickVerifyForForeigner()
+        await expect(page).toHaveURL(/.*reporting\/verification\/foreigner/);
+
+        await educationReportingPage.selectFileForVerifyForeigner([
+            'frontIDcard.png',
+            'backIDcard.png',
+            'photo.jpg'
+        ])
+        await educationReportingPage.clickConfirmVerification()
+        await educationReportingPage.clickConfirmPopup()
+        await expect(page.getByText('ทำรายการสำเร็จ')).toBeVisible()
+    });
     
 });
