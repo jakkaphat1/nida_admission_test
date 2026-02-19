@@ -13,8 +13,24 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         await myCalendarPage.clickMyCalendarMenu();
         await expect(page).toHaveURL(/.*my-calendar/);
         await myCalendarPage.checkMyCalendarLandingPage()
+        await myCalendarPage.checkMyCalendarSpace();
+        await myCalendarPage.checkCurrentMonthYear('ก.พ. 2569');
+        await myCalendarPage.checkTodayHighlight();
+        await myCalendarPage.checkEventOnCalendar('วันที่เปิดรับสมัครสอบข้อเขียน (วิชาเฉพาะ 9)');
+    });
+
+    test('TC-03 ทดสอบดูข้อมูลปฏิทินเดือน / ปี อื่นๆ' , async ({ admissionPage , myCalendarPage, page}) => {
+        await admissionPage.gotoPrograms();
+        await myCalendarPage.clickMyCalendarMenu();
+        await expect(page).toHaveURL(/.*my-calendar/);
+        await myCalendarPage.checkMyCalendarLandingPage()
         await myCalendarPage.selectMonthYearDropdown('ก.พ. 2569')
-        await myCalendarPage.selectMonthYear('มีนาคม')
+        await myCalendarPage.selectYearInDatepicker('2569','2569')
+        await myCalendarPage.selectMonthInDatepicker('กุมภาพันธ์')
+        await myCalendarPage.checkMyCalendarSpace();
+        await myCalendarPage.checkCurrentMonthYear('ก.พ. 2569');
+        await myCalendarPage.checkTodayHighlight();
+        await myCalendarPage.checkEventOnCalendar('วันที่เปิดรับสมัครสอบข้อเขียน (วิชาเฉพาะ 9)');
     });
 
     
