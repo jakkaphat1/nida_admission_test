@@ -8,6 +8,7 @@ import { PaymentPage } from '../pages/PaymentPage'
 import { ExamAnnoucePage } from '../pages/ExamAnnoucePage';
 import { MyAnnoucement } from '../pages/MyAnnoucement';
 import { ConfirmRegistration } from '../pages/ConfirmRegistration';
+import { MyCalendarPage } from '../pages/MyCalendarPage';
 
 type MyFixtures = {
   admissionPage: AdmissionPage;
@@ -19,6 +20,7 @@ type MyFixtures = {
   examAnnoucePage : ExamAnnoucePage
   myAnnoucement : MyAnnoucement
   confirmRegistration : ConfirmRegistration
+  myCalendarPage : MyCalendarPage
 };
 
 export const test = base.extend<MyFixtures>({
@@ -57,6 +59,10 @@ export const test = base.extend<MyFixtures>({
   confirmRegistration: async ({page} , use) => {
     const confirmRegistration = new ConfirmRegistration(page)
     await use(confirmRegistration)
+  },
+  myCalendarPage: async({page} , use) => {
+    const myCalendarPage = new MyCalendarPage(page)
+    await use(myCalendarPage)
   },
 
 
