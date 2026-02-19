@@ -32,6 +32,8 @@ test.describe('NIDA Admission Test Suite - ยืนยันสิทธิ์�
         await confirmRegistration.checkConfirmEnrollmentPolicyPopup()
         await confirmRegistration.clickCheckboxInPolicyPopup('หมายเหตุ : ผู้ผ่านการคัดเลือก','หากกองบริการการศึกษาตรวจสอบเอกสารขึ้นทะเบียนเป็นนักศึกษาแล้ว')
         await confirmRegistration.clickAcceptEnrollmentPolicy()
+        await confirmRegistration.clickEditContactInfo()
+        await confirmRegistration.fillContactInfo('0812345678','todsob@gmail.com')
         // await confirmRegistration.clickNextStepEnrollment()
         // await expect(page).toHaveURL(/.*reporting/);
     });   
@@ -44,6 +46,12 @@ test.describe('NIDA Admission Test Suite - ยืนยันสิทธิ์�
         await confirmRegistration.checkConfirmEnrollmentPolicyPopup()
         await confirmRegistration.clickCheckboxInPolicyPopup('หมายเหตุ : ผู้ผ่านการคัดเลือก','หากกองบริการการศึกษาตรวจสอบเอกสารขึ้นทะเบียนเป็นนักศึกษาแล้ว')
         await confirmRegistration.clickAcceptEnrollmentPolicy()
+        await confirmRegistration.selectCourseInConfirmEnrollPageByName('วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)')
+        await confirmRegistration.clickEditContactInfo()
+        await confirmRegistration.fillContactInfo('0812345678','todsob@gmail.com')
+        await confirmRegistration.clickConfirmEnrollmentAfterSelectOrFillData()
+        await expect(page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })).toBeVisible()
+        await confirmRegistration.clickConfirmPopup()
         await confirmRegistration.clickNextStepEnrollment()
         await expect(page).toHaveURL(/.*reporting/);
     });   
