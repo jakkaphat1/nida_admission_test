@@ -85,4 +85,22 @@ export class EducationReportingPage {
         await expect(confirmButton).toBeVisible()
         await confirmButton.click()
    }
+
+   async clickAcceptTermOrPolicyForUniversityRule(){
+        const acceptButton = this.page.getByText('ข้าพเจ้าได้อ่าน และเข้าใจถึงข้อกำหนดของทางสถาบัน และยินยอม ปฏิบัติตามเงื่อนไขดัง')
+        await expect(acceptButton).toBeVisible()
+        await acceptButton.click()
+   }
+
+   async clickConfirmButtonForUniversityRule(){
+        const confirmButton = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(confirmButton).toBeVisible()
+        await confirmButton.click()
+   }
+
+   async clickConfirmInPopupForUniversityRule(){
+        const confirmButton = this.page.locator('#portal').getByRole('button', { name: 'ยืนยัน' })
+        await expect(confirmButton).toBeVisible()
+        await confirmButton.click()
+   }
 }

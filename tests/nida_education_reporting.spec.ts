@@ -42,5 +42,17 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         await educationReportingPage.clickConfirmPopup()
         await expect(page.getByText('ทำรายการสำเร็จ')).toBeVisible()
     });
+
+    test('TC-04 ทดสอบรับทราบระเบียบปฏิบัติการเป็นนักศึกษาของสถาบัน' , async ({ admissionPage , educationReportingPage, page}) => {
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        await expect(page).toHaveURL(/.*reporting/);
+        await educationReportingPage.clickProcessByLabel('รับทราบระเบียบปฏิบัติการเป็นนักศึกษาของสถาบัน')
+        await expect(page).toHaveURL(/.*reporting\/terms/);
+        await educationReportingPage.clickAcceptTermOrPolicyForUniversityRule()
+        await educationReportingPage.clickConfirmButtonForUniversityRule()
+        await educationReportingPage.clickConfirmInPopupForUniversityRule()
+        await expect(page.getByText('ทำรายการสำเร็จ')).toBeVisible()
+    });
     
 });
