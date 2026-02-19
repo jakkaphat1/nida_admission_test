@@ -8,12 +8,20 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         await expect(page).toHaveURL(/.*admissions-uat.nida.ac.th/);
     });
 
-    test('TC-02 ทดสอบรายงานตัว(เงื่อนไข : ผู้สมัครต้องทำการยืนยันสิทธิ์เรียบร้อยเเล้ว)' , async ({ admissionPage , educationReportingPage, page}) => {
+    test('TC-02.1 ทดสอบรายงานตัว(เงื่อนไข : ผู้สมัครต้องทำการยืนยันสิทธิ์เรียบร้อยเเล้ว) | รายงานตัวครั้งแรก' , async ({ admissionPage , educationReportingPage, page}) => {
         await admissionPage.gotoPrograms();
         await educationReportingPage.clickReportingMenu()
         await educationReportingPage.checkReportingFirstTimePopup() //ใช้ได้เฉพาะครั้งแรกที่รายงานตัวเท่านั้น
         await educationReportingPage.clickAcceptTermPolicy()
         await educationReportingPage.clickAcceptTermPolicyButton()
+    });
+
+    test('TC-02.2 ทดสอบรายงานตัว(เงื่อนไข : ผู้สมัครต้องทำการยืนยันสิทธิ์เรียบร้อยเเล้ว) | เคยรายงานตัวแล้ว' , async ({ admissionPage , educationReportingPage, page}) => {
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        // await educationReportingPage.checkReportingFirstTimePopup() //ใช้ได้เฉพาะครั้งแรกที่รายงานตัวเท่านั้น
+        // await educationReportingPage.clickAcceptTermPolicy()
+        // await educationReportingPage.clickAcceptTermPolicyButton()
     });
     
 });
