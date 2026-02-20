@@ -100,4 +100,20 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         await educationReportingPage.checkStep2Verification(step2Data);
         await educationReportingPage.clickNextStep()
     });
+
+    test('TC-05 ทดสอบปรับปรุงทะเบียนประวัตินักศึกษา (3) ทดสอบปรับปรุงข้อมูลขั้นตอนที่ 3 : ประวัติการศึกษาเดิม (แยก Step)' , async ({ admissionPage , educationReportingPage, page}) => {
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        await expect(page).toHaveURL(/.*reporting/);
+        await educationReportingPage.clickProcessByLabel('ปรับปรุงทะเบียนประวัตินักศึกษา')
+        await expect(page).toHaveURL(/.*reporting\/fullform/);
+        await educationReportingPage.handleStepNavigation()
+        await educationReportingPage.clickNextStep()
+        await educationReportingPage.checkStep3Verification()
+        await educationReportingPage.fillStep3('จบการศึกษาในประเทศ','ปริญญาตรี','สัตวแพทศาสตร์บัณฑิต','3.87','01122568','ปรัชญาดุษฎีบัณฑิต (วิทยาการคอมพิวเตอร์)','จุฬาลงกรณ์มหาวิทยาลัย','เกียรตินิยมอันดับ 1')
+        await educationReportingPage.clickSaveInfoButton()
+        await expect(page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })).toBeVisible()
+        await educationReportingPage.clickConfirmPopup()
+        await educationReportingPage.clickNextStep()
+    });
 });

@@ -26,24 +26,35 @@ export class EducationReportingPage {
     /**
  * LOCATORS SECTION
  * ---------------------------------------------------------------- */
-    reportingMenu
-    nationalDropdown
-    idNumber 
-    birthDate
-    prefix
-    gender
-    creatPassportDate
-    expiredPassportDate
-    firstTHName
-    midTHName
-    lastTHName
-    firstENName
-    midENName
-    lastENName
-    telNumber
-    email
-    birthplace
-    religion
+     reportingMenu
+     nationalDropdown
+     idNumber 
+     birthDate
+     prefix
+     gender
+     creatPassportDate
+     expiredPassportDate
+     firstTHName
+     midTHName
+     lastTHName
+     firstENName
+     midENName
+     lastENName
+     telNumber
+     email
+     birthplace
+     religion
+     educationCountryLabel
+     educationLevelhasValue
+     educatuinLevelPlaceholder
+     educationQualification
+     gpaTextBox
+     educateDate
+     educationQuantificationForApplication
+     universityNamehasValue
+     universityNamePlaceholder
+     honorshasVelue
+     honorsPlaceholder 
     /**
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -74,6 +85,21 @@ export class EducationReportingPage {
      this.email = this.page.getByRole('textbox', { name: 'อีเมล (ที่ใช้สำหรับการติดต่อ)' })
      this.birthplace = this.page.locator('div').filter({ hasText: /^ภูมิลำเนา$/ }).nth(3)
      this.religion = this.page.locator('div').filter({ hasText: /^ไม่ระบุศาสนา$/ }).nth(3)
+
+
+     //Step3
+     this.educationCountryLabel = this.page.locator('div').filter({ hasText: /^จบการศึกษาในประเทศจบการศึกษาต่างประเทศ$/ }).nth(1)
+     this.educationLevelhasValue = this.page.locator('div').filter({ hasText: /^ปริญญาตรี$/ }).nth(3)
+     this.educatuinLevelPlaceholder = this.page.locator('#react-select-16-placeholder')
+     this.educationQualification = this.page.getByRole('textbox', { name: 'วุฒิการศึกษา' })
+     this.gpaTextBox = this.page.getByRole('textbox', { name: 'GPA' })
+     this.educateDate = this.page.getByRole('textbox', { name: 'DD/MM/YYYY' })
+     this.educationQuantificationForApplication = this.page.locator('.react-select__input-container').first()
+     this.universityNamehasValue = this.page.locator('div:nth-child(6) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container')
+     this.universityNamePlaceholder = this.page.locator('div').filter({ hasText: /^ชื่อสถาบันการศึกษา$/ }).nth(3)
+     this.honorshasVelue = this.page.locator('div').filter({ hasText: /^เกียรตินิยมอันดับ 1$/ }).nth(3)
+     this.honorsPlaceholder = this.page.locator('#react-select-19-placeholder')
+
 
      }
 
@@ -322,5 +348,56 @@ export class EducationReportingPage {
           }
 
      
+     }
+
+     async checkStep3Verification(){
+          const elements = [
+               this.educationCountryLabel,
+               this.educationLevelhasValue,
+               this.educationQualification,
+               this.gpaTextBox,
+               this.educateDate,
+               this.educationQuantificationForApplication,
+               this.universityNamehasValue,
+               this.honorshasVelue,
+          ]
+          for (const checkelement of elements) {
+               await expect(checkelement).toBeVisible()
+          }
+     }
+
+     async fillStep3(educationCountry: 'จบการศึกษาในประเทศ' | 'จบการศึกษาต่างประเทศ',educationLevel:string , eduQualification:string , gpa:string , graduate:string ,quantificationForApplication :string ,university:string ,honors:string){
+          await this.educationCountryLabel.getByText(educationCountry).click()
+          
+          if(educationLevel){
+               const educationLevelOption = this.page.getByRole('option', { name: educationLevel })
+               await this.educationLevelhasValue.click()
+               await educationLevelOption.click()
+          }
+
+          await this.educateDate.click()
+          await this.educateDate.press('Control+a') 
+          await this.educateDate.press('Backspace')
+          await this.educateDate.pressSequentially(graduate , {delay:200})
+
+          if(quantificationForApplication){
+               const quantification = this.page.getByRole('option', { name: quantificationForApplication })
+               await this.educationQuantificationForApplication.click()
+               await quantification.click()
+          }
+
+          await this.gpaTextBox.fill(gpa)
+
+          if(university){
+               const universityOption = this.page.getByRole('option', { name: university , exact:true})
+               await this.universityNamePlaceholder.click()
+               await universityOption.click()
+          }
+          
+          if(honors){
+               const honorsOption = this.page.getByRole('option', { name: honors , exact:true }) 
+               await this.honorshasVelue.click()
+               await honorsOption.click()
+          }
      }
 }
