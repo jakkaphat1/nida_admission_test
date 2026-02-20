@@ -55,7 +55,7 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         await expect(page.getByText('ทำรายการสำเร็จ')).toBeVisible()
     });
     
-    test('TC-05 ทดสอบปรับปรุงทะเบียนประวัตินักศึกษา' , async ({ admissionPage , educationReportingPage, page}) => {
+    test('TC-05 ทดสอบปรับปรุงทะเบียนประวัตินักศึกษา (1) ทดสอบปรับปรุงข้อมูลขั้นตอนที่ 1 : ข้อมูลทั่วไป (แยก Step)' , async ({ admissionPage , educationReportingPage, page}) => {
         test.setTimeout(50000)
         await admissionPage.gotoPrograms();
         await educationReportingPage.clickReportingMenu()
@@ -78,6 +78,26 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         // await expect(page.getByText('ยืนยันการทำรายการ')).toBeVisible()
         
         await educationReportingPage.clickConfirmPopup()
+        await educationReportingPage.clickNextStep()
+    });
+
+    test('TC-05 ทดสอบปรับปรุงทะเบียนประวัตินักศึกษา (2) ทดสอบปรับปรุงข้อมูลขั้นตอนที่ 2 : ข้อมูลการศึกษา (แยก Step)' , async ({ admissionPage , educationReportingPage, page}) => {
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        await expect(page).toHaveURL(/.*reporting/);
+        await educationReportingPage.clickProcessByLabel('ปรับปรุงทะเบียนประวัตินักศึกษา')
+        await expect(page).toHaveURL(/.*reporting\/fullform/);
+        await educationReportingPage.handleStepNavigation()
+        const step2Data = {
+            curriculumCode: 'TGAS12001',
+            curriculumName: 'หลักสูตรวิทยาศาสตรมหาบัณฑิต',
+            admissionYear: '2569/ภาคการศึกษาที่ 1',
+            degree: 'ปริญญาโท',
+            faculty: 'GSAS - คณะสถิติประยุกต์',
+            major: 'เทคโนโลยีขั้นสูงและระบบอัจฉริยะ',
+            
+        };
+        await educationReportingPage.checkStep2Verification(step2Data);
         await educationReportingPage.clickNextStep()
     });
 });

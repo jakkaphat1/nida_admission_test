@@ -10,6 +10,17 @@ interface StudentName {
 }
 
 
+interface EducationData {
+    curriculumCode?: string;
+    curriculumName?: string;
+    admissionYear?: string;
+    degree?: string;
+    faculty?: string;
+    major?: string;
+    status?: string;
+}
+
+
 export class EducationReportingPage {
     page : Page;
     /**
@@ -186,6 +197,16 @@ export class EducationReportingPage {
 
      }
 
+     async handleStepNavigation() {
+          const editBtn = this.page.getByRole('button', { name: 'แก้ไข' })
+          const nextBtn = this.page.getByRole('button', { name: 'ถัดไป' })
+
+          if (await editBtn.isVisible() && await nextBtn.isEnabled()) {
+               await nextBtn.click()
+               return  
+          }
+     }
+
      async chooseFacePhoto(fileName:string){
           const chooseFile = this.page.getByLabel('backdrop')
           await expect(chooseFile).toBeVisible()
@@ -281,5 +302,25 @@ export class EducationReportingPage {
      async clickNextStep(){
           const nextButton = this.page.getByRole('button', { name: 'ถัดไป' })
           await nextButton.click()
+     }
+
+     async checkStep2Verification(data: EducationData){
+          if (data.curriculumCode) {
+            await expect(this.page.getByText(data.curriculumCode)).toBeVisible();
+          }
+        
+          if (data.admissionYear) {
+               await expect(this.page.getByText(data.admissionYear)).toBeVisible();
+          }
+
+          const fieldsToVerify = Object.values(data).filter(value => value !== data.status);
+        
+          for (const value of fieldsToVerify) {
+               if (value) {
+                    await expect(this.page.getByText(value).first()).toBeVisible();
+               }
+          }
+
+     
      }
 }
