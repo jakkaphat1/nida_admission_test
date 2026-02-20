@@ -34,6 +34,43 @@ interface WorkingData {
      workType? : string;
      workTelephone? : string;
 
+     workingPlacePresent2? : string;
+     salary2? : string
+     jobPosition2? :string;
+     workType2? : string;
+     workTelephone2? : string;
+}
+
+interface ParentData {
+     fatherAliveStatus? : string
+     fatherPrefix? : string
+     fatherName? : string
+     fatherLastName? : string
+     fatherPhoneNumber? : string
+     fatherEmailContact? : string
+
+     motherAliveStatus? : string
+     motherPrefix? : string
+     motherName? : string
+     motherLastName? : string
+     motherPhoneNumber? : string
+     motherEmailContact? : string
+
+     parentPerson? : string
+     parentRelation? : string
+     parentPrefix? : string
+     parentName? : string
+     parentLastName? : string
+     parentPhoneNumber? : string
+     parentEmailContact? : string
+
+     emergencyParent? : string
+     emergencyrelationshipWith? : string
+     emergencyprefix? : string
+     emergencyName? : string
+     emergencyLastName? : string
+     emergencyPhoneNumber? : string
+     emergencyEmailContact? : string
 }
 
 
@@ -84,6 +121,48 @@ export class EducationReportingPage {
      jobPosition
      workType
      workTelephone
+     workingPlacePresent2
+     salary2
+     jobPosition2
+     workType2
+     workTelephone2
+
+     //Step5 
+     fatherAliveStatus
+     fatherPrefix
+     fatherName
+     fatherLastName
+     fatherPhoneNumber
+     fatherEmailContact
+
+     motherAliveStatus
+     motherPrefix
+     motherName
+     motherLastName
+     motherPhoneNumber
+     motherEmailContact
+
+     parentPerson
+     parentRelation
+     parentPrefix
+     parentName
+     parentLastName
+     parentPhoneNumber
+     parentEmailContact
+
+     emergencyParent
+     emergencyrelationshipWith
+     emergencyprefix
+     emergencyName
+     emergencyLastName
+     emergencyPhoneNumber
+     emergencyEmailContact
+
+
+
+
+
+
     /**
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -141,6 +220,44 @@ export class EducationReportingPage {
      this.jobPosition          = page.getByRole('textbox', { name: 'ตำแหน่งงาน' })
      this.workType             = page.getByRole('textbox', { name: 'ประเภทธุรกิจ' })
      this.workTelephone        = page.getByRole('textbox', { name: 'โทรศัพท์' })
+
+     this.workingPlacePresent2  = page.getByRole('textbox', { name: 'สถานที่ทำงานปัจจุบัน' }).nth(1)
+     this.salary2               = page.getByRole('textbox', { name: 'เงินเดือน' }).nth(1)
+     this.jobPosition2          = page.getByRole('textbox', { name: 'ตำแหน่งงาน' }).nth(1)
+     this.workType2             = page.getByRole('textbox', { name: 'ประเภทธุรกิจ' }).nth(1)
+     this.workTelephone2        = page.getByRole('textbox', { name: 'โทรศัพท์' }).nth(1)
+
+     //step5
+     this.fatherAliveStatus = page.locator('#father_info-alive')
+     this.fatherPrefix = page.locator('.react-select__input-container').first()
+     this.fatherName = page.locator('input[name="father_info.first_name_th"]')
+     this.fatherLastName = page.locator('input[name="father_info.last_name_th"]')
+     this.fatherPhoneNumber = page.locator('input[name="father_info.mobile_phone"]')
+     this.fatherEmailContact = page.locator('input[name="father_info.email_contact"]')
+
+     this.motherAliveStatus = page.locator('#mother_info-alive')
+     this.motherPrefix = page.locator('div:nth-child(2) > .formLayout_container > div:nth-child(2) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container')
+     this.motherName = page.locator('input[name="mother_info.first_name_th"]')
+     this.motherLastName = page.locator('input[name="mother_info.last_name_th"]')
+     this.motherPhoneNumber = page.locator('input[name="mother_info.mobile_phone"]')
+     this.motherEmailContact = page.locator('input[name="mother_info.email_contact"]')
+
+     this.parentPerson = page.locator('#parent_relation')
+     this.parentRelation = page.locator('div').filter({ hasText: /^ความเกี่ยวข้อง$/ }).nth(3)
+     this.parentPrefix = page.locator('div:nth-child(3) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container').first()
+     this.parentName = page.locator('input[name="parent_info.first_name_th"]')
+     this.parentLastName = page.locator('input[name="parent_info.last_name_th"]')
+     this.parentPhoneNumber = page.locator('input[name="parent_info.mobile_phone"]')
+     this.parentEmailContact = page.locator('input[name="parent_info.email_contact"]')
+
+     this.emergencyParent = page.locator('#emergency_relation')
+     this.emergencyrelationshipWith = page.locator('div:nth-child(4) > .formLayout_container > div:nth-child(2) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control')
+     this.emergencyprefix = page.locator('div:nth-child(4) > .formLayout_container > div:nth-child(3) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container')
+     this.emergencyName = page.locator('input[name="emergency_info.first_name_th"]')
+     this.emergencyLastName = page.locator('input[name="emergency_info.last_name_th"]')
+     this.emergencyPhoneNumber = page.locator('input[name="emergency_info.mobile_phone"]')
+     this.emergencyEmailContact = page.locator('input[name="emergency_info.email_contact"]')
+
      }
 
 
@@ -480,8 +597,6 @@ export class EducationReportingPage {
                await this.workingPlacePresent.fill(data.workingPlacePresent)
           }
 
-
-
           if (data.salary)                
                await this.salary.fill(data.salary)
           if (data.jobPosition)                
@@ -492,5 +607,101 @@ export class EducationReportingPage {
           }
           if (data.workTelephone)             
                 await this.workTelephone.fill(data.workTelephone)
+     }
+
+     async clickAddHistoryWorkingButton(){
+          const AddHistoryWorkingButton = this.page.getByRole('button', { name: 'เพิ่มข้อมูลการทำงาน' })
+          await AddHistoryWorkingButton.click()
+     }
+
+     async fillHistoryWorking2(data:WorkingData){
+          if(data.workingPlacePresent2){
+               await this.workingPlacePresent.fill(data.workingPlacePresent2)
+          }
+
+          if (data.salary2)                
+               await this.salary.fill(data.salary2)
+          if (data.jobPosition2)                
+               await this.jobPosition.fill(data.jobPosition2)
+
+          if(data.workType2){
+               await this.workType.fill(data.workType2)
+          }
+          if (data.workTelephone2)             
+                await this.workTelephone.fill(data.workTelephone2)
+     }
+
+     async fillFatherInfo(data: ParentData) {
+          if (data.fatherAliveStatus) {
+               await this.fatherAliveStatus.getByText(data.fatherAliveStatus).click()
+          }
+          if (data.fatherPrefix) {
+               await this.fatherPrefix.click()
+               await this.page.getByRole('option', { name: data.fatherPrefix, exact: true }).click()
+          }
+          if (data.fatherName)        await this.fatherName.fill(data.fatherName)
+          if (data.fatherLastName)    await this.fatherLastName.fill(data.fatherLastName)
+          if (data.fatherPhoneNumber) await this.fatherPhoneNumber.fill(data.fatherPhoneNumber)
+          if (data.fatherEmailContact) await this.fatherEmailContact.fill(data.fatherEmailContact)
+          await this.page.waitForTimeout(2000)
+     }
+
+     async fillMotherInfo(data: ParentData) {
+          if (data.motherAliveStatus) {
+               await this.motherAliveStatus.getByText(data.motherAliveStatus).click()
+          }
+          if (data.motherPrefix) {
+               await this.motherPrefix.click()
+               await this.page.getByRole('option', { name: data.motherPrefix, exact: true }).click()
+          }
+          if (data.motherName)        await this.motherName.fill(data.motherName)
+          if (data.motherLastName)    await this.motherLastName.fill(data.motherLastName)
+          if (data.motherPhoneNumber) await this.motherPhoneNumber.fill(data.motherPhoneNumber)
+          if (data.motherEmailContact) await this.motherEmailContact.fill(data.motherEmailContact)
+          await this.page.waitForTimeout(2000)
+     }
+
+     async fillParentInfo(data: ParentData){
+          if (data.parentPerson){
+               await this.parentPerson.getByText(data.parentPerson).click()
+          }
+
+          if (data.parentRelation){
+               await this.parentRelation.click()
+               await this.page.getByRole('option', { name: data.parentRelation, exact: true }).click()
+          }
+
+          if (data.parentPrefix) {
+               await this.parentPrefix.click()
+               await this.page.getByRole('option', { name: data.parentPrefix, exact: true }).click()
+          }
+
+          if (data.parentName)        await this.parentName.fill(data.parentName)
+          if (data.parentLastName)    await this.parentLastName.fill(data.parentLastName)
+          if (data.parentPhoneNumber) await this.parentPhoneNumber.fill(data.parentPhoneNumber)
+          if (data.parentEmailContact) await this.parentEmailContact.fill(data.parentEmailContact)
+          await this.page.waitForTimeout(2000)
+     }
+
+     async fillEmergencyInfo(data: ParentData){
+          if (data.emergencyParent){
+               await this.emergencyParent.getByText(data.emergencyParent).click()
+          }
+
+          if (data.emergencyrelationshipWith){
+               await this.emergencyrelationshipWith.click()
+               await this.page.getByRole('option', { name: data.emergencyrelationshipWith, exact: true }).click()
+          }
+
+          if (data.emergencyprefix) {
+               await this.emergencyprefix.click()
+               await this.page.getByRole('option', { name: data.emergencyprefix, exact: true }).click()
+          }
+
+          if (data.emergencyName)        await this.emergencyName.fill(data.emergencyName)
+          if (data.emergencyLastName)    await this.emergencyLastName.fill(data.emergencyLastName)
+          if (data.emergencyPhoneNumber) await this.emergencyPhoneNumber.fill(data.emergencyPhoneNumber)
+          if (data.emergencyEmailContact) await this.emergencyEmailContact.fill(data.emergencyEmailContact)
+          await this.page.waitForTimeout(2000)
      }
 }

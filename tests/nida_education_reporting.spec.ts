@@ -139,7 +139,74 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
             workType : 'IT/Technology',
             workTelephone : '043321456'
         }
+
+        // const secondWorkingHistory = {
+        //     workingPlacePresent2 : 'G-Able Co.ltd' ,
+        //     salary2 : '20000',
+        //     jobPosition2 : 'Internship',
+        //     workType2 : 'IT/Technology',
+        //     workTelephone2 : '043321456'
+        // }
         await educationReportingPage.fillStep4(step4Data)
+        // await educationReportingPage.clickAddHistoryWorkingButton()
+        // await educationReportingPage.fillHistoryWorking2(secondWorkingHistory)
+        await educationReportingPage.clickSaveInfoButton()
+        await expect(page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })).toBeVisible()
+        await educationReportingPage.clickConfirmPopup()
+        await educationReportingPage.clickNextStep()
+
+    });
+
+    test('TC-05 (5) ทดสอบปรับปรุงข้อมูลขั้นตอนที่ 5 : ข้อมูลผู้ปกครอง (แยก Step)' , async ({ admissionPage , educationReportingPage, page}) => {
+        test.setTimeout(50000)
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        await expect(page).toHaveURL(/.*reporting/);
+        await educationReportingPage.clickProcessByLabel('ปรับปรุงทะเบียนประวัตินักศึกษา')
+        await expect(page).toHaveURL(/.*reporting\/fullform/);
+        await educationReportingPage.handleStepNavigation()
+        await educationReportingPage.clickNextStep()
+        await educationReportingPage.handleStepNavigation()
+        await educationReportingPage.handleStepNavigation()
+        await educationReportingPage.fillFatherInfo({
+            fatherAliveStatus: 'มีชีวิตอยู่',
+            fatherPrefix: 'นาย',
+            fatherName: 'พ่อทดสอบ',
+            fatherLastName: 'แอดมิชชั่น',
+            fatherPhoneNumber: '0812345678',
+            fatherEmailContact: 'phor.todsob@gmail.com'
+        })
+
+        await educationReportingPage.fillMotherInfo({
+            motherAliveStatus : 'มีชีวิตอยู่',
+            motherPrefix:'นาง',
+            motherName: 'แม่ทดสอบ',
+            motherLastName: 'แอดมิชชั่น',
+            motherPhoneNumber: '0912345678',
+            motherEmailContact : 'maee.todsob@gmail.com'
+        })
+
+        await educationReportingPage.fillParentInfo({
+            parentPerson : 'บุคคลอื่นเป็นผู้ปกครอง',
+            parentRelation : 'ผู้ปกครอง',
+            parentPrefix : 'นาย',
+            parentName : 'พี่ชายทดสอบ',
+            parentLastName : 'แอดมิชชัน',
+            parentPhoneNumber : '0621234567',
+            parentEmailContact : 'phee.todsob@gmail.com'
+
+        })
+
+        await educationReportingPage.fillEmergencyInfo({
+            emergencyParent : 'บุคคลอื่นเป็นผู้ปกครอง',
+            emergencyrelationshipWith : 'ผุ้ที่ติดต่อได้กรณีฉุกเฉิน',
+            emergencyprefix : 'นาย',
+            emergencyName : 'พี่ชายทดสอบ',
+            emergencyLastName : 'แอดมิชชัน',
+            emergencyPhoneNumber : '0621234567',
+            emergencyEmailContact : 'phee.todsob@gmail.com'
+
+        })
         await educationReportingPage.clickSaveInfoButton()
         await expect(page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })).toBeVisible()
         await educationReportingPage.clickConfirmPopup()
