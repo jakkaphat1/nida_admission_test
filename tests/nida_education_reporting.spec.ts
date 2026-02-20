@@ -116,4 +116,34 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         await educationReportingPage.clickConfirmPopup()
         await educationReportingPage.clickNextStep()
     });
+
+    test('TC-05 ทดสอบปรับปรุงทะเบียนประวัตินักศึกษา (4) ทดสอบปรับปรุงข้อมูลขั้นตอนที่ 4 : ประวัติการทำงาน (แยก Step)' , async ({ admissionPage , educationReportingPage, page}) => {
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        await expect(page).toHaveURL(/.*reporting/);
+        await educationReportingPage.clickProcessByLabel('ปรับปรุงทะเบียนประวัตินักศึกษา')
+        await expect(page).toHaveURL(/.*reporting\/fullform/);
+        await educationReportingPage.handleStepNavigation()
+        await educationReportingPage.clickNextStep()
+        await educationReportingPage.handleStepNavigation()
+        const step4Data = {
+            workingStatus : 'ทำงาน',
+            workingAfterEducationYear : '1 ปี',
+            workingAfterEducationMonth :'1 เดือน' ,
+            workingAllExperienceYear : '3 ปี',
+            workingAllExperienceMonth : '2 เดือน' ,
+            jobs : 'นักวิศวกรคอมพิวเตอร์',
+            workingPlacePresent : 'G-Able Co.ltd' ,
+            salary : '50000',
+            jobPosition : 'QA/Tester',
+            workType : 'IT/Technology',
+            workTelephone : '043321456'
+        }
+        await educationReportingPage.fillStep4(step4Data)
+        await educationReportingPage.clickSaveInfoButton()
+        await expect(page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })).toBeVisible()
+        await educationReportingPage.clickConfirmPopup()
+        await educationReportingPage.clickNextStep()
+
+    });
 });

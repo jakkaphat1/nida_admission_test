@@ -20,6 +20,22 @@ interface EducationData {
     status?: string;
 }
 
+interface WorkingData {
+     workingStatus? : string;
+     workingAfterEducationYear? : string;
+     workingAfterEducationMonth? : string;
+     workingAllExperienceYear? : string;
+     workingAllExperienceMonth? : string;
+     jobs? : string;
+
+     workingPlacePresent? : string;
+     salary? : string
+     jobPosition? :string;
+     workType? : string;
+     workTelephone? : string;
+
+}
+
 
 export class EducationReportingPage {
     page : Page;
@@ -55,6 +71,19 @@ export class EducationReportingPage {
      universityNamePlaceholder
      honorshasVelue
      honorsPlaceholder 
+
+     //step4
+     workingStatus
+     workingAfterEduYear
+     workingAfterEduMonth
+     workingAllExpYear
+     workingAllExpMonth
+     jobs
+     workingPlacePresent
+     salary
+     jobPosition
+     workType
+     workTelephone
     /**
  * Constructor SECTION
  * ---------------------------------------------------------------- */
@@ -100,10 +129,19 @@ export class EducationReportingPage {
      this.honorshasVelue = this.page.locator('div').filter({ hasText: /^เกียรตินิยมอันดับ 1$/ }).nth(3)
      this.honorsPlaceholder = this.page.locator('#react-select-19-placeholder')
 
-
+     //Step 4
+     this.workingStatus        = page.locator('div').filter({ hasText: /^ทำงานว่างงาน$/ }).nth(1)
+     this.workingAfterEduYear  = page.locator('div').filter({ hasText: /^เลือกปี$/ }).nth(2)
+     this.workingAfterEduMonth = page.locator('div').filter({ hasText: /^เลือกเดือน$/ }).nth(2)
+     this.workingAllExpYear    = page.locator('div:nth-child(3) > .formItem_input > .grid > div > .css-nxiuxh-container > .unext-form-control').first()
+     this.workingAllExpMonth   = page.locator('div:nth-child(3) > .formItem_input > .grid > div:nth-child(2) > .css-nxiuxh-container > .unext-form-control')
+     this.jobs                 = page.locator('div').filter({ hasText: /^ประเภทอาชีพ$/ }).nth(3)
+     this.workingPlacePresent  = page.getByRole('textbox', { name: 'สถานที่ทำงานปัจจุบัน' })
+     this.salary               = page.getByRole('textbox', { name: 'เงินเดือน' })
+     this.jobPosition          = page.getByRole('textbox', { name: 'ตำแหน่งงาน' })
+     this.workType             = page.getByRole('textbox', { name: 'ประเภทธุรกิจ' })
+     this.workTelephone        = page.getByRole('textbox', { name: 'โทรศัพท์' })
      }
-
-
 
 
     /**
@@ -399,5 +437,60 @@ export class EducationReportingPage {
                await this.honorshasVelue.click()
                await honorsOption.click()
           }
+     }
+
+     async fillStep4(data: WorkingData) {
+          if (data.workingStatus) {
+               // await this.workingStatus.click()
+               await this.page.getByText(data.workingStatus, { exact: true }).click()
+          }
+          if (data.workingAfterEducationYear){
+               await this.workingAfterEduYear.click()
+               const workingAfterEduYearOption = this.page.getByRole('option', { name: data.workingAfterEducationYear, exact: true })
+               await workingAfterEduYearOption.click()
+          }  
+               
+          if (data.workingAfterEducationMonth){
+               await this.workingAfterEduMonth.click()
+               const workingAfterEduMonthOption = this.page.getByRole('option', { name: data.workingAfterEducationMonth , exact: true})
+               await workingAfterEduMonthOption.click()
+          }
+               
+          if (data.workingAllExperienceYear){
+               await this.workingAllExpYear.click()
+               const workingAllExpYearOption = this.page.getByRole('option', { name: data.workingAllExperienceYear, exact: true })
+               await workingAllExpYearOption.click()
+          }
+               
+          if (data.workingAllExperienceMonth) {
+               await this.workingAllExpMonth.click()
+               const workingAllExpMonthOption = this.page.getByRole('option', { name: data.workingAllExperienceMonth, exact: true })
+               await workingAllExpMonthOption.click()
+          }
+          
+          if (data.jobs){
+               await this.jobs.click()
+               const jobsOption = this.page.getByRole('option', { name: data.jobs, exact: true })
+               await jobsOption.click()
+          }
+
+         
+
+          if(data.workingPlacePresent){
+               await this.workingPlacePresent.fill(data.workingPlacePresent)
+          }
+
+
+
+          if (data.salary)                
+               await this.salary.fill(data.salary)
+          if (data.jobPosition)                
+               await this.jobPosition.fill(data.jobPosition)
+
+          if(data.workType){
+               await this.workType.fill(data.workType)
+          }
+          if (data.workTelephone)             
+                await this.workTelephone.fill(data.workTelephone)
      }
 }
