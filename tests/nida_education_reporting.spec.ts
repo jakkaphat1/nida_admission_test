@@ -248,4 +248,32 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         await educationReportingPage.clickConfirmPopup()
         await educationReportingPage.clickNextStep()
     });
+
+    test('TC-05 (7) ทดสอบปรับปรุงข้อมูลขั้นตอนที่ 7 : ข้อมูลอื่นๆ' , async ({ admissionPage , educationReportingPage, page}) => {
+        test.setTimeout(50000)
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        await expect(page).toHaveURL(/.*reporting/);
+        await educationReportingPage.clickProcessByLabel('ปรับปรุงทะเบียนประวัตินักศึกษา')
+        await expect(page).toHaveURL(/.*reporting\/fullform/);
+        await educationReportingPage.clickTrainButtonByName('ที่อยู่')
+        await educationReportingPage.handleStepNavigation()
+        const otherData = ({
+            congenitalDisease : 'โรคเบาหวาน และความดัน' ,
+            bankCompany :  '014',
+            bankBranch :  'สาขาขอนแก่น',
+            bankAccountOwnerName :  'นายไม่ชอบทดสอบ แอดมิชชัน',
+            bankAccountOwnerNumber :  '123456789012',
+        })
+
+        await educationReportingPage.fillOtherInfo(otherData)
+        await educationReportingPage.clickSaveInfoButton()
+        await expect(page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })).toBeVisible()
+        await educationReportingPage.clickConfirmPopup()
+        await educationReportingPage.clickConfirmCheckRegistratrion()
+        await educationReportingPage.clickSaveInfoButton()
+        await expect(page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })).toBeVisible()
+        await educationReportingPage.clickConfirmPopup()
+        await expect(page).toHaveURL(/.*reporting/);
+    });
 });

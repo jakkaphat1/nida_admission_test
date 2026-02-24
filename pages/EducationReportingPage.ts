@@ -79,6 +79,14 @@ interface HouseData{
      floorNumber?:string , alleyName?:string , roadName?:string , provinceName?:string , districtName?:string , subDistrictName?:string
 }
 
+interface OtherData{
+     congenitalDisease? : string
+     bankCompany? : string
+     bankBranch? : string
+     bankAccountOwnerName? : string
+     bankAccountOwnerNumber? : string
+}
+
 
 export class EducationReportingPage {
     page : Page;
@@ -796,5 +804,39 @@ export class EducationReportingPage {
      async clickAddressSameByReceipt(){
           const AddressSameByReceipt = this.page.locator('#receipt_address-assign_flag').getByText('ใช้ที่อยู่ปัจจุบัน')
           await AddressSameByReceipt.click()
+     }
+
+     async fillOtherInfo(data:OtherData){
+          if(data.congenitalDisease){
+               const congenitalDiseaseBox = this.page.getByRole('textbox', { name: 'โรคประจำตัว' })
+               await congenitalDiseaseBox.pressSequentially(data.congenitalDisease)
+          }
+
+          if(data.bankCompany){
+               const bankCompanyDropdown = this.page.locator('div').filter({ hasText: /^ธนาคารเจ้าของบัญชี$/ }).nth(4)
+               const bankCompanyOption = this.page.getByRole('option', { name: data.bankCompany })
+               await bankCompanyDropdown.click()
+               await bankCompanyOption.click()
+          }
+
+          if(data.bankBranch){
+               const bankBranchBox = this.page.getByRole('textbox', { name: 'สาขาธนาคาร' })
+               await bankBranchBox.pressSequentially(data.bankBranch)
+          }
+
+          if(data.bankAccountOwnerName){
+               const bankAccountOwnerNameBox = this.page.getByRole('textbox', { name: 'ชื่อเจ้าของบัญชี' })
+               await bankAccountOwnerNameBox.pressSequentially(data.bankAccountOwnerName)
+          }
+
+          if(data.bankAccountOwnerNumber){
+               const bankAccountOwnerNumberBox = this.page.getByRole('textbox', { name: 'เลขบัญชีธนาคาร' })
+               await bankAccountOwnerNumberBox.pressSequentially(data.bankAccountOwnerNumber)
+          }
+     }
+
+     async clickConfirmCheckRegistratrion(){
+          const ConfirmCheckRegistratrionButton = this.page.getByRole('button', { name: 'ยืนยันการตรวจสอบทะเบียนประวัติ' })
+          await ConfirmCheckRegistratrionButton.click()
      }
 }
