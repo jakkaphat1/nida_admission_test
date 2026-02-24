@@ -276,4 +276,30 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         await educationReportingPage.clickConfirmPopup()
         await expect(page).toHaveURL(/.*reporting/);
     });
+
+    test('TC-06 ทดสอบแนบเอกสารการขึ้นทะเบียนเป็นนักศึกษา' , async ({ admissionPage , educationReportingPage, page}) => {
+        test.setTimeout(50000)
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        await expect(page).toHaveURL(/.*reporting/);
+        await educationReportingPage.clickProcessByLabel('แนบเอกสารการขึ้นทะเบียนเป็นนักศึกษา')
+        await expect(page).toHaveURL(/.*reporting\/attachment/);
+
+        const graduateCard = 'downloads/Invoice_00006830079.pdf';
+        await educationReportingPage.fillAttachmentInfo('ใบจบการศึกษา',graduateCard)
+        await educationReportingPage.clickSaveInfoButton()
+        await expect(page.getByRole('heading', { name: 'ยืนยันการบันทึก' })).toBeVisible()
+        await educationReportingPage.clickConfirmPopup()
+    });
+
+    test('TC-07 ทดสอบออกรหัสนักศึกษา และบัญชีผู้ใช้งาน' , async ({ admissionPage , educationReportingPage, page}) => {
+        test.setTimeout(50000)
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        await expect(page).toHaveURL(/.*reporting/);
+        await educationReportingPage.clickProcessByLabel('ออกรหัสนักศึกษา และบัญชีผู้ใช้งาน')
+        await expect(page).toHaveURL(/.*reporting\/issued-applicant/);
+        await educationReportingPage.clickBackToFirstPageButton()
+        await expect(page).toHaveURL(/.*reporting/);
+    });
 });

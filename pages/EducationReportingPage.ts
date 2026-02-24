@@ -1,4 +1,5 @@
 import { Page, Locator , expect } from '@playwright/test'; 
+import path from 'path';
 
 interface StudentName {
     firstTH: string
@@ -335,7 +336,7 @@ export class EducationReportingPage {
      }
 
      async clickConfirmPopup(){
-        const heading = this.page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })
+        const heading = this.page.getByRole('heading', { name: /ยืนยันการทำรายการ|ยืนยันการบันทึก/ })
         const confirmButton = this.page.getByRole('button', { name: 'ยืนยัน' })
         await expect(heading).toBeVisible()
         await expect(confirmButton).toBeVisible()
@@ -838,5 +839,20 @@ export class EducationReportingPage {
      async clickConfirmCheckRegistratrion(){
           const ConfirmCheckRegistratrionButton = this.page.getByRole('button', { name: 'ยืนยันการตรวจสอบทะเบียนประวัติ' })
           await ConfirmCheckRegistratrionButton.click()
+     }
+
+     async fillAttachmentInfo(cardName:string, filePath: string){
+          const card = this.page.locator('div').filter({ hasText: cardName })
+          const dropBox = this.page.getByRole('button', { name: 'เลือกไฟล์' }).nth(1)
+          
+          const fileChooserPromise = this.page.waitForEvent('filechooser');
+          await dropBox.click();
+          const fileChooser = await fileChooserPromise;
+          await fileChooser.setFiles(filePath);
+     }
+
+     async clickBackToFirstPageButton(){
+          const firstPageBtn = this.page.getByRole('button', { name: 'กลับไปหน้าหลัก' })
+          await firstPageBtn.click()
      }
 }
