@@ -213,4 +213,39 @@ test.describe('NIDA Admission Test Suite - ประกาศผลของฉ�
         await educationReportingPage.clickNextStep()
 
     });
+
+    test('TC-05 (6) ทดสอบปรับปรุงข้อมูลขั้นตอนที่ 6 : ที่อยู่' , async ({ admissionPage , educationReportingPage, page}) => {
+        test.setTimeout(50000)
+        await admissionPage.gotoPrograms();
+        await educationReportingPage.clickReportingMenu()
+        await expect(page).toHaveURL(/.*reporting/);
+        await educationReportingPage.clickProcessByLabel('ปรับปรุงทะเบียนประวัตินักศึกษา')
+        await expect(page).toHaveURL(/.*reporting\/fullform/);
+        // await educationReportingPage.handleStepNavigation()
+        // await educationReportingPage.clickNextStep()
+        await educationReportingPage.clickTrainButtonByName('ข้อมูลผู้ปกครอง')
+        await educationReportingPage.handleStepNavigation()
+        const houseData = ({
+            countryName: 'ไทย' ,
+            addressNumber:'123' , 
+            villageNumber:'6' ,
+            buildingNumber:'ไม่มีอาคาร' , 
+            floorNumber: 'ชั้นที่ 8' , 
+            alleyName:'ซอยข้างถนน' , 
+            roadName:'ถนนใหญ่' , 
+            provinceName:'กรุงเทพมหานคร' , 
+            districtName:'คลองสามวา' , 
+            subDistrictName:'ทรายกองดิน'
+        })
+
+        await educationReportingPage.fillAddressInfo(houseData)
+        await educationReportingPage.clickAddressSameHomeRegistration()
+        await educationReportingPage.clickAddressSameByParent()
+        await educationReportingPage.clickAddressSameByInfoSender()
+        await educationReportingPage.clickAddressSameByReceipt()
+        await educationReportingPage.clickSaveInfoButton()
+        await expect(page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })).toBeVisible()
+        await educationReportingPage.clickConfirmPopup()
+        await educationReportingPage.clickNextStep()
+    });
 });

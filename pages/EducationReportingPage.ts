@@ -74,6 +74,12 @@ interface ParentData {
 }
 
 
+interface HouseData{
+     countryName?:string , addressNumber?:string , villageNumber?:string , buildingNumber?:string , 
+     floorNumber?:string , alleyName?:string , roadName?:string , provinceName?:string , districtName?:string , subDistrictName?:string
+}
+
+
 export class EducationReportingPage {
     page : Page;
     /**
@@ -703,5 +709,92 @@ export class EducationReportingPage {
           if (data.emergencyPhoneNumber) await this.emergencyPhoneNumber.fill(data.emergencyPhoneNumber)
           if (data.emergencyEmailContact) await this.emergencyEmailContact.fill(data.emergencyEmailContact)
           await this.page.waitForTimeout(2000)
+     }
+
+     async clickTrainButtonByName(trainName:string){
+          const TrainButton = this.page.getByRole('button', { name: trainName })
+          await TrainButton.click()
+          
+     }
+
+     async fillAddressInfo(data:HouseData){
+          
+          if(data.countryName){
+               const countryDropdown = this.page.locator('.react-select__input-container').first()
+               const countryOption = this.page.getByRole('option', { name: data.countryName })
+               await countryDropdown.click()
+               await countryOption.click()
+          }
+
+          if(data.addressNumber){
+               const adressNumberBox = this.page.getByRole('textbox', { name: 'ระบุบ้านเลขที่' })
+               await adressNumberBox.fill(data.addressNumber)
+          }
+
+          if(data.villageNumber){
+               const villageNumberBox = this.page.getByRole('textbox', { name: 'ระบุหมู่ที่' })
+               await villageNumberBox.fill(data.villageNumber)
+          }
+
+          if(data.buildingNumber){
+               const buildingNumberBox = this.page.getByRole('textbox', { name: 'อาคาร' })
+               await buildingNumberBox.fill(data.buildingNumber)
+          }
+
+          if(data.floorNumber){
+               const floorNumberBox = this.page.getByRole('textbox', { name: 'ระบุชั้น' })
+               await floorNumberBox.fill(data.floorNumber)
+          }
+
+          if(data.alleyName){
+               const alleyNameBox = this.page.getByRole('textbox', { name: 'ระบุตรอก/ซอย' })
+               await alleyNameBox.fill(data.alleyName)
+          }
+
+          if(data.roadName){
+               const roadNameBox = this.page.getByRole('textbox', { name: 'ระบุถนน' })
+               await roadNameBox.fill(data.roadName)
+          }
+
+          if(data.provinceName){
+               const provinceNameBox = this.page.locator('div:nth-child(8) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container')
+               const provinceNameOption = this.page.getByRole('option', { name: data.provinceName , exact:true })
+               await provinceNameBox.click()
+               await provinceNameOption.click()
+          }
+
+          if(data.districtName){
+               const districtNameBox = this.page.locator('div:nth-child(9) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container')
+               const districtNameOption = this.page.getByRole('option', { name: data.districtName , exact:true})
+               await districtNameBox.click()
+               await districtNameOption.click()
+          }
+
+          if(data.subDistrictName){
+               const subDistrictNameBox = this.page.locator('div:nth-child(10) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container')
+               const subDistrictNameOption = this.page.getByRole('option', { name: data.subDistrictName , exact:true })
+               await subDistrictNameBox.click()
+               await subDistrictNameOption.click()
+          }
+     }
+
+     async clickAddressSameHomeRegistration(){
+          const AddressSameHomeRegistrationButton = this.page.locator('#house_address-assign_flag').getByText('ใช้ที่อยู่ปัจจุบัน')
+          await AddressSameHomeRegistrationButton.click()
+     }
+
+     async clickAddressSameByParent(){
+          const AddressSameByParent = this.page.locator('#parent_address-assign_flag').getByText('ใช้ที่อยู่ปัจจุบัน')
+          await AddressSameByParent.click()
+     }
+
+     async clickAddressSameByInfoSender(){
+          const AddressSameByInfoSender = this.page.locator('#document_address-assign_flag').getByText('ใช้ที่อยู่ปัจจุบัน')
+          await AddressSameByInfoSender.click()
+     }
+
+     async clickAddressSameByReceipt(){
+          const AddressSameByReceipt = this.page.locator('#receipt_address-assign_flag').getByText('ใช้ที่อยู่ปัจจุบัน')
+          await AddressSameByReceipt.click()
      }
 }
