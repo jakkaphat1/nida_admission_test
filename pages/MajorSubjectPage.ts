@@ -147,6 +147,21 @@ export class MajorSubjectPage {
         await editButton.click()
     }
 
+    async clickDeleteMajorSubjectCardByName(subjectID:string){
+        const card = this.page.locator('div').filter({ hasText: subjectID }).first()
+        const deleteButton = card.locator('button.delete-button')
+        await deleteButton.waitFor({ state: 'visible' });
+        await deleteButton.click()
+    }
+
+    async confirmDeleteMajorSubjectPopup(){
+        await expect(this.page.getByRole('heading', { name: 'ยืนยันการลบวิชาเอก ?' })).toBeVisible()
+        
+        const confirmButton = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await confirmButton.waitFor({state:'visible'})
+        await confirmButton.click()
+    }
+
     async fillEditMajorSubjectPage(data:{
         faculty?: string, 
         subjectTH?: string, 

@@ -59,5 +59,15 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible();
     });
 
+    test('TC-06 ทดสอบลบข้อมูลวิชาเอก' , async ({ majorSubjectPage, page}) => {
+        await majorSubjectPage.gotoPrograms();
+        await majorSubjectPage.gotoMajorSubjectMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/major/);
+        await majorSubjectPage.fillSearchAndFilterBox('GSPA001','ใช้งาน')
+        await majorSubjectPage.clickDeleteMajorSubjectCardByName('GSPA001')
+        await majorSubjectPage.confirmDeleteMajorSubjectPopup()
+        await expect(page.getByText('ลบข้อมูลสำเร็จ')).toBeVisible()
+    });
+
 
 });
