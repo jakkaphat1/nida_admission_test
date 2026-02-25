@@ -20,6 +20,27 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await majorSubjectPage.gotoMajorSubjectMenu()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/major/);
         await majorSubjectPage.fillSearchAndFilterBox('สาขาวิชาเอกการจัดการระบบสารสนเทศ','ใช้งาน','คณะสถิติประยุกต์')
+        await expect(page.getByText('สาขาวิชาเอกการจัดการระบบสารสนเทศ')).toBeVisible();
+    });
+
+    test('TC-04 ทดสอบเพิ่มวิชาเอก' , async ({ majorSubjectPage, page}) => {
+        await majorSubjectPage.gotoPrograms();
+        await majorSubjectPage.gotoMajorSubjectMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/major/);
+        await majorSubjectPage.clickAddMajorSubjectButton()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/major\/create.*/);
+        await majorSubjectPage.checkAddMajorSubjectPage()
+
+        const data = {
+            id: 'GSPA001',
+            faculty: 'GSPA - คณะรัฐประศาสนศาสตร์',
+            subjectTH: 'การจัดการทรัพยากรมนุษย์',
+            subjectEN: 'Human Resource Management',
+            subjectCN: ''
+        }
+        await majorSubjectPage.fillAddMajorSubjectPage(data)
+        await majorSubjectPage.clickSaveButton()
+        await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible();
     });
 
 
