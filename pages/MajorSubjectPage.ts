@@ -102,7 +102,7 @@ export class MajorSubjectPage {
         const statusButton = this.page.locator('label').filter({ hasText: 'สถานะ' })
         .locator('xpath=./parent::div/following-sibling::div//button[@role="switch"] | ./ancestor::div[contains(@class,"form-item")]//button[@role="switch"] | //span[contains(@class,"ant-switch")]')
         .first();
-        const selectFacultyDropdown = this.page.locator('div').filter({ hasText: /^เลือกคณะ$/ }).nth(3)
+        const selectFacultyDropdown = this.page.locator('.react-select__input-container')
         const majorSubjectTH = this.page.getByRole('textbox', { name: 'ชื่อวิชาเอก (ภาษาไทย)*' })
         const majorSubjectEN = this.page.getByRole('textbox', { name: 'ชื่อวิชาเอก (ภาษาอังกฤษ)' })
         const majorSubjectCN = this.page.getByRole('textbox', { name: 'ชื่อวิชาเอก (ภาษาจีน)' })
@@ -139,5 +139,39 @@ export class MajorSubjectPage {
     async clickSaveButton(){
         const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
         await saveBtn.click()
+    }
+
+    async clickEditMajorSubjectCardByName(subjectID:string){
+        const card = this.page.locator('div').filter({ hasText: subjectID }).first()
+        const editButton = card.getByRole('button').nth(4)
+        await editButton.click()
+    }
+
+    async fillEditMajorSubjectPage(data:{
+        faculty?: string, 
+        subjectTH?: string, 
+        subjectEN?: string, 
+        subjectCN?: string
+    }){
+        const selectFacultyDropdown = this.page.locator('.react-select__input-container')
+        const majorSubjectTH = this.page.getByRole('textbox', { name: 'ชื่อวิชาเอก (ภาษาไทย)*' })
+        const majorSubjectEN = this.page.getByRole('textbox', { name: 'ชื่อวิชาเอก (ภาษาอังกฤษ)' })
+        const majorSubjectCN = this.page.getByRole('textbox', { name: 'ชื่อวิชาเอก (ภาษาจีน)' })
+
+        if(data.faculty){
+            const facultyOption = this.page.getByRole('option', { name: data.faculty })
+            await selectFacultyDropdown.click()
+            await facultyOption.click()
+        }
+
+        if(data.subjectTH){
+            await majorSubjectTH.fill(data.subjectTH)
+        }
+        if(data.subjectEN){
+            await majorSubjectEN.fill(data.subjectEN)
+        }
+        if(data.subjectCN){
+            await majorSubjectCN.fill(data.subjectCN)
+        }
     }
 }
