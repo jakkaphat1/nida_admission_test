@@ -9,10 +9,17 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await majorSubjectPage.fillUsernameAndPassword('sys_admin1','unext@2022')
     });
 
-   test('TC-02 ทดสอบไปที่เมนูข้อมูลวิชาเอก' , async ({ majorSubjectPage, page}) => {
+    test('TC-02 ทดสอบไปที่เมนูข้อมูลวิชาเอก' , async ({ majorSubjectPage, page}) => {
         await majorSubjectPage.gotoPrograms();
         await majorSubjectPage.gotoMajorSubjectMenu()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/major/);
+    });
+
+    test('TC-03 ทดสอบค้นหาข้อมูลวิชาเอก' , async ({ majorSubjectPage, page}) => {
+        await majorSubjectPage.gotoPrograms();
+        await majorSubjectPage.gotoMajorSubjectMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/major/);
+        await majorSubjectPage.fillSearchAndFilterBox('สาขาวิชาเอกการจัดการระบบสารสนเทศ','ใช้งาน','คณะสถิติประยุกต์')
     });
 
 

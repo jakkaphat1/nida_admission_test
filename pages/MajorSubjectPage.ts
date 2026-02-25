@@ -46,4 +46,27 @@ export class MajorSubjectPage {
         await basicInfoButton.click()
         await majorSubeject.click()
     }
+
+    async fillSearchAndFilterBox(subjectName:string , status:string ,faculty?:string ){
+        const searchBox = this.page.getByRole('textbox', { name: 'ค้นหารหัสหรือชื่อวิชาเอก' })
+        const statusDropdown = this.page.locator('.react-select__value-container').first()
+        const filterButton = this.page.getByRole('button', { name: 'ตัวกรอง' })
+        const selectFacultyDropdown = this.page.locator('div').filter({ hasText: /^เลือกคณะ$/ }).nth(4)
+
+        await searchBox.pressSequentially(subjectName)
+        
+        if(status){
+            const statusOption = this.page.getByRole('option', { name: status, exact: true })
+            await statusDropdown.click()
+            await statusOption.click()
+        }
+
+        if(faculty){
+            const facultyOption = this.page.getByRole('option', { name: faculty })
+            await filterButton.click() 
+            await selectFacultyDropdown.click()
+            await facultyOption.click()
+        }
+
+    }
 }
