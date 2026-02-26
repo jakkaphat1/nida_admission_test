@@ -13,6 +13,13 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await departmentInformationPage.gotoPrograms();
         await departmentInformationPage.gotoSubjectFieldMenu()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/subject-field/);
+
+        const searchData = {
+            searchRole:'สาขาวิชานิเทศศาสตร์และนวัตกรรม',
+            status: 'ใช้งาน' as const,
+            facultyName:'GSCM - คณะนิเทศศาสตร์',
+        }
+        await departmentInformationPage.fillSearchAndFilterBox(searchData)
     });
 
     

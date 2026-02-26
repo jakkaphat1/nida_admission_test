@@ -49,4 +49,36 @@ export class DepartmentInformationPage {
         await basicInfoButton.click()
         await subjectField.click()
     }
+
+    async fillSearchAndFilterBox(data:{
+        searchRole?:string,
+        status?:'ใช้งาน' | 'ไม่ใช้งาน',
+        facultyName?:string,
+    }){
+
+        const searchBox = this.page.getByRole('textbox', { name: 'ค้นหารหัสหรือชื่อสาขาวิชา' })
+        const statusDropdown = this.page.locator('.react-select__value-container').first()
+        const filterButton = this.page.getByRole('button', { name: 'ตัวกรอง' })
+        const facultyNameDropdown = this.page.locator('.react-select__input-container')
+        
+
+        if(data.searchRole){
+            await searchBox.pressSequentially(data.searchRole , {delay:100})
+        }
+
+        if(data.status){
+            const statusOption = this.page.getByRole('option', { name: data.status, exact: true })
+            await statusDropdown.click()
+            await statusOption.click()
+            await expect(this.page.getByText(data.status, { exact: true })).toBeVisible();
+        }
+
+        if(data.facultyName){
+            await filterButton.click()
+            await facultyNameDropdown.click()
+
+            const facultyNameOption = this.page.getByRole('option' , {name: data.facultyName})
+            await facultyNameOption.click()
+        }
+    }
 }
