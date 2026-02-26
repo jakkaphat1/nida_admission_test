@@ -105,4 +105,13 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await facultyInformationPage.clickSaveButton()
         await expect(page.getByRole('heading' , {name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
     });
+
+    test('TC-05 ทดสอบลบข้อมูลคณะ' , async ({ facultyInformationPage, page}) => {
+        await facultyInformationPage.gotoPrograms();
+        await facultyInformationPage.gotoFacultyInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/university-structure/);
+        await facultyInformationPage.clickDeleteFacultyInCampus('สยาม','คณะนิติศาสตร์')
+        await facultyInformationPage.clickConfirmDeleteButton()
+        await expect(page.getByRole('heading' , {name:'ทำรายการสำเร็จ'})).toBeVisible()
+    });
 });

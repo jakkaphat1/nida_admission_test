@@ -65,6 +65,20 @@ export class FacultyInformationPage {
         await this.page.getByRole('button', { name: 'แก้ไข' }).click();
     }
 
+    async clickDeleteFacultyInCampus(campusName: string, facultyName: string) {
+        const campusCard = this.page.locator('.ant-card, div').filter({ hasText: campusName }).first();
+        const facultyRow = campusCard.locator('tr').filter({ hasText: facultyName });
+        const kebabMenu = facultyRow.locator('.menuAction_button').first();
+        await kebabMenu.click();
+        await this.page.getByRole('button', { name: 'ลบ' }).click();
+    }
+
+    async clickConfirmDeleteButton(){
+        const confirmButton = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(this.page.getByRole('heading' , {name:'ยืนยันการลบคณะ ?'})).toBeVisible()
+        await confirmButton.click()
+    }
+
 
     // Fill Add Process
     async fillAddFacultyInfoPage(data:{
