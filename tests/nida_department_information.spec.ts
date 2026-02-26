@@ -13,6 +13,12 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await departmentInformationPage.gotoPrograms();
         await departmentInformationPage.gotoSubjectFieldMenu()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/subject-field/);
+    });
+
+    test('TC-03 ทดสอบค้นหาข้อมูลสาขาวิชา' , async ({ departmentInformationPage, page}) => {
+        await departmentInformationPage.gotoPrograms();
+        await departmentInformationPage.gotoSubjectFieldMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/subject-field/);
 
         const searchData = {
             searchRole:'สาขาวิชานิเทศศาสตร์และนวัตกรรม',
@@ -22,6 +28,27 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await departmentInformationPage.fillSearchAndFilterBox(searchData)
     });
 
-    
+    test('TC-04 ทดสอบกำหนดข้อมูลสาขาวิชา' , async ({ departmentInformationPage, page}) => {
+        await departmentInformationPage.gotoPrograms();
+        await departmentInformationPage.gotoSubjectFieldMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/subject-field/);
+
+        await departmentInformationPage.clickAddSubjectButton()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/subject-field\/create.*/);
+
+        const fillData = {
+            id: '10008986', 
+            status:'ใช้งาน' as const,
+            faculty: 'GSPA - คณะรัฐประศาสนศาสตร์', 
+            subjectTH: 'การจัดการทรัพยากรมนุษย์', 
+            subjectEN: 'Human Resource Management', 
+            subjectCN: '',
+            majorSubjectStatus:'มี',
+            majorSubject:'GSPA007'
+        }
+        await departmentInformationPage.fillAddSubjectPage(fillData)
+        await departmentInformationPage.clickSaveButton()
+        await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible()
+    });
 
 });

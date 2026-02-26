@@ -81,4 +81,78 @@ export class DepartmentInformationPage {
             await facultyNameOption.click()
         }
     }
+
+
+    async clickAddSubjectButton(){
+        const AddSubjectButton = this.page.getByRole('button', { name: 'เพิ่มสาขาวิชา' })
+        await AddSubjectButton.click()
+    }
+
+
+
+    async fillAddSubjectPage(data: {
+        id?: string, 
+        status?:'ใช้งาน' | 'ไม่ใช้งาน',
+        faculty?: string, 
+        subjectTH?: string, 
+        subjectEN?: string, 
+        subjectCN?: string,
+        majorSubjectStatus?:string,
+        majorSubject?:string,
+
+    }){
+        const subjectID = this.page.getByRole('textbox', { name: 'รหัสสาขาวิชา*' })
+        const statusContainer = this.page.locator('span.label')
+        const statusButton = this.page.locator('label').filter({ hasText: 'สถานะ' })
+        .locator('xpath=./parent::div/following-sibling::div//button[@role="switch"] | ./ancestor::div[contains(@class,"form-item")]//button[@role="switch"] | //span[contains(@class,"ant-switch")]')
+        .first();
+        const selectFacultyDropdown = this.page.locator('.react-select__input-container')
+        const majorSubjectTH = this.page.getByRole('textbox', { name: 'ชื่อสาขาวิชา (ภาษาไทย)*' })
+        const majorSubjectEN = this.page.getByRole('textbox', { name: 'ชื่อสาขาวิชา (ภาษาอังกฤษ)' })
+        const majorSubjectCN = this.page.getByRole('textbox', { name: 'ชื่อสาขาวิชา (ภาษาจีน)' })
+
+        if(data.id){
+            await subjectID.pressSequentially(data.id)
+        }
+
+        if (data.status) {
+            const currentText = await statusContainer.textContent()
+            if (!currentText?.includes(data.status)) {
+                await statusContainer.click()
+            }
+            await expect(statusContainer).toContainText(data.status)
+        }
+
+        if(data.faculty){
+            const facultyOption = this.page.getByRole('option', { name: data.faculty })
+            await selectFacultyDropdown.click()
+            await facultyOption.click()
+        }
+        if(data.subjectTH){
+            await majorSubjectTH.fill(data.subjectTH)
+        }
+        if(data.subjectEN){
+            await majorSubjectEN.fill(data.subjectEN)
+        }
+        if(data.subjectCN){
+            await majorSubjectCN.fill(data.subjectCN)
+        }
+
+        if(data.majorSubjectStatus){
+            const majorsubject = this.page.getByText('มี', { exact: true })
+            await majorsubject.click()
+            if(data.majorSubjectStatus == 'มี' && data.majorSubject){
+                const expandDropdown = this.page.locator('#major_subject_code > .unext-form-control > .react-select__indicators')
+                const majorsubjectOption = this.page.getByRole('option', { name: data.majorSubject })
+                await expandDropdown.click()
+                await majorsubjectOption.click()
+            }
+        }
+    }
+
+
+    async clickSaveButton(){
+        const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
+        await saveBtn.click()
+    }
 }
