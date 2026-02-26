@@ -57,6 +57,16 @@ export class FacultyInformationPage {
         await addButton.click()
     }
 
+    async clickEditFacultyInCampus(campusName: string, facultyName: string) {
+        const campusCard = this.page.locator('.ant-card, div').filter({ hasText: campusName }).first();
+        const facultyRow = campusCard.locator('tr').filter({ hasText: facultyName });
+        const kebabMenu = facultyRow.locator('.menuAction_button').first();
+        await kebabMenu.click();
+        await this.page.getByRole('button', { name: 'แก้ไข' }).click();
+    }
+
+
+    // Fill Add Process
     async fillAddFacultyInfoPage(data:{
         facultyID? : string,
         facultyIntial? : string,
@@ -155,6 +165,141 @@ export class FacultyInformationPage {
     }
 
     async fillAddFacultyContactInfo(data:{
+        campusTel? : string,
+        campusLineID? : string,
+        campusFacebook? : string,
+        campusEmail? : string,
+        campusWebsite? : string,
+        campusFirstOfficerName? : string,
+        campusFirstOfficerTel? : string,
+        campusSecondOfficerName? : string,
+        campusSecondOfficerTel? : string,
+    }){
+        if(data.campusTel){
+            const telphoneBox = this.page.getByRole('textbox', { name: 'เบอร์โทรสำนักงาน' })
+            await telphoneBox.fill(data.campusTel)
+        }
+        if(data.campusLineID){
+            const lineIDBox = this.page.getByRole('textbox', { name: 'line ID' })
+            await lineIDBox.fill(data.campusLineID)
+        }
+        if(data.campusFacebook){
+            const faceboolBox = this.page.getByRole('textbox', { name: 'Facebook' })
+            await faceboolBox.fill(data.campusFacebook)
+        }
+        if(data.campusEmail){
+            const inputBox = this.page.getByRole('textbox', { name: 'Email' })
+            await inputBox.fill(data.campusEmail)
+        }
+        if(data.campusWebsite){
+            const inputBox = this.page.getByRole('textbox', { name: 'Website' })
+            await inputBox.fill(data.campusWebsite)
+        }
+        if(data.campusFirstOfficerName && data.campusFirstOfficerTel ){
+            const inputNameBox = this.page.locator('[id="officers[0].contact_name"]')
+            const inputTelBox = this.page.locator('[id="officers[0].contact_tel"]')
+            await inputNameBox.fill(data.campusFirstOfficerName)
+            await inputTelBox.fill(data.campusFirstOfficerTel)
+        }
+        if(data.campusSecondOfficerName && data.campusSecondOfficerTel){
+            const inputNameBox = this.page.locator('[id="officers[1].contact_name"]')
+            const inputTelBox = this.page.locator('[id="officers[1].contact_tel"]')
+            await inputNameBox.fill(data.campusSecondOfficerName)
+            await inputTelBox.fill(data.campusSecondOfficerTel)
+        }
+    }
+
+
+    // Fill Edit Process
+    async fillEditFacultyInfoPage(data:{
+        facultyID? : string,
+        facultyIntial? : string,
+        facultyNameTH? : string,
+        facultyNameEN? : string,
+        facultyColour? : string,
+        
+    }){
+        if(data.facultyID){
+            const facultyIDBox = this.page.getByRole('textbox', { name: 'รหัสคณะ*' })
+            await facultyIDBox.fill(data.facultyID)
+        }
+
+        if(data.facultyIntial){
+            const facultyIntialBox = this.page.getByRole('textbox', { name: 'ชื่อย่อคณะ*' })
+            await facultyIntialBox.fill(data.facultyIntial)
+        }
+
+        if(data.facultyNameTH){
+            const facultyNameTHBox = this.page.getByRole('textbox', { name: 'ชื่อคณะ (ภาษาไทย)*' })
+            await facultyNameTHBox.fill(data.facultyNameTH)
+        }
+
+        if(data.facultyNameEN){
+            const facultyNameENBox = this.page.getByRole('textbox', { name: 'ชื่อคณะ (ภาษาอังกฤษ)*' })
+            await facultyNameENBox.fill(data.facultyNameEN)
+        }
+
+        if(data.facultyColour){
+            const facultyColourBox = this.page.getByRole('textbox', { name: 'ระบุ HEX code เช่น #FFFFFF' })
+            await facultyColourBox.fill(data.facultyColour)
+        }
+    }
+
+    async fillEditFacultyAddressInfo(data:{
+        campusLocation? : 'สถานที่เดียวกับวิทยาเขต'|'กำหนดเอง',
+        campusAddress? : string,
+        campusProvince? : string,
+        campusDistrict? : string,
+        campusSubDistrict? : string,
+        campusZipCode? : string,
+        campusLatitude? : string,
+        campusLongitude? : string,
+    }){
+        if(data.campusLocation == 'กำหนดเอง' && data.campusAddress){
+            const facultyPlace = this.page.getByText('กำหนดเอง')
+            await facultyPlace.click()
+
+            if(data.campusAddress){
+                const address = this.page.getByRole('textbox', { name: 'ที่อยู่' })
+                await address.fill(data.campusAddress)
+            }
+            if(data.campusProvince){
+                const provinceDropdown = this.page.locator('.react-select__input-container').first()
+                const provinceOption = this.page.getByRole('option', { name: data.campusProvince })
+                await provinceDropdown.click()
+                await provinceOption.click()
+            }
+            if(data.campusDistrict){
+                const districtDropdown = this.page.locator('#district_code > .unext-form-control > .react-select__value-container > .react-select__input-container')
+                const districtOption = this.page.getByRole('option', { name: data.campusDistrict })
+                await districtDropdown.click()
+                await districtOption.click()
+            }
+            if(data.campusSubDistrict){
+                const campusSubDistrictDropdown = this.page.locator('#subdistrict_code > .unext-form-control > .react-select__value-container > .react-select__input-container')
+                const camputSubDistrictOption = this.page.getByRole('option', { name: data.campusSubDistrict })
+                await campusSubDistrictDropdown.click()
+                await camputSubDistrictOption.click()
+            }
+            if(data.campusZipCode){
+                const zipcodeDropdown = this.page.locator('#zipcode > .unext-form-control > .react-select__indicators')
+                const zipcodeOption = this.page.getByRole('option', { name: data.campusZipCode })
+                await zipcodeDropdown.click()
+                await zipcodeOption.click()
+            }
+            if(data.campusLatitude){
+                const latitudeBox = this.page.getByRole('textbox', { name: 'Latitude' })
+                await latitudeBox.fill(data.campusLatitude)
+            }
+            if(data.campusLongitude){
+                const longitudeBox = this.page.getByRole('textbox', { name: 'Longitude' })
+                await longitudeBox.fill(data.campusLongitude)
+            }
+        }
+
+    }
+
+    async fillEditFacultyContactInfo(data:{
         campusTel? : string,
         campusLineID? : string,
         campusFacebook? : string,

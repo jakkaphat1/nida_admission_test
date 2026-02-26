@@ -63,5 +63,46 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page.getByRole('heading' , {name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
     });
 
+    test('TC-04 ทดสอบแก้ไขข้อมูลคณะ' , async ({ facultyInformationPage, page}) => {
+        await facultyInformationPage.gotoPrograms();
+        await facultyInformationPage.gotoFacultyInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/university-structure/);
+        await facultyInformationPage.clickEditFacultyInCampus('สยาม','คณะนิติศาสตร์')
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/university-structure\/faculty-edit.*/);
 
+        const facultyInfoData = {
+           
+            facultyIntial : 'นต.',
+            facultyNameTH : 'คณะนิติศาสตร์',
+            facultyNameEN : 'Graduate School of Law',
+            facultyColour : '#740000',
+        }
+        await facultyInformationPage.fillEditFacultyInfoPage(facultyInfoData)
+
+
+        const facultyAddressInfo = {
+            campusLocation : 'กำหนดเอง' as const,
+            campusAddress : '888/55',
+            campusProvince : 'กรุงเทพมหานคร' ,
+            campusDistrict : 'ปทุมวัน' ,
+            campusSubDistrict : 'ปทุมวัน',
+            campusZipCode : '10330',
+            campusLatitude : '7.894937',
+            campusLongitude : '98.37683',
+        }
+        await facultyInformationPage.fillEditFacultyAddressInfo(facultyAddressInfo)
+
+        const facultyContactInfo = {
+            campusTel : '02-727-39334',
+            campusLineID : '@LLMLawNIDA',
+            campusFacebook : 'LawNIDA',
+            campusEmail : 'schooloflaw@nida.ac.th',
+            campusWebsite : 'https://law.nida.ac.th',
+            campusFirstOfficerName : 'คุณธรณ์ธันย์ คะริบรัมย์',
+            campusFirstOfficerTel : '08-279-01946',
+        }
+        await facultyInformationPage.fillEditFacultyContactInfo(facultyContactInfo)
+        await facultyInformationPage.clickSaveButton()
+        await expect(page.getByRole('heading' , {name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
+    });
 });
