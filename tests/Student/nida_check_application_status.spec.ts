@@ -1,7 +1,7 @@
-import { test, expect } from '../fixtures/baseTest';
-import { AdmissionPage } from '../pages/AdmissionPage';
-import { ExamsPage, StudentInfoForApplyExam } from '../pages/ExamsPage';
-import { ApplicationStatusPage } from '../pages/ApplicationStatusPage';
+import { test, expect } from '../../fixtures/baseTest';
+import { AdmissionPage } from '../../pages/AdmissionPage';
+import { ExamsPage, StudentInfoForApplyExam } from '../../pages/ExamsPage';
+import { ApplicationStatusPage } from '../../pages/ApplicationStatusPage';
 import path from 'path';
 
 test.describe('NIDA Check Application Status' , () => {

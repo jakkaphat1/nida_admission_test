@@ -1,4 +1,4 @@
-import { test, expect } from '../fixtures/baseTest';
+import { test, expect } from '../../fixtures/baseTest';
 
 test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรับสมัคร/ข้อมูลตั้งต้น/ เมนูข้อมูลวิชาเอก', () => {
     test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)' , async ({ admissionPage ,majorSubjectPage, page}) => {

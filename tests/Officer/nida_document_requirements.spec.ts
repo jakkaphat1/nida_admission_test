@@ -1,9 +1,9 @@
-import { test, expect } from '../fixtures/baseTest';
-import { AdmissionPage } from '../pages/AdmissionPage';
-import { ExamsPage, StudentInfoForApplyExam } from '../pages/ExamsPage';
-import { ApplicationStatusPage } from '../pages/ApplicationStatusPage';
-import { CourseAndProgramInformationPage } from '../pages/CourseAndProgramInformationPage';
-import { DocumentRequirementPage } from '../pages/DocumentRequirementsPage';
+import { test, expect } from '../../fixtures/baseTest';
+import { AdmissionPage } from '../../pages/AdmissionPage';
+import { ExamsPage, StudentInfoForApplyExam } from '../../pages/ExamsPage';
+import { ApplicationStatusPage } from '../../pages/ApplicationStatusPage';
+import { CourseAndProgramInformationPage } from '../../pages/CourseAndProgramInformationPage';
+import { DocumentRequirementPage } from '../../pages/DocumentRequirementsPage';
 import path from 'path';
 
 test.describe('NIDA Specific Document Information Requirement' , () => {

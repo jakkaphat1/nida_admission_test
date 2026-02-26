@@ -1,4 +1,4 @@
-import { test, expect } from '../fixtures/baseTest';
+import { test, expect } from '../../fixtures/baseTest';
 
 test.describe('NIDA Admission Test Suite - ยืนยันสิทธิ์เข้าศึกษา' , () => {
     test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)' , async ({ admissionPage, page}) => {
