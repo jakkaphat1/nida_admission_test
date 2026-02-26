@@ -75,4 +75,19 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await departmentInformationPage.clickSaveButton()
         await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible()
     });
+
+    test('TC-06 ทดสอบลบข้อมูลสาขาวิชา' , async ({ departmentInformationPage, page}) => {
+        await departmentInformationPage.gotoPrograms();
+        await departmentInformationPage.gotoSubjectFieldMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/subject-field/);
+
+        const searchData = {
+            searchInput:'10008986',
+            status: 'ใช้งาน' as const,
+        }
+        await departmentInformationPage.fillSearchAndFilterBox(searchData)
+        await departmentInformationPage.clickDeleteSubjectCardByName('10008986')
+        await departmentInformationPage.confirmDeleteSubjectPopup()
+        await expect(page.getByText('ทำรายการสำเร็จ')).toBeVisible()
+    });
 });

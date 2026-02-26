@@ -88,8 +88,6 @@ export class DepartmentInformationPage {
         await AddSubjectButton.click()
     }
 
-
-
     async fillAddSubjectPage(data: {
         id?: string, 
         status?:'ใช้งาน' | 'ไม่ใช้งาน',
@@ -150,7 +148,6 @@ export class DepartmentInformationPage {
         }
     }
 
-
     async clickSaveButton(){
         const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
         await saveBtn.click()
@@ -201,5 +198,19 @@ export class DepartmentInformationPage {
                     await majorsubjectOption.click()
             }
         }
+    }
+
+    async clickDeleteSubjectCardByName(subjectID:string){
+        const card = this.page.locator('div').filter({ hasText: subjectID }).nth(1)
+        const deleteButton = card.locator('button.delete-button')
+        await deleteButton.waitFor({ state: 'visible' });
+        await deleteButton.click()
+    }
+
+    async confirmDeleteSubjectPopup(){
+        await expect(this.page.getByRole('heading', { name: 'ยืนยันการลบสาขาวิชา ?' })).toBeVisible()
+        const confirmButton = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await confirmButton.waitFor({state:'visible'})
+        await confirmButton.click()
     }
 }
