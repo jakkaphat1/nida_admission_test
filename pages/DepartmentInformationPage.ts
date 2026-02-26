@@ -51,7 +51,7 @@ export class DepartmentInformationPage {
     }
 
     async fillSearchAndFilterBox(data:{
-        searchRole?:string,
+        searchInput?:string,
         status?:'ใช้งาน' | 'ไม่ใช้งาน',
         facultyName?:string,
     }){
@@ -62,8 +62,8 @@ export class DepartmentInformationPage {
         const facultyNameDropdown = this.page.locator('.react-select__input-container')
         
 
-        if(data.searchRole){
-            await searchBox.pressSequentially(data.searchRole , {delay:100})
+        if(data.searchInput){
+            await searchBox.pressSequentially(data.searchInput , {delay:100})
         }
 
         if(data.status){
@@ -154,5 +154,52 @@ export class DepartmentInformationPage {
     async clickSaveButton(){
         const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
         await saveBtn.click()
+    }
+
+    async clickEditSubjectCardByName(subjectID:string){
+        const card = this.page.locator('div').filter({ hasText: subjectID }).nth(1)
+        const editButton = card.getByRole('button').nth(4)
+        await editButton.click()
+    }
+
+    async fillEditMajorSubjectPage(data:{
+        faculty?: string, 
+        subjectTH?: string, 
+        subjectEN?: string, 
+        subjectCN?: string,
+        majorSubjectStatus?:string,
+        majorSubject?:string,
+    }){
+        const selectFacultyDropdown = this.page.locator('.react-select__input-container')
+        const majorSubjectTH = this.page.getByRole('textbox', { name: 'ชื่อสาขาวิชา (ภาษาไทย)*' })
+        const majorSubjectEN = this.page.getByRole('textbox', { name: 'ชื่อสาขาวิชา (ภาษาอังกฤษ)' })
+        const majorSubjectCN = this.page.getByRole('textbox', { name: 'ชื่อสาขาวิชา (ภาษาจีน)' })
+
+        if(data.faculty){
+            const facultyOption = this.page.getByRole('option', { name: data.faculty })
+            await selectFacultyDropdown.click()
+            await facultyOption.click()
+        }
+
+        if(data.subjectTH){
+            await majorSubjectTH.fill(data.subjectTH)
+        }
+        if(data.subjectEN){
+            await majorSubjectEN.fill(data.subjectEN)
+        }
+        if(data.subjectCN){
+            await majorSubjectCN.fill(data.subjectCN)
+        }
+
+        if(data.majorSubjectStatus){
+                const majorsubject = this.page.getByText('มี', { exact: true })
+                await majorsubject.click()
+                if(data.majorSubjectStatus == 'มี' && data.majorSubject){
+                    const expandDropdown = this.page.locator('#major_subject_code > .unext-form-control > .react-select__indicators')
+                    const majorsubjectOption = this.page.getByRole('option', { name: data.majorSubject })
+                    await expandDropdown.click()
+                    await majorsubjectOption.click()
+            }
+        }
     }
 }
