@@ -4,7 +4,7 @@ import path from 'path';
 
 // test.use({ storageState: 'playwright/.auth/user.json' });
 
-test.describe('NIDA Admission Test Suite', () => {
+test.describe('Application Page Test Suite', () => {
   
   // test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)', async ({ admissionPage, page }) => {
   //   // 1. เข้าไปที่หน้าเว็บระบบรับสมัคร
@@ -43,7 +43,7 @@ test.describe('NIDA Admission Test Suite', () => {
     await page.waitForLoadState('networkidle');
     
     // กำหนดชื่อโครงการที่ต้องการทดสอบ
-    const projectName = 'รัฐประศาสนศาตรมหาบัณฑิต ภาคพิเศษ กรุงเทพมหานคร'; 
+    const projectName = 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)'; 
     await admissionPage.clickRegister(projectName);
 
     await expect(page.getByText(projectName)).toBeVisible();
@@ -93,31 +93,16 @@ test.describe('NIDA Admission Test Suite', () => {
 
   test('TC-04 ทดสอบกรอกข้อมูล Step 2: กรอกข้อมูลเบื้องต้น ', async ({ admissionPage, page }) => {
     test.setTimeout(60000);
-    
-    // go to admissions-uat.nida.ac.th/programs
     await admissionPage.gotoPrograms();
-
-    // รอให้หน้าโหลดเสร็จสมบูรณ์
     await page.waitForLoadState('networkidle');
-    
-    // กำหนดชื่อโครงการที่ต้องการทดสอบ
     const projectName = 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)';
     await admissionPage.clickRegister(projectName);
-
     await expect(page.getByText(projectName)).toBeVisible();
     await page.waitForLoadState('networkidle');
-
-    // handle duplicate project popup
     await admissionPage.handleDuplicateProjectPopup();
-
-
-    // mock data ของ นศ
     const myStudentData = {
         firstEngName: 'Nueyyy',
-        lastEngName: 'Todsob',
-        // TelNumber: '0812345678',
-        // email: 'jakkaphatz2004@gmail.com',
-        
+        lastEngName: 'Todsob',    
         // Logic ที่อยู่: เลือกในประเทศ
         inCountryAddress: true,
         address: '123 ถนนสุขุมวิท',

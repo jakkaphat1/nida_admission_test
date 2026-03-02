@@ -70,6 +70,7 @@ export class AdmissionPage {
   lastEngNameInput: Locator;
   inCountryAddressRadio: Locator;
 
+  selectCountry : Locator
   addressInput : Locator;
   provinceInput  : Locator;
   districtInput  : Locator;
@@ -171,6 +172,7 @@ export class AdmissionPage {
     this.firstEngNameInput = page.locator('#first_name_en');
     this.lastEngNameInput = page.locator('#last_name_en');
     this.inCountryAddressRadio = page.getByRole('radio', { name: 'ที่อยู่ในประเทศ' });
+    this.selectCountry = this.page.locator('.sm\\:col-span-2 > .formItem_vertical > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__value-container > .react-select__input-container')
     this.addressInput = page.locator('[id="address.addr_detail"]');
     this.provinceInput = page.locator('.react-select__control').filter({ hasText: 'จังหวัด' }).locator('input');
     this.districtInput = page.locator('.react-select__control').filter({ hasText: 'เขต/อำเภอ' }).locator('input');
