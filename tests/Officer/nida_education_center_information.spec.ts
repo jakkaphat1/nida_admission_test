@@ -72,4 +72,50 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await educationCenterInformationPage.clickSaveButton()
         await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible()
     });
+
+    test('TC-05 ทดสอบแก้ไขข้อมูลศูนย์การศึกษา' , async ({ educationCenterInformationPage, page}) => {
+        await educationCenterInformationPage.gotoPrograms();
+        await educationCenterInformationPage.gotoEducationCenterMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/education-center/);
+        const searchData = {
+            searchInput:'PKT001'
+        }
+        await educationCenterInformationPage.fillSearchAndFilterBox(searchData)
+        await educationCenterInformationPage.clickEditEducationCentralButtonByName('PKT001')
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/education-center\/edit.*/);
+
+        const centralEduBasicInfo = {
+            centralEduNameEN : 'Phuket Education Center',
+        }
+        await educationCenterInformationPage.fillEditCentralEduInfoPage(centralEduBasicInfo)
+
+        const centralEduAddessInfo = {
+            centralEduAddress : 'วิทยาลัยอาชีวศึกษาภูเก็ต อาคารรัษฎา',
+            centralEduProvince : 'ภูเก็ต',
+            centralEduDistrict : 'เมืองภูเก็ต',
+            centralEduSubDistrict : 'ตลาดเหนือ',
+            centralEduZipCode: '83000',
+            centralEduLatitude : '7.8949373638514',
+            centralEduLongitude : '98.3768345189004',
+        }
+        await educationCenterInformationPage.fillEditFacultyAddressInfo(centralEduAddessInfo)
+
+
+        const centralEduContactInfo = {
+            centralEduTel : '02-123-24770',
+            centralEduLineID : '',
+            centralEduFacebook : 'ท่องเที่ยว นิด้า GSTM NIDA - PKT',
+            centralEduEmail : 'gstm@nida.ac.th',
+            centralEduWebsite : 'https://tour.nida.ac.th/th/',
+            centralEduFirstOfficerName : 'นางสาวสิรินภา จงเกษกรณ์',
+            centralEduFirstOfficerTel : '09-485-98905',
+            centralEduSecondOfficerName : '',
+            centralEduSecondOfficerTel : '',
+        }
+        await educationCenterInformationPage.fillEditFacultyContactInfo(centralEduContactInfo)
+
+        await educationCenterInformationPage.handleStatusSlider('ใช้งาน')
+        await educationCenterInformationPage.clickSaveButton()
+        await expect(page.getByText('แก้ไขข้อมูลสำเร็จ')).toBeVisible()
+    });
 });
