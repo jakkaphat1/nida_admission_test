@@ -95,6 +95,19 @@ export class EducationCenterInformationPage{
         await editButton.click()
     }
 
+    async clickDeleteEducationCentralButtonByName(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).first()
+        const deleteButton = card.getByRole('button').nth(5)
+        await deleteButton.click()
+    }
+
+    async clickConfirmPopupButtonUsingHeading(headingText:string){
+        const heading = this.page.getByRole('heading', { name: headingText })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
+
     async fillAddCentralEduInfoPage(data:{
         centralEduID? : string,
         centralEduNameTH? : string,

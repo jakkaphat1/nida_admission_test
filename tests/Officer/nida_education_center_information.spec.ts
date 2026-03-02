@@ -118,4 +118,19 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await educationCenterInformationPage.clickSaveButton()
         await expect(page.getByText('แก้ไขข้อมูลสำเร็จ')).toBeVisible()
     });
+
+
+    test('TC-06 ทดสอบลบข้อมูลศูนย์การศึกษา' , async ({ educationCenterInformationPage, page}) => {
+        await educationCenterInformationPage.gotoPrograms();
+        await educationCenterInformationPage.gotoEducationCenterMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/education-center/);
+        const searchData = {
+            searchInput:'PKT001'
+        }
+        await educationCenterInformationPage.fillSearchAndFilterBox(searchData)
+        await educationCenterInformationPage.clickDeleteEducationCentralButtonByName('PKT001')
+        await expect(page.getByRole('heading', { name: 'ยืนยันการลบศูนย์การศึกษา ?' })).toBeVisible
+        await educationCenterInformationPage.clickConfirmPopupButtonUsingHeading('ยืนยันการลบศูนย์การศึกษา ?')
+        await expect(page.getByRole('heading', { name: 'ทำรายการสำเร็จ' })).toBeVisible
+    });
 });
