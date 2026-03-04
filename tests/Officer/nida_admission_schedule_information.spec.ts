@@ -83,5 +83,6 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page.getByText('ต้องการลบข้อมูล', {exact:true})).toBeVisible()
         await admissionScheduleInformationPage.clickConfirmDelete()
         await expect(page.getByText('ลบข้อมูลสำเร็จ', {exact:true})).toBeVisible()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/activities/);
     });
 });
