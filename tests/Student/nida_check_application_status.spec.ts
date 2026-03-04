@@ -179,6 +179,6 @@ test.describe('NIDA Check Application Status' , () => {
             grade: '3.70'
         });
         await applicationStatusPage.clickSaveInfoAndSendRecheck()
-        await expect(page.getByRole('heading', { name: 'ปรับปรุงข้อมูลสำเร็จแล้ว' })).toBeVisible()
+        await expect(page.getByRole('heading', { name: 'ปรับปรุงข้อมูลสำเร็จ' })).toBeVisible()
     });
 });

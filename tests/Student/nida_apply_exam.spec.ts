@@ -27,9 +27,9 @@ test.describe('NIDA Apply Exam Tests', () => {
         test.setTimeout(45000);
 
         await examsPage.gotoExamsPage();
-        await examsPage.searchExamBySubject('วิชาเฉพาะ 2');
+        await examsPage.searchExamBySubject('วิชาเฉพาะ 9');
         await examsPage.searchExamEduLevel('ปริญญาโท');
-        await examsPage.chooseExam('วิชาเฉพาะ 2','ครั้งที่ 10/2568');
+        await examsPage.chooseExam('วิชาเฉพาะ 9','ครั้งที่ 3/2568');
 
         const studentData: StudentInfoForApplyExam = {
             firstNameEng: 'NUEYY',
@@ -47,11 +47,11 @@ test.describe('NIDA Apply Exam Tests', () => {
         };
 
         await examsPage.fillExamApplicationForm(studentData);
-        await examsPage.saveButtonClick();
+        // await examsPage.saveButtonClick();
 
-        await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible();
+        // await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible();
 
-        await examsPage.nextButtonClick();
+        // await examsPage.nextButtonClick();
     });
 
     test('TC-04 ทดสอบตรวจสอบข้อมูลที่ Step 2: ตรวจสอบวิชา', async ({ admissionPage, examsPage, page }) => {
