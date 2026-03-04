@@ -1,13 +1,15 @@
 import { test, expect } from '../../fixtures/baseTest';
 
 test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรับสมัคร/ข้อมูลตั้งต้น/ข้อมูลกำหนดการรับสมัคร', () => {
-    test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)' , async ({ admissionPage,educationCenterInformationPage , page}) => {
-        await admissionPage.goto();
-        await admissionPage.loginButton.click();
-        await admissionPage.fillEmail(admissionPage.email);
+    test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)' , async ({ commonPage,admissionScheduleInformationPage , page}) => {
+        await commonPage.gotoBackOfficeLogin();
         await expect(page).toHaveURL('https://backoffice-uat.nida.ac.th/login/');
-        await educationCenterInformationPage.fillUsernameAndPassword('sys_admin1','unext@2022')
+        await commonPage.fillUsernameAndPassword('sys_admin1','unext@2022')
     });
 
-    
+    test('TC-02 ทดสอบการเข้าเมนูข้อมูลประเภทกำหนดการ' , async ({ admissionScheduleInformationPage, page}) => {
+        await admissionScheduleInformationPage.gotoPrograms()
+        await admissionScheduleInformationPage.gotoAdmissionScheduleInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/activities/);
+    });
 });

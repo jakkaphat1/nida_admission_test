@@ -15,8 +15,9 @@ import { DepartmentInformationPage } from '../pages/DepartmentInformationPage';
 import { FacultyInformationPage } from '../pages/FacultyInformationPage';
 import { EducationCenterInformationPage } from '../pages/EducationCenterInformationPage';
 import { AdmissionScheduleInformationPage } from '../pages/AdmissionScheduleInformationPage';
-
+import { CommonPage } from '../pages/CommonPaeg';
 type MyFixtures = {
+  commonPage : CommonPage;
   admissionPage: AdmissionPage;
   examsPage: ExamsPage;
   applicationStatusPage : ApplicationStatusPage
@@ -36,6 +37,10 @@ type MyFixtures = {
 };
 
 export const test = base.extend<MyFixtures>({
+  commonPage:async ({page}, use)=> {
+    const commonPage = new CommonPage(page);
+    await use(commonPage)
+  },
   admissionPage: async ({ page }, use) => {
     const admissionPage = new AdmissionPage(page);
     await use(admissionPage);
