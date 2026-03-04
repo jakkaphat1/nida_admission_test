@@ -32,4 +32,27 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await admissionCalendarInformationPage.searchByFilter(searchInfo)
         await expect(page.getByText('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 4 ภาคการศึกษาที่ 1 ปริญญาโท ภาคปกติ')).toBeVisible()
     });
+
+    test('TC-04 ทดสอบสร้างปฏิทินการรับสมัคร' , async ({ admissionCalendarInformationPage, page}) => {
+        await admissionCalendarInformationPage.gotoPrograms()
+        await admissionCalendarInformationPage.gotoAdmissionCalendarInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
+        await admissionCalendarInformationPage.clickAddCalendarButton()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar\/create.*/);
+        await admissionCalendarInformationPage.checkAddCalendarPage()
+
+        const addCalendarInfo = {
+            display : 'แสดง' as const, 
+            round : '1',
+            education : 'ปริญญาโท',
+            student : 'ภาคปกติ',
+            term : 'ภาคการศึกษาที่ 2',
+            year : '2569',
+            faculty : 'GSAS - คณะสถิติประยุกต์',
+        }
+        await admissionCalendarInformationPage.filAddCalendarPage(addCalendarInfo)
+        await admissionCalendarInformationPage.clickSaveButton()
+        await expect(page.getByRole('heading',{name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
+    });
 });

@@ -157,4 +157,87 @@ export class AdmissionCalendarInformationPage {
             await backFilterBtn.click() // ปิด panel ตัวกรอง เพื่อดูผลลัพธ์
         }
     }
+
+    async clickAddCalendarButton(){
+        const addBtn = this.page.getByRole('button', { name: 'สร้างปฏิทิน' })
+        await addBtn.click()
+    }
+
+    async checkAddCalendarPage(){
+        const roundDropdown = this.page.locator('div').filter({ hasText: /^เลือกรอบที่$/ }).nth(3)
+        const educationLevelDropdown = this.page.locator('div').filter({ hasText: /^เลือกระดับการศึกษา$/ }).nth(3)
+        const studentTypeDroppdown = this.page.locator('div').filter({ hasText: /^เลือกประเภทนักศึกษา$/ }).nth(3)
+        const termDropdown = this.page.locator('div').filter({ hasText: /^ภาคการศึกษาที่ 2$/ }).nth(3)
+        const academicYearDropdown = this.page.locator('div').filter({ hasText: /^2569$/ }).nth(3)
+        const facultyDropdonw = this.page.locator('div').filter({ hasText: /^เลือกคณะ$/ }).nth(3)
+        await expect(roundDropdown).toBeVisible()
+        await expect(educationLevelDropdown).toBeVisible()
+        await expect(studentTypeDroppdown).toBeVisible()
+        await expect(termDropdown).toBeVisible()
+        await expect(academicYearDropdown).toBeVisible()
+        await expect(facultyDropdonw).toBeVisible()
+    }
+
+    async filAddCalendarPage(data:{
+        display : 'แสดง'|'ไม่แสดง'
+        round : string
+        education : string
+        student : string
+        term : string
+        year : string
+        faculty : string
+    }){
+        const displayRadio = this.page.getByRole('radio', { name: data.display, exact: true })
+        const roundDropdown = this.page.locator('div').filter({ hasText: /^เลือกรอบที่$/ }).nth(3)
+        const educationLvlDropdown = this.page.locator('div').filter({ hasText: /^เลือกระดับการศึกษา$/ }).nth(3)
+        const studentTypeDropdown = this.page.locator('div').filter({ hasText: /^เลือกประเภทนักศึกษา$/ }).nth(3)
+        const termDropdown = this.page.locator('div').filter({ hasText: /^ภาคการศึกษาที่ 2$/ }).nth(3)
+        const academicYearDropdown = this.page.locator('div').filter({ hasText: /^2569$/ }).nth(3)
+        const facultyDropdonw = this.page.locator('div').filter({ hasText: /^เลือกคณะ$/ }).nth(3)
+
+        if(data.display){
+            await displayRadio.click()
+        }
+
+        if(data.round){
+            const roundOption = this.page.getByRole('option', { name: data.round, exact: true })
+            await roundDropdown.click()
+            await roundOption.click()
+        }
+
+        if(data.education){
+            const educationOption = this.page.getByRole('option', { name: data.education, exact: true })
+            await educationLvlDropdown.click()
+            await educationOption.click()
+        }
+
+        if(data.student){
+            const studentTypeOption = this.page.getByRole('option', { name: data.student, exact: true })
+            await studentTypeDropdown.click()
+            await studentTypeOption.click()
+        }
+
+        if(data.term){
+            const termOption = this.page.getByRole('option', { name: data.term, exact: true })
+            await termDropdown.click()
+            await termOption.click()
+        }
+
+        if(data.year){
+            const yearOption = this.page.getByRole('option', { name: data.year, exact: true })
+            await academicYearDropdown.click()
+            await yearOption.click()
+        }
+
+        if(data.faculty){
+            const facultyOption = this.page.getByRole('option', { name: data.faculty, exact: true })
+            await facultyDropdonw.click()
+            await facultyOption.click()
+        }
+    }
+
+    async clickSaveButton(){
+        const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
+        await saveBtn.click()
+    }
 }
