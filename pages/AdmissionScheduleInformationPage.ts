@@ -152,4 +152,21 @@ export class AdmissionScheduleInformationPage {
         const editButton = card.getByRole('button').nth(5)
         await editButton.click()
     }
+
+    async clickDeleteScheduleButtonByName(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).first()
+        const deleteButton = card.getByRole('button').filter({ hasText: /^$/ }).nth(3)
+        await deleteButton.click()
+    }
+
+    async clickConfirmDelete(){
+        const popup = this.page.getByRole('heading', { name: 'ต้องการลบข้อมูล' })
+        const cancel = this.page.getByRole('button', { name: 'ยกเลิก' })
+        const confirm  = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(popup).toBeVisible()
+        await expect(cancel).toBeVisible()
+        await expect(confirm).toBeVisible()
+
+        await confirm.click()
+    }
 }

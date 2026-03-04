@@ -69,4 +69,19 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page).toHaveURL(/.*admin\/admission\/master\/activities.*/);
     });
 
+    test('TC-06 ทดสอบลบประเภทกำหนดการ' , async ({ admissionScheduleInformationPage, page}) => {
+        await admissionScheduleInformationPage.gotoPrograms()
+        await admissionScheduleInformationPage.gotoAdmissionScheduleInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/activities/);
+        const searchArguement = {
+            searchEventName:'วันประกาศรายชื่อและสถานที่สอบข้อเขียน',
+            eventType:'AMS_SC-วันประกาศรายชื่อและสถานที่สอบข้อเขียน(วิชาส่วนกลาง)'
+        }
+        await admissionScheduleInformationPage.searchByFilter(searchArguement)
+        await expect(page.getByText('วันประกาศรายชื่อและสถานที่สอบข้อเขียน(วิชาส่วนกลาง)', {exact:true})).toBeVisible()
+        await admissionScheduleInformationPage.clickDeleteScheduleButtonByName('วันประกาศรายชื่อและสถานที่สอบข้อเขียน(วิชาส่วนกลาง)')
+        await expect(page.getByText('ต้องการลบข้อมูล', {exact:true})).toBeVisible()
+        await admissionScheduleInformationPage.clickConfirmDelete()
+        await expect(page.getByText('ลบข้อมูลสำเร็จ', {exact:true})).toBeVisible()
+    });
 });
