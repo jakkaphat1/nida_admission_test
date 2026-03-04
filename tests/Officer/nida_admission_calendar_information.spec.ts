@@ -12,4 +12,24 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await admissionCalendarInformationPage.gotoAdmissionCalendarInformationMenu()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
     });
+
+    test('TC-03 ทดสอบค้นหาปฏิทิน' , async ({ admissionCalendarInformationPage, page}) => {
+        await admissionCalendarInformationPage.gotoPrograms()
+        await admissionCalendarInformationPage.gotoAdmissionCalendarInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
+
+        const searchInfo = {
+            searchCalendarName:'ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 4 ภาคการศึกษาที่ 1 ปริญญาโท ภาคปกติ',
+            status:'ใช้งาน',
+            round:'4',
+            eduLevel : 'ปริญญาโท',
+            studentType : 'ภาคปกติ',
+            term : 'ภาคการศึกษาที่ 1',
+            academicYear : '2569',
+            display: 'แสดง' as const
+        }
+
+        await admissionCalendarInformationPage.searchByFilter(searchInfo)
+        await expect(page.getByText('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 4 ภาคการศึกษาที่ 1 ปริญญาโท ภาคปกติ')).toBeVisible()
+    });
 });
