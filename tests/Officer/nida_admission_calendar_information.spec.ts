@@ -7,5 +7,9 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await commonPage.fillUsernameAndPassword('sys_admin1','unext@2022')
     });
 
-    
+    test('TC-02 ทดสอบการเข้าเมนูข้อมูลปฏิทินการรับสมัคร' , async ({ admissionCalendarInformationPage, page}) => {
+        await admissionCalendarInformationPage.gotoPrograms()
+        await admissionCalendarInformationPage.gotoAdmissionCalendarInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
+    });
 });
