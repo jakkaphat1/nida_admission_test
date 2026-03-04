@@ -14,6 +14,7 @@ import { MajorSubjectPage } from '../pages/MajorSubjectPage';
 import { DepartmentInformationPage } from '../pages/DepartmentInformationPage';
 import { FacultyInformationPage } from '../pages/FacultyInformationPage';
 import { EducationCenterInformationPage } from '../pages/EducationCenterInformationPage';
+import { AdmissionScheduleInformationPage } from '../pages/AdmissionScheduleInformationPage';
 
 type MyFixtures = {
   admissionPage: AdmissionPage;
@@ -31,6 +32,7 @@ type MyFixtures = {
   departmentInformationPage : DepartmentInformationPage
   facultyInformationPage : FacultyInformationPage
   educationCenterInformationPage : EducationCenterInformationPage
+  admissionScheduleInformationPage : AdmissionScheduleInformationPage
 };
 
 export const test = base.extend<MyFixtures>({
@@ -93,7 +95,11 @@ export const test = base.extend<MyFixtures>({
   educationCenterInformationPage:async ({page} , use) => {
     const educationCenterInformationPage = new EducationCenterInformationPage(page)
     await use(educationCenterInformationPage)
-  }
+  },
+  admissionScheduleInformationPage:async ({page} , use) => {
+    const admissionScheduleInformationPage = new AdmissionScheduleInformationPage(page)
+    await use(admissionScheduleInformationPage)
+  },
 
 
 
