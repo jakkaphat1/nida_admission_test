@@ -17,7 +17,6 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await admissionScheduleInformationPage.gotoPrograms()
         await admissionScheduleInformationPage.gotoAdmissionScheduleInformationMenu()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/activities/);
-
         const searchArguement = {
             searchEventName:'วันประกาศผลสอบข้อเขียน',
             status:'ใช้งาน',
@@ -25,5 +24,22 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         }
         await admissionScheduleInformationPage.searchByFilter(searchArguement)
         await expect(page.getByText('วันประกาศผลสอบข้อเขียน', {exact:true})).toBeVisible()
+    });
+
+    test('TC-04 ทดสอบสร้างประเภทกำหนดการ' , async ({ admissionScheduleInformationPage, page}) => {
+        await admissionScheduleInformationPage.gotoPrograms()
+        await admissionScheduleInformationPage.gotoAdmissionScheduleInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/activities/);
+        await admissionScheduleInformationPage.clickAddScheduleButton()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/activities\/create.*/);
+        await admissionScheduleInformationPage.checkAddSchedulePage()
+        const addShecduleInfo = {
+            scheduleNameTH : 'วันประกาศผลสอบข้อเขียน' ,
+            scheduleNameEN : 'Schedule for Written Exam' ,
+            scheduleOption : 'AMS-วันประกาศผลสอบข้อเขียน'
+        }
+        await admissionScheduleInformationPage.fillInfoAddSchedulePage(addShecduleInfo)
+        await admissionScheduleInformationPage.clickSaveButton()
+        await expect(page.getByRole('heading', {name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
     });
 });

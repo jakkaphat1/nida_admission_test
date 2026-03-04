@@ -77,4 +77,49 @@ export class AdmissionScheduleInformationPage {
             await backFilterBtn.click()
         }
     }
+
+    async clickAddScheduleButton(){
+        const addBtn = this.page.getByRole('button', { name: 'สร้างประเภทกำหนดการ' })
+        await addBtn.click()
+    }
+
+    async checkAddSchedulePage(){
+        const scheduleNameTH = this.page.getByRole('textbox', { name: 'ชื่อประเภทกำหนดการ*' })
+        const scheduleNameEN = this.page.getByRole('textbox', { name: 'ชื่อกำหนดการ (อังกฤษ)' })
+        const scheduleTypeDroppdown = this.page.locator('div').filter({ hasText: /^เลือกประเภทนักศึกษา$/ }).nth(3)
+        const statusLabel = this.page.locator('span').nth(4)
+        await expect(scheduleNameTH).toBeVisible()
+        await expect(scheduleNameEN).toBeVisible()
+        await expect(scheduleTypeDroppdown).toBeVisible()
+        await expect(statusLabel).toBeVisible()
+    }
+
+    async fillInfoAddSchedulePage(data:{
+        scheduleNameTH? : string
+        scheduleNameEN? : string
+        scheduleOption? : string
+    }){
+        const scheduleNameTHBox = this.page.getByRole('textbox', { name: 'ชื่อประเภทกำหนดการ*' })
+        const scheduleNameENBox = this.page.getByRole('textbox', { name: 'ชื่อกำหนดการ (อังกฤษ)' })
+        const scheduleTypeDroppdown = this.page.locator('div').filter({ hasText: /^เลือกประเภทนักศึกษา$/ }).nth(3)
+        const scheduleOption = this.page.getByRole('option', { name: data.scheduleOption })
+
+        if(data.scheduleNameTH){
+            await scheduleNameTHBox.fill(data.scheduleNameTH)
+        }
+
+        if(data.scheduleNameEN){
+            await scheduleNameENBox.fill(data.scheduleNameEN)
+        }
+
+        if(data.scheduleOption){
+            await scheduleTypeDroppdown.click()
+            await scheduleOption.click()
+        }
+    }
+
+    async clickSaveButton(){
+        const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
+        await saveBtn.click()
+    }
 }
