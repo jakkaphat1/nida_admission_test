@@ -1,4 +1,5 @@
 import { test as base } from '@playwright/test';
+import { CommonPage } from '../pages/CommonPaeg';
 import { AdmissionPage } from '../pages/AdmissionPage';
 import { ExamsPage } from '../pages/ExamsPage';
 import { ApplicationStatusPage } from '../pages/ApplicationStatusPage';
@@ -15,7 +16,7 @@ import { DepartmentInformationPage } from '../pages/DepartmentInformationPage';
 import { FacultyInformationPage } from '../pages/FacultyInformationPage';
 import { EducationCenterInformationPage } from '../pages/EducationCenterInformationPage';
 import { AdmissionScheduleInformationPage } from '../pages/AdmissionScheduleInformationPage';
-import { CommonPage } from '../pages/CommonPaeg';
+import { AdmissionCalendarInformationPage } from '../pages/AdmissionCalendarIInformationPage';
 type MyFixtures = {
   commonPage : CommonPage;
   admissionPage: AdmissionPage;
@@ -34,6 +35,7 @@ type MyFixtures = {
   facultyInformationPage : FacultyInformationPage
   educationCenterInformationPage : EducationCenterInformationPage
   admissionScheduleInformationPage : AdmissionScheduleInformationPage
+  admissionCalendarInformationPage : AdmissionCalendarInformationPage
 };
 
 export const test = base.extend<MyFixtures>({
@@ -104,6 +106,10 @@ export const test = base.extend<MyFixtures>({
   admissionScheduleInformationPage:async ({page} , use) => {
     const admissionScheduleInformationPage = new AdmissionScheduleInformationPage(page)
     await use(admissionScheduleInformationPage)
+  },
+  admissionCalendarInformationPage:async ({page},use) => {
+    const admissionCalendarInformationPage = new AdmissionCalendarInformationPage(page)
+    await use(admissionCalendarInformationPage)
   },
 
 
