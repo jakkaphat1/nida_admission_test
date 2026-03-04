@@ -34,12 +34,39 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page).toHaveURL(/.*admin\/admission\/master\/activities\/create.*/);
         await admissionScheduleInformationPage.checkAddSchedulePage()
         const addShecduleInfo = {
-            scheduleNameTH : 'วันประกาศผลสอบข้อเขียน' ,
-            scheduleNameEN : 'Schedule for Written Exam' ,
-            scheduleOption : 'AMS-วันประกาศผลสอบข้อเขียน'
+            scheduleNameTH : 'วันประกาศรายชื่อและสถานที่สอบข้อเขียน(วิชาส่วนกลาง)' ,
+            scheduleNameEN : '' ,
+            scheduleOption : 'AMS_SC-วันประกาศรายชื่อและสถานที่สอบข้อเขียน(วิชาส่วนกลาง)'
         }
         await admissionScheduleInformationPage.fillInfoAddSchedulePage(addShecduleInfo)
         await admissionScheduleInformationPage.clickSaveButton()
         await expect(page.getByRole('heading', {name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
+        await page.waitForTimeout(2000)
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/activities\/create.*/);
     });
+
+    test('TC-05 ทดสอบแก้ไขประเภทกำหนดการ' , async ({ admissionScheduleInformationPage, page}) => {
+        await admissionScheduleInformationPage.gotoPrograms()
+        await admissionScheduleInformationPage.gotoAdmissionScheduleInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/activities/);
+        const searchArguement = {
+            searchEventName:'วันประกาศรายชื่อและสถานที่สอบข้อเขียน',
+            eventType:'AMS_SC-วันประกาศรายชื่อและสถานที่สอบข้อเขียน(วิชาส่วนกลาง)'
+        }
+        await admissionScheduleInformationPage.searchByFilter(searchArguement)
+        await expect(page.getByText('วันประกาศรายชื่อและสถานที่สอบข้อเขียน(วิชาส่วนกลาง)', {exact:true})).toBeVisible()
+        await admissionScheduleInformationPage.clickEditScheduleButtonByName('วันประกาศรายชื่อและสถานที่สอบข้อเขียน(วิชาส่วนกลาง)')
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/activities\/edit.*/);
+
+        const editShecduleInfo = {
+            scheduleNameTH : 'วันประกาศรายชื่อและสถานที่สอบข้อเขียน(วิชาส่วนกลาง)' ,
+            scheduleNameEN : 'Date and location of the written exam (central subjects) announcement.' ,
+            scheduleOption : 'AMS_SC-วันประกาศรายชื่อและสถานที่สอบข้อเขียน(วิชาส่วนกลาง)'
+        }
+        await admissionScheduleInformationPage.fillInfoEditSchedulePage(editShecduleInfo)
+        await admissionScheduleInformationPage.clickSaveButton()
+        await expect(page.getByRole('heading', {name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/activities.*/);
+    });
+
 });

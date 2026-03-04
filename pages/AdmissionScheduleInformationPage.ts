@@ -118,8 +118,38 @@ export class AdmissionScheduleInformationPage {
         }
     }
 
+    async fillInfoEditSchedulePage(data:{
+        scheduleNameTH? : string
+        scheduleNameEN? : string
+        scheduleOption? : string
+    }){
+        const scheduleNameTHBox = this.page.getByRole('textbox', { name: 'ชื่อประเภทกำหนดการ*' })
+        const scheduleNameENBox = this.page.getByRole('textbox', { name: 'ชื่อกำหนดการ (อังกฤษ)' })
+        const scheduleTypeDroppdown = this.page.locator('.react-select__indicators')
+        const scheduleOption = this.page.getByRole('option', { name: data.scheduleOption })
+
+        if(data.scheduleNameTH){
+            await scheduleNameTHBox.fill(data.scheduleNameTH)
+        }
+
+        if(data.scheduleNameEN){
+            await scheduleNameENBox.fill(data.scheduleNameEN)
+        }
+
+        if(data.scheduleOption){
+            await scheduleTypeDroppdown.click()
+            await scheduleOption.click()
+        }
+    }
+
     async clickSaveButton(){
         const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
         await saveBtn.click()
+    }
+
+    async clickEditScheduleButtonByName(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).first()
+        const editButton = card.getByRole('button').nth(5)
+        await editButton.click()
     }
 }
