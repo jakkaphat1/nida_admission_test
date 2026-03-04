@@ -12,4 +12,18 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await admissionScheduleInformationPage.gotoAdmissionScheduleInformationMenu()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/activities/);
     });
+
+    test('TC-03 ทดสอบค้นหาข้อมูลประเภทกำหนดการ' , async ({ admissionScheduleInformationPage, page}) => {
+        await admissionScheduleInformationPage.gotoPrograms()
+        await admissionScheduleInformationPage.gotoAdmissionScheduleInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/activities/);
+
+        const searchArguement = {
+            searchEventName:'วันประกาศผลสอบข้อเขียน',
+            status:'ใช้งาน',
+            eventType:'AMS-วันประกาศผลสอบข้อเขียน'
+        }
+        await admissionScheduleInformationPage.searchByFilter(searchArguement)
+        await expect(page.getByText('วันประกาศผลสอบข้อเขียน', {exact:true})).toBeVisible()
+    });
 });

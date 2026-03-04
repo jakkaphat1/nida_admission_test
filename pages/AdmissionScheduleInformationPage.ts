@@ -47,4 +47,34 @@ export class AdmissionScheduleInformationPage {
     async gotoPrograms() {
         await this.page.goto('https://backoffice-uat.nida.ac.th/admin/rolesAndPermissions/master/role-permission');
     }
+
+    async searchByFilter(data:{
+        searchEventName?:string
+        status?:string
+        eventType?:string
+    } ){
+        const searchBox = this.page.getByRole('textbox', { name: 'ค้นหาชื่อกำหนดการ' })
+        const filterBtn = this.page.getByRole('button', { name: 'ตัวกรอง' })
+        const backFilterBtn = this.page.getByRole('button', { name: 'ตัวกรอง' }).nth(1)
+        const statusLabel = this.page.locator('.react-select__value-container').first()
+        const statusOption = this.page.getByRole('option', { name: data.status, exact: true })
+        const eventDropdown = this.page.locator('div').filter({ hasText: /^เลือกประเภทกิจกรรม$/ }).nth(4)
+        const eventOption = this.page.getByRole('option', { name: data.eventType })
+
+        if(data.searchEventName){
+            await searchBox.pressSequentially(data.searchEventName)
+        }
+        
+        if(data.status){
+            await statusLabel.click()
+            await statusOption.click()
+        }
+
+        if(data.eventType){
+            await filterBtn.click()
+            await eventDropdown.click()
+            await eventOption.click()
+            await backFilterBtn.click()
+        }
+    }
 }
