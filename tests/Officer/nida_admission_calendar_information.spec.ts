@@ -226,9 +226,54 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
                 startDate: "01062025",
                 endDate: "30062025",
             },
+            {
+                field: "วันประกาศผลสอบข้อเขียน",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันรายงานตัวและบันทึกประวัติ",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "นักศึกษายืนยันสิทธิ์เข้าศึกษา",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
         ]);
         await admissionCalendarInformationPage.clickSaveButton()
         await expect(page.getByRole('heading',{name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
+    });
+
+    test('TC-06 ทดสอบจัดการกำหนดการของปฏิทิน' , async ({ admissionCalendarInformationPage, page}) => {
+        
+        await admissionCalendarInformationPage.gotoPrograms()
+        await admissionCalendarInformationPage.gotoAdmissionCalendarInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
+
+        const searchInfo = {
+            searchCalendarName:'ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ',
+            status:'ใช้งาน',
+            // round:'4',
+            // eduLevel : 'ปริญญาโท',
+            // studentType : 'ภาคปกติ',
+            // term : 'ภาคการศึกษาที่ 2',
+            // academicYear : '2569',
+            // display: 'แสดง' as const
+        }
+
+        await admissionCalendarInformationPage.searchByFilter(searchInfo)
+        await expect(page.getByText('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ')).toBeVisible()
+        // await admissionCalendarInformationPage.clickKebabMenuByCard('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ')
+        await admissionCalendarInformationPage.clickManageCalendarButton()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar\/faculties.*/);
+        await admissionCalendarInformationPage.clickCustomCalendarButtonByFaculty('คณะสถิติประยุกต์')
+        await admissionCalendarInformationPage.clickEditButton()
+        
+        await admissionCalendarInformationPage.clickSaveButton()
+
+       
     });
 });

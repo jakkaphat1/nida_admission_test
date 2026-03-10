@@ -405,10 +405,26 @@ export class AdmissionCalendarInformationPage {
     async clickSaveButton(){
         const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
         await saveBtn.click()
+        console.log(`กดปุ่ม ${saveBtn}`)
     }
 
     async clickEditButton(){
         const editBtn = this.page.getByRole('button', { name: 'แก้ไข' })
         await editBtn.click()
+    }
+
+    async clickManageCalendarButton(){
+        const manageCalendar  = this.page.getByRole('button', { name: 'จัดการกำหนดการของปฏิทิน' })
+        await manageCalendar.click()
+    }
+
+    async clickCustomCalendarButtonByFaculty(faultyName:string){
+        const facultyCard = this.page.locator('div').filter({ hasText: faultyName }).first()
+        const customCalendarBtn = facultyCard.getByRole('button', { name: 'ปรับกำหนดการ' })
+        await customCalendarBtn.click()
+    }
+
+    async clickAddProject(){
+        const addProject = this.page.getByRole('button', { name: 'โครงการ' }).first()
     }
 }
