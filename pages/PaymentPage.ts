@@ -22,7 +22,7 @@ export class PaymentPage{
         this.paymentModule = this.page.locator('div').filter({ hasText: 'การชำระเงิน' }).nth(3)
         this.toBePaid = this.page.getByRole('link', { name: 'ที่ต้องชำระ' })
         this.historyPaid = this.page.getByRole('link', { name: 'ประวัติการชำระ' })
-        this.changePayment = this.page.getByRole('button', { name: 'เปลี่ยนช่องทางการชำระเงิน' })
+        this.changePayment = this.page.getByRole('button', { name: 'ชำระเงิน' })
         this.paidButton = this.page.getByRole('button', { name: 'ชำระเงิน' })
         this.confirmPopupButton = this.page.getByRole('button', { name: 'ยืนยัน' })
 
@@ -57,7 +57,7 @@ export class PaymentPage{
     }
 
     async clickChangePaymentGateWayByCard(PaymentNumber:string){
-        const card = this.page.locator('div').filter({ hasText: PaymentNumber }).nth(5)
+        const card = this.page.locator('div').filter({ hasText: PaymentNumber }).first()
         await expect(card).toBeVisible()
 
         await card.locator(this.changePayment).click()

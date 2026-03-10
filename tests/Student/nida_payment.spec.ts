@@ -14,22 +14,23 @@ test.describe('NIDA Admission Test Suite' , () => {
         await paymentPage.checkPaymentModule()
         await paymentPage.clickToBePaid()
         await expect(page).toHaveURL(/\/payment\/paid/);
-        await paymentPage.checkPaymentCard('00006940001')
-        await paymentPage.clickChangePaymentGateWayByCard('00006940001')
+        await paymentPage.checkPaymentCard('00006940014')
+        await paymentPage.clickChangePaymentGateWayByCard('00006940014')
     });
 
-    test('TC-03 ทดสอบชำระเงิน' , async ({ admissionPage , paymentPage, page}) => {
+    test('TC-03 ทดสอบชำระเงิน' , async ({ examsPage,admissionPage , paymentPage, page}) => {
         await admissionPage.gotoPrograms();
         await paymentPage.clickPaymentModule()
         await paymentPage.checkPaymentModule()
         await paymentPage.clickToBePaid()
         await expect(page).toHaveURL(/\/payment\/paid/);
-        await paymentPage.checkPaymentCard('00006940001')
-        await paymentPage.clickChangePaymentGateWayByCard('00006940001')
-        // await paymentPage.clickPaymentWay('Bill Payment')
-        // await paymentPage.clickPaidBtn()
-        // await expect(page.getByRole('heading', { name: 'ยืนยันการเปลี่ยนช่องทางการชำระเงิน' })).toBeVisible()
-        // await paymentPage.clickConfirmPopupBtn()
+        await paymentPage.checkPaymentCard('00006940014')
+        await paymentPage.clickChangePaymentGateWayByCard('00006940014')
+        await paymentPage.clickPaymentWay('Bill Payment')
+        await paymentPage.clickPaidBtn()
+        await expect(page.getByRole('heading', { name: 'ยืนยันการเปลี่ยนช่องทางการชำระเงิน' })).toBeVisible()
+        await paymentPage.clickConfirmPopupBtn()
+        await examsPage.downloadPaymentInvoice();
     });
 
     test('TC-04 ทดสอบเลือกช่องทางการขำระเงิน' , async ({ admissionPage , paymentPage, page}) => {
