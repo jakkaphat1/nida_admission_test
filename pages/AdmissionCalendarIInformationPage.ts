@@ -1,5 +1,30 @@
 import { Page, Locator , expect } from '@playwright/test'; 
 
+// type DateString = `${string}/${string}/${string}`;
+type DateString = `${string}`;
+
+type CalendarField =
+  | "วันเปิดรับสมัคร"
+  | "วันประกาศรายชื่อผู้มีสิทธิ์สอบและสถานที่สอบ (ข้อเขียน)"
+  | "วันประกาศรายชื่อผู้มีสิทธิ์สอบและสถานที่สอบ (สอบสัมภาษณ์)"
+  | "วันสอบข้อเขียน"
+  | "วันสอบสัมภาษณ์"
+  | "วันประกาศผลสอบข้อเขียน"
+  | "วันประกาศผลการคัดเลือก"
+  | "วันประกาศผลสอบข้อเขียน"
+  | "วันรับเอกสารขึ้นทะเบียน"
+  | "วันชำระเงินค่าลงทะเบียน"
+  | "วันเปิดภาคการศึกษา"
+  | "วันปฐมนิเทศ"
+  | "วันรายงานตัวและบันทึกประวัติ"
+  | "นักศึกษายืนยันสิทธิ์เข้าศึกษา";
+
+interface CalendarDateInput {
+  field: CalendarField;
+  startDate: DateString;
+  endDate: DateString;
+}
+
 export class AdmissionCalendarInformationPage {
     page : Page;
     /**
@@ -25,6 +50,11 @@ export class AdmissionCalendarInformationPage {
  * ---------------------------------------------------------------- */    
     async gotoBackOffice(){
         await this.page.goto(this.backOfficeLandingURL);
+    }
+
+    async clickNextStep(){
+        const nextButton = this.page.getByRole('button', { name: 'ถัดไป' })
+        await nextButton.click()
     }
 
     async fillUsernameAndPassword(username:string , password:string){
@@ -178,7 +208,7 @@ export class AdmissionCalendarInformationPage {
         await expect(facultyDropdonw).toBeVisible()
     }
 
-    async filAddCalendarPage(data:{
+    async filAddCalendarPageFirstStep(data:{
         display : 'แสดง'|'ไม่แสดง'
         round : string
         education : string
@@ -233,6 +263,50 @@ export class AdmissionCalendarInformationPage {
             const facultyOption = this.page.getByRole('option', { name: data.faculty, exact: true })
             await facultyDropdonw.click()
             await facultyOption.click()
+        }
+    }
+
+    async fillScheduleDates(data: CalendarDateInput[]) {
+        for (const item of data) {
+            const escapedField = item.field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            const row = this.page.locator("div").filter({ 
+                hasText: new RegExp(`^\\d+${escapedField}$`) 
+            }).first();
+            const startDateInput = row.getByRole("textbox", { name: "DD/MM/YYYY" }).first();
+            const endDateInput   = row.getByRole("textbox", { name: "DD/MM/YYYY" }).nth(1);
+
+            console.log(`กำลังกรอก field: "${item.field}" | start: ${item.startDate} → end: ${item.endDate}`)
+
+            await startDateInput.click();
+            await startDateInput.pressSequentially(item.startDate );
+            await this.page.keyboard.press("Tab");
+
+            await endDateInput.click();
+            await endDateInput.pressSequentially(item.endDate );
+            await this.page.keyboard.press("Tab");
+            await row.click()
+            console.log(`กรอกเสร็จ: "${item.field}"`)
+        }
+    }
+
+    async reorderScheduleRows(order: CalendarField[]) {
+        for (let targetIndex = 0; targetIndex < order.length; targetIndex++) {
+            const fieldName = order[targetIndex]
+
+            const dragHandle = this.page
+                .locator("div")
+                .filter({ hasText: new RegExp(`${fieldName}`) })
+                .locator('[role="button"][aria-roledescription="sortable"]')
+                .first()
+
+            const targetRow = this.page
+                .locator('[aria-roledescription="sortable"]')
+                .nth(targetIndex)
+
+            console.log(` ย้าย "${fieldName}" → ตำแหน่งที่ ${targetIndex + 1}`)
+
+            await dragHandle.dragTo(targetRow)
+            await this.page.waitForTimeout(300)
         }
     }
 

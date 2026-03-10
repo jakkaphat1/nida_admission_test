@@ -34,6 +34,7 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
     });
 
     test('TC-04 ทดสอบสร้างปฏิทินการรับสมัคร' , async ({ admissionCalendarInformationPage, page}) => {
+        test.setTimeout(80000)
         await admissionCalendarInformationPage.gotoPrograms()
         await admissionCalendarInformationPage.gotoAdmissionCalendarInformationMenu()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
@@ -42,15 +43,90 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await admissionCalendarInformationPage.checkAddCalendarPage()
 
         const addCalendarInfo = {
-            display : 'แสดง' as const, 
-            round : '1',
+            display : 'ไม่แสดง' as const, 
+            round : '4',
             education : 'ปริญญาโท',
             student : 'ภาคปกติ',
             term : 'ภาคการศึกษาที่ 2',
             year : '2569',
             faculty : 'GSAS - คณะสถิติประยุกต์',
         }
-        await admissionCalendarInformationPage.filAddCalendarPage(addCalendarInfo)
+        await admissionCalendarInformationPage.filAddCalendarPageFirstStep(addCalendarInfo)
+        await admissionCalendarInformationPage.clickSaveButton()
+        await expect(page.getByRole('heading',{name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
+        await admissionCalendarInformationPage.clickNextStep()
+        await admissionCalendarInformationPage.fillScheduleDates([
+            {
+                field: "วันเปิดรับสมัคร",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันประกาศรายชื่อผู้มีสิทธิ์สอบและสถานที่สอบ (สอบสัมภาษณ์)",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันประกาศผลสอบข้อเขียน",
+                startDate: "15072025",
+                endDate: "15072025",
+            },
+            {
+                field: "วันประกาศผลการคัดเลือก",
+                startDate: "01082025",
+                endDate: "01082025",
+            },
+            {
+                field: "วันประกาศรายชื่อผู้มีสิทธิ์สอบและสถานที่สอบ (ข้อเขียน)",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันรับเอกสารขึ้นทะเบียน",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันสอบสัมภาษณ์",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            
+            {
+                field: "วันเปิดภาคการศึกษา",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันสอบข้อเขียน",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันปฐมนิเทศ",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันชำระเงินค่าลงทะเบียน",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+        ]);
+
+        // await admissionCalendarInformationPage.reorderScheduleRows([
+        //     "วันเปิดรับสมัคร",
+        //     "วันประกาศรายชื่อผู้มีสิทธิ์สอบและสถานที่สอบ (ข้อเขียน)",
+        //     "วันสอบข้อเขียน",
+        //     "วันประกาศผลสอบข้อเขียน",
+        //     "วันประกาศรายชื่อผู้มีสิทธิ์สอบและสถานที่สอบ (สอบสัมภาษณ์)",
+        //     "วันสอบสัมภาษณ์",
+        //     "วันประกาศผลการคัดเลือก",
+        //     "วันรับเอกสารขึ้นทะเบียน",
+        //     "วันชำระเงินค่าลงทะเบียน",
+        //     "วันปฐมนิเทศ",
+        //     "วันเปิดภาคการศึกษา",
+        // ])
         await admissionCalendarInformationPage.clickSaveButton()
         await expect(page.getByRole('heading',{name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
