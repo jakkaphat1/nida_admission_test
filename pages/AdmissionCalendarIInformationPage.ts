@@ -413,8 +413,9 @@ export class AdmissionCalendarInformationPage {
         await editBtn.click()
     }
 
-    async clickManageCalendarButton(){
-        const manageCalendar  = this.page.getByRole('button', { name: 'จัดการกำหนดการของปฏิทิน' })
+    async clickManageCalendarButton(cardName:string){
+        const card = this.page.locator('.card-container').filter({ hasText: cardName })
+        const manageCalendar  = card.getByRole('button', { name: 'จัดการกำหนดการของปฏิทิน' })
         await manageCalendar.click()
     }
 
@@ -426,5 +427,59 @@ export class AdmissionCalendarInformationPage {
 
     async clickAddProject(){
         const addProject = this.page.getByRole('button', { name: 'โครงการ' }).first()
+    }
+
+    async seeAdmissionCalendarByName(cardName:string){
+        const card = this.page.locator('.card-container').filter({ hasText: cardName })
+        const admissionCalendarBtn = card.getByRole('button', { name: 'ดูปฏิทินการรับสมัคร' }).first()
+        await admissionCalendarBtn.click()
+    }
+
+    async checkAdmissionCalendarInfo(calendarName:string){
+        const calendar = this.page.locator('div').filter({ hasText: calendarName }).nth(5)
+        const facultyUsing = this.page.getByRole('heading', { name: 'คณะที่นำปฏิทินไปใช้' })
+        const facultyNonUsing = this.page.getByRole('heading', { name: 'คณะที่ไม่มีการนำปฏิทินไปใช้' })        
+        const showOnCandidate = this.page.getByRole('button', { name: 'แสดงหน้าผู้สมัคร' })
+        const project = this.page.getByRole('heading', { name: 'โครงการ', exact: true })
+        const projectNotChange = this.page.getByRole('heading', { name: 'โครงการที่ใช้กำหนดการนี้แต่มีการเปลี่ยนแปลงวันที่เฉพาะโครงการ' })
+
+        await expect(calendar).toBeVisible()
+        await expect(facultyUsing).toBeVisible()
+        await expect(facultyNonUsing).toBeVisible()
+        await expect(showOnCandidate).toBeVisible()
+        await expect(project).toBeVisible()
+        await expect(projectNotChange).toBeVisible()
+    }
+
+    async clickCalendarName(calendar:string){
+        const calendarName = this.page.getByText(calendar).first()
+        await calendarName.click()
+    }
+
+    async selectProjectEngagementOption(projectType?:string , faculty?:string){
+        const projectTypeDropdown = this.page.locator('.react-select__indicators').first()
+        const facultyDropdown = this.page.locator('#faculty > .unext-form-control > .react-select__indicators')
+        const projectTypeOption = this.page.getByRole('option', { name: projectType })
+        const facultyOption = this.page.getByRole('option', { name: faculty })
+
+        if(projectType){
+            await projectTypeDropdown.click()
+            await projectTypeOption.click()
+        }
+
+        if(faculty){
+            await facultyDropdown.click()
+            await facultyOption.click()
+        }
+    }
+
+    async checkProjectByName(project:string){
+        const projectName = this.page.getByText(project).first()
+        await expect(projectName).toBeVisible()
+    }
+
+    async clickReturnToFirstPage(){
+        const firstPageBtn = this.page.getByRole('button', { name: 'กลับไปหน้าแรก' })
+        await firstPageBtn.click()
     }
 }

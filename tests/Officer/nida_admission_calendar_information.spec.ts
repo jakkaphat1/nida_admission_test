@@ -267,7 +267,7 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await admissionCalendarInformationPage.searchByFilter(searchInfo)
         await expect(page.getByText('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ')).toBeVisible()
         // await admissionCalendarInformationPage.clickKebabMenuByCard('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ')
-        await admissionCalendarInformationPage.clickManageCalendarButton()
+        await admissionCalendarInformationPage.clickManageCalendarButton('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ')
         await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar\/faculties.*/);
         await admissionCalendarInformationPage.clickCustomCalendarButtonByFaculty('คณะสถิติประยุกต์')
         await admissionCalendarInformationPage.clickEditButton()
@@ -275,5 +275,34 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await admissionCalendarInformationPage.clickSaveButton()
 
        
+    });
+
+    test('TC-07 ทดสอบจัดการกำหนดการของปฏิทิน' , async ({ admissionCalendarInformationPage, page}) => {
+        
+        await admissionCalendarInformationPage.gotoPrograms()
+        await admissionCalendarInformationPage.gotoAdmissionCalendarInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
+
+        const searchInfo = {
+            searchCalendarName:'ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ',
+            status:'ใช้งาน',
+            // round:'4',
+            // eduLevel : 'ปริญญาโท',
+            // studentType : 'ภาคปกติ',
+            // term : 'ภาคการศึกษาที่ 2',
+            // academicYear : '2569',
+            // display: 'แสดง' as const
+        }
+
+        await admissionCalendarInformationPage.searchByFilter(searchInfo)
+        await expect(page.getByText('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ')).toBeVisible()
+        await admissionCalendarInformationPage.seeAdmissionCalendarByName('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ')
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar\/view.*/);
+        await admissionCalendarInformationPage.checkAdmissionCalendarInfo('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ')
+        await admissionCalendarInformationPage.clickCalendarName('วันประกาศผลสอบข้อเขียน')
+        await admissionCalendarInformationPage.selectProjectEngagementOption('โครงการที่ใช้กำหนดการ','คณะสถิติประยุกต์')
+        await admissionCalendarInformationPage.checkProjectByName('วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ')
+        await admissionCalendarInformationPage.clickReturnToFirstPage()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
     });
 });
