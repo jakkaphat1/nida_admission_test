@@ -131,4 +131,104 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page.getByRole('heading',{name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
         await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
     });
+
+    test('TC-05 ทดสอบแก้ไขปฏิทินการรับสมัคร' , async ({ admissionCalendarInformationPage, page}) => {
+        test.setTimeout(80000)
+        await admissionCalendarInformationPage.gotoPrograms()
+        await admissionCalendarInformationPage.gotoAdmissionCalendarInformationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
+
+        const searchInfo = {
+            searchCalendarName:'ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ',
+            status:'ใช้งาน',
+            // round:'4',
+            // eduLevel : 'ปริญญาโท',
+            // studentType : 'ภาคปกติ',
+            // term : 'ภาคการศึกษาที่ 2',
+            // academicYear : '2569',
+            // display: 'แสดง' as const
+        }
+
+        await admissionCalendarInformationPage.searchByFilter(searchInfo)
+        await expect(page.getByText('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ')).toBeVisible()
+        await admissionCalendarInformationPage.clickKebabMenuByCard('ปฏิทินรับสมัคร ปี 2569 ครั้งที่ 5 ภาคการศึกษาที่ 2 ปริญญาโท ภาคปกติ')
+        await admissionCalendarInformationPage.clickKebabOption('แก้ไข')
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar\/edit.*/);
+
+        await admissionCalendarInformationPage.clickEditButton()
+        const editCalendarInfo = {
+            display : 'ไม่แสดง' as const, 
+            round : '5',
+            education : 'ปริญญาโท',
+            student : 'ภาคปกติ',
+            term : 'ภาคการศึกษาที่ 2',
+        }
+        await admissionCalendarInformationPage.filEditalendarPageFirstStep(editCalendarInfo)
+        await admissionCalendarInformationPage.clickSaveButton()
+        await expect(page.getByRole('heading',{name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
+        await admissionCalendarInformationPage.clickNextStep()
+
+        await admissionCalendarInformationPage.clickEditButton()
+        await admissionCalendarInformationPage.fillEditScheduleDates([
+            {
+                field: "วันเปิดรับสมัคร",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันประกาศรายชื่อผู้มีสิทธิ์สอบและสถานที่สอบ (สอบสัมภาษณ์)",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันประกาศผลสอบข้อเขียน",
+                startDate: "15072025",
+                endDate: "15072025",
+            },
+            {
+                field: "วันประกาศผลการคัดเลือก",
+                startDate: "01082025",
+                endDate: "01082025",
+            },
+            {
+                field: "วันประกาศรายชื่อผู้มีสิทธิ์สอบและสถานที่สอบ (ข้อเขียน)",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันรับเอกสารขึ้นทะเบียน",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันสอบสัมภาษณ์",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            
+            {
+                field: "วันเปิดภาคการศึกษา",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันสอบข้อเขียน",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันปฐมนิเทศ",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+            {
+                field: "วันชำระเงินค่าลงทะเบียน",
+                startDate: "01062025",
+                endDate: "30062025",
+            },
+        ]);
+        await admissionCalendarInformationPage.clickSaveButton()
+        await expect(page.getByRole('heading',{name:'บันทึกข้อมูลสำเร็จ'})).toBeVisible()
+        await expect(page).toHaveURL(/.*admin\/admission\/master\/academic-calendar/);
+    });
 });

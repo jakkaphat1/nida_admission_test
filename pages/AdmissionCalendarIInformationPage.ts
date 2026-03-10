@@ -209,13 +209,13 @@ export class AdmissionCalendarInformationPage {
     }
 
     async filAddCalendarPageFirstStep(data:{
-        display : 'แสดง'|'ไม่แสดง'
-        round : string
-        education : string
-        student : string
-        term : string
-        year : string
-        faculty : string
+        display? : 'แสดง'|'ไม่แสดง'
+        round?: string
+        education? : string
+        student? : string
+        term? : string
+        year? : string
+        faculty? : string
     }){
         const displayRadio = this.page.getByRole('radio', { name: data.display, exact: true })
         const roundDropdown = this.page.locator('div').filter({ hasText: /^เลือกรอบที่$/ }).nth(3)
@@ -224,6 +224,64 @@ export class AdmissionCalendarInformationPage {
         const termDropdown = this.page.locator('div').filter({ hasText: /^ภาคการศึกษาที่ 2$/ }).nth(3)
         const academicYearDropdown = this.page.locator('div').filter({ hasText: /^2569$/ }).nth(3)
         const facultyDropdonw = this.page.locator('div').filter({ hasText: /^เลือกคณะ$/ }).nth(3)
+
+        if(data.display){
+            await displayRadio.click()
+        }
+
+        if(data.round){
+            const roundOption = this.page.getByRole('option', { name: data.round, exact: true })
+            await roundDropdown.click()
+            await roundOption.click()
+        }
+
+        if(data.education){
+            const educationOption = this.page.getByRole('option', { name: data.education, exact: true })
+            await educationLvlDropdown.click()
+            await educationOption.click()
+        }
+
+        if(data.student){
+            const studentTypeOption = this.page.getByRole('option', { name: data.student, exact: true })
+            await studentTypeDropdown.click()
+            await studentTypeOption.click()
+        }
+
+        if(data.term){
+            const termOption = this.page.getByRole('option', { name: data.term, exact: true })
+            await termDropdown.click()
+            await termOption.click()
+        }
+
+        if(data.year){
+            const yearOption = this.page.getByRole('option', { name: data.year, exact: true })
+            await academicYearDropdown.click()
+            await yearOption.click()
+        }
+
+        if(data.faculty){
+            const facultyOption = this.page.getByRole('option', { name: data.faculty, exact: true })
+            await facultyDropdonw.click()
+            await facultyOption.click()
+        }
+    }
+
+    async filEditalendarPageFirstStep(data:{
+        display? : 'แสดง'|'ไม่แสดง'
+        round? : string
+        education? : string
+        student? : string
+        term? : string
+        year? : string
+        faculty? : string
+    }){
+        const displayRadio = this.page.getByRole('radio', { name: data.display, exact: true })
+        const roundDropdown = this.page.locator('.react-select__indicators').first()
+        const educationLvlDropdown = this.page.locator('#edulevel_code > .unext-form-control > .react-select__indicators')
+        const studentTypeDropdown = this.page.locator('#student_status_code > .unext-form-control > .react-select__indicators')
+        const termDropdown = this.page.locator('#semester_code > .unext-form-control > .react-select__indicators')
+        const academicYearDropdown = this.page.locator('#academic_year > .unext-form-control > .react-select__indicators')
+        const facultyDropdonw = this.page.locator('#faculties > .unext-form-control > .react-select__indicators')
 
         if(data.display){
             await displayRadio.click()
@@ -289,6 +347,29 @@ export class AdmissionCalendarInformationPage {
         }
     }
 
+    async fillEditScheduleDates(data: CalendarDateInput[]) {
+        for (const item of data) {
+            const escapedField = item.field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            const row = this.page.locator("div").filter({ 
+                hasText: new RegExp(`^\\d+${escapedField}$`) 
+            }).first();
+            const startDateInput = row.getByRole("textbox", { name: "DD/MM/YYYY" }).first();
+            const endDateInput   = row.getByRole("textbox", { name: "DD/MM/YYYY" }).nth(1);
+
+            console.log(`กำลังกรอก field: "${item.field}" | start: ${item.startDate} → end: ${item.endDate}`)
+
+            await startDateInput.click({ clickCount: 3 })
+            await startDateInput.pressSequentially(item.startDate );
+            await this.page.keyboard.press("Tab");
+
+            await endDateInput.click({ clickCount: 3 })
+            await endDateInput.pressSequentially(item.endDate );
+            await this.page.keyboard.press("Tab");
+            await row.click()
+            console.log(`กรอกเสร็จ: "${item.field}"`)
+        }
+    }
+
     async reorderScheduleRows(order: CalendarField[]) {
         for (let targetIndex = 0; targetIndex < order.length; targetIndex++) {
             const fieldName = order[targetIndex]
@@ -310,8 +391,24 @@ export class AdmissionCalendarInformationPage {
         }
     }
 
+    async clickKebabMenuByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({ hasText: cardName })
+        const kebabButton = card.locator('button.menuAction_button')
+        await kebabButton.click()
+    }
+    
+    async clickKebabOption(optionType:string){
+        const option = this.page.getByRole('button', { name: optionType })
+        await option.click()
+    }
+
     async clickSaveButton(){
         const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
         await saveBtn.click()
+    }
+
+    async clickEditButton(){
+        const editBtn = this.page.getByRole('button', { name: 'แก้ไข' })
+        await editBtn.click()
     }
 }
