@@ -7,8 +7,10 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await commonPage.fillUsernameAndPassword('sys_admin1','unext@2022')
     });
 
-    test('TC-02 ทดสอบการเข้าเมนูหลักสูตรที่เปิดรับ' , async ({ commonPage , page}) => {
-        
+    test('TC-02 ทดสอบการเข้าเมนูหลักสูตรที่เปิดรับ' , async ({ commonPage , courseOpenPage , page}) => {
+        await commonPage.gotoPrograms()
+        await courseOpenPage.gotoCourseOpenMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
     });
 
     
