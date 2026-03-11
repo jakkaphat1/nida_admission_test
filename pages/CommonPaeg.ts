@@ -24,7 +24,7 @@ export class CommonPage {
  * Method SECTION
  * ---------------------------------------------------------------- */    
     async gotoBackOfficeLogin(){
-        await this.page.goto(this.backOfficeLandingURL);
+        await this.page.goto(this.backOfficeLoginURL);
     }
 
     async gotoBackOfficeLandingPage(){
