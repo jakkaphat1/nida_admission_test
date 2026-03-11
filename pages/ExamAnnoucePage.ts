@@ -55,6 +55,11 @@ export class ExamAnnoucePage {
 
     }
 
+    async checkApplicationStatus(status:string){
+        const applicationStatus = this.page.locator('div').filter({ hasText: status }).first();
+        await expect(applicationStatus).toBeVisible()
+    }
+
     async checkAnnouceExpandDetail(ApplicationNumber:string,location:string,date:string,seat:string){
         const card = this.page.locator('div').filter({ hasText: ApplicationNumber }).first();
         // const expandIcon = card.locator(`.rotate-${degree}`);
