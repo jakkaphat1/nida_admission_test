@@ -391,6 +391,13 @@ export class CourseOpenPage {
         await expect(this.page.getByText('แก้ไขประกาศสำเร็จ')).toBeVisible()
     }
 
+    async clickConfirmCancelAnnoucePopup(){
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(this.page.getByRole('heading', { name: 'ยืนยันยกเลิกประกาศ' })).toBeVisible()
+        await confirmBtn.click()
+        await expect(this.page.getByRole('alert').filter({ hasText: 'บันทึกรายการเรียบร้อยแล้ว' }).last()).toBeVisible()
+    }
+
     async clickSeeAnnoucementButtonByCard(cardName:string){
         const card = this.page.locator('.card-container').filter({hasText:cardName}).first()
         const seeAnnoucemenntBtn = card.getByRole('button', { name: 'ดูประกาศ' })
@@ -421,6 +428,14 @@ export class CourseOpenPage {
         const historyButton = this.page.getByRole('button', { name: 'ประวัติ' })
         await kebabBtn.click()
         await historyButton.click()
+    }
+
+    async clickKebabButtonForCancelAnnouceByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const kebabBtn = card.locator('button.menuAction_button')
+        const cancelButton = this.page.getByRole('button', { name: 'ยกเลิกประกาศ' })
+        await kebabBtn.click()
+        await cancelButton.click()
     }
 
     async clearFileUpload(hoverText:string){
