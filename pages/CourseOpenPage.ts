@@ -318,4 +318,21 @@ export class CourseOpenPage {
         const closeBtn = this.page.getByRole('button', { name: 'ปิด' })
         await closeBtn.click()
     }
+
+    async clickDashboardButtonByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({hasText:cardName}).first()
+        const dashboardBtn = card.getByRole('button', { name: 'Dashboard' })
+        await dashboardBtn.click()
+    }
+
+    async clickFacultyToSeePercentage(facultyName:string){
+        const facultyCard = this.page.getByText(facultyName)
+        await facultyCard.click()
+        console.log(`เลือกดู : ${facultyName} `);
+    }
+
+    async clickBackToFirstPage(){
+        const backFirstPage = this.page.getByRole('button', { name: 'กลับไปหน้าแรก' })
+        await backFirstPage.click()
+    }
 }
