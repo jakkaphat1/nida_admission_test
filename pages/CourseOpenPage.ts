@@ -397,12 +397,30 @@ export class CourseOpenPage {
         await seeAnnoucemenntBtn.click()
     }
 
+    async clickSeePDFinHistory(){
+        const pdfButton = this.page.getByRole('button', { name: 'เปิดดู PDF' }).nth(1)
+        await pdfButton.click()
+    }
+
+    async clickClosePDFHistoryPopup(){
+        const closeBtn = this.page.getByRole('button', { name: 'ปิด', exact: true })
+        await closeBtn.click()
+    }
+
     async clickKebabButtonForEditAnnouceByNumber(number:string){
         const card = this.page.locator('div').filter({ hasText: number}).nth(5)
         const kebabBtn = card.locator('button.menuAction_button')
         const editButton = this.page.getByRole('button', { name: 'แก้ไขประกาศ' })
         await kebabBtn.click()
         await editButton.click()
+    }
+
+    async clickKebabButtonForAnnouceHistoryByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const kebabBtn = card.locator('button.menuAction_button')
+        const historyButton = this.page.getByRole('button', { name: 'ประวัติ' })
+        await kebabBtn.click()
+        await historyButton.click()
     }
 
     async clearFileUpload(hoverText:string){
