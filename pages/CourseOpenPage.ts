@@ -398,10 +398,29 @@ export class CourseOpenPage {
         await expect(this.page.getByRole('alert').filter({ hasText: 'บันทึกรายการเรียบร้อยแล้ว' }).last()).toBeVisible()
     }
 
+    async clickConfirmAnnouceApplcationCoursePopup(){
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(this.page.getByRole('heading', { name: 'ประกาศเปิดรับสมัคร' })).toBeVisible()
+        await confirmBtn.click()
+        await expect(this.page.getByRole('alert').filter({ hasText: 'ประกาศรับสมัครสำเร็จ' }).last()).toBeVisible()
+    }
+
     async clickSeeAnnoucementButtonByCard(cardName:string){
         const card = this.page.locator('.card-container').filter({hasText:cardName}).first()
         const seeAnnoucemenntBtn = card.getByRole('button', { name: 'ดูประกาศ' })
         await seeAnnoucemenntBtn.click()
+    }
+
+    async clickCheckboxForAnnouceApplicationByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({hasText:cardName}).first()
+        const checkbox = card.getByRole('checkbox').first()
+        await checkbox.click()
+        console.log(` เลือกประกาศสมัครสำหรับ: ${cardName}`);
+    }
+
+    async clickAnnouceApplication(){
+        const annouceApplicationBtn = this.page.getByRole('button', { name: 'ประกาศเปิดรับสมัคร', exact: true })
+        await annouceApplicationBtn.click()
     }
 
     async clickSeePDFinHistory(){

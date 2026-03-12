@@ -264,4 +264,24 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await courseOpenPage.clickKebabButtonForCancelAnnouceByNumber('12032026213612Svr')
         await courseOpenPage.clickConfirmCancelAnnoucePopup()
     });
+
+    test('TC-14 ทดสอบสอบประกาศเปิดรับสมัคร' , async ({ commonPage , courseOpenPage , page}) => {
+        test.setTimeout(35000)
+        await commonPage.gotoPrograms()
+        await courseOpenPage.gotoCourseOpenMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
+        await courseOpenPage.clickCourseNotOpenTab()
+        await courseOpenPage.clickStatusByKeyword('ใช้งาน')
+        await courseOpenPage.filterMoreOption({
+            eduYear:'2570',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'4',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ'
+        })
+        await expect(page.getByText('รอบที่ 4/2570 (ภาคการศึกษาที่ 1)')).toBeVisible()
+        await courseOpenPage.clickCheckboxForAnnouceApplicationByCard('รอบที่ 4/2570 (ภาคการศึกษาที่ 1)')
+        await courseOpenPage.clickAnnouceApplication()
+        await courseOpenPage.clickConfirmAnnouceApplcationCoursePopup()
+    });
 });
