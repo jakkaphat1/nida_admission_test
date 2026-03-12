@@ -188,7 +188,7 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await courseOpenPage.clickUploadAnnoucementByCard('รอบที่ 4/2570 (ภาคการศึกษาที่ 1')
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program\/upload-announcement.*/);
         await courseOpenPage.checkUploadAnnoucementPage('คณะสถิติประยุกต์')
-        await courseOpenPage.selectCourseToOpenByFacultyAndCourse('คณะสถิติประยุกต์','วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)')
+        await courseOpenPage.selectCourseToOpenByFacultyAndCourse('คณะสถิติประยุกต์','วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)');   
         const annouceFile = 'downloads/ตัวอย่างไฟล์ประกาศหลักสูตรที่เปิดรับ.pdf';
         await courseOpenPage.uploadAnnouceFile(annouceFile)
         await courseOpenPage.clickSaveButton()
@@ -369,5 +369,31 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await courseOpenPage.clickSaveButton()
         await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible()
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program\/faculties\/quotas.*/);
+    });
+
+    test('TC-18 ทดสอบอัปโหลดประกาศข้อมูลหลักสูตรที่เปิดรับสมัครเเล้ว' , async ({ commonPage , courseOpenPage , page}) => {
+        test.setTimeout(35000)
+        await commonPage.gotoPrograms()
+        await courseOpenPage.gotoCourseOpenMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
+        await courseOpenPage.clickCourseOpenedTab()
+        await courseOpenPage.fillSearchBox('TGAS12001')
+        await courseOpenPage.clickStatusByKeyword('ใช้งาน')
+        await courseOpenPage.filterMoreOption({
+            eduYear:'2570',
+            // semester:'ภาคการศึกษาที่ 1',
+            round:'4',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ'
+        })
+        await expect(page.getByText('รอบที่ 4/2570 (ภาคการศึกษาที่ 1)')).toBeVisible()
+        await courseOpenPage.clickUploadAnnoucementByCard('รอบที่ 4/2570 (ภาคการศึกษาที่ 1')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program\/upload-announcement.*/);
+        await courseOpenPage.checkUploadAnnoucementPage('คณะสถิติประยุกต์')
+        await courseOpenPage.selectAllCourseOpen()
+        const annouceFile = 'downloads/ตัวอย่างไฟล์ประกาศหลักสูตรที่เปิดรับ.pdf';
+        await courseOpenPage.uploadAnnouceFile(annouceFile)
+        await courseOpenPage.clickSaveButton()
+        await courseOpenPage.clickConfirmUploadAnnouceFilePopup()
     });
 });

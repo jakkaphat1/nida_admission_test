@@ -379,6 +379,12 @@ export class CourseOpenPage {
         await courseCheckBox.click()
     }
 
+    async selectAllCourseOpen(){
+        const allCourseBtn = this.page.getByRole('checkbox').first()
+        await allCourseBtn.click()
+    }
+
+
     async selectEditCourseToOpenByFacultyAndCourse(facultyName:string,courseName:string){
         const faculty = this.page.locator('.card-container').filter({hasText:facultyName}).first()
         const expandBtn = faculty.locator('.status-box')
