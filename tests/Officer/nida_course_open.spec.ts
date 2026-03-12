@@ -13,5 +13,20 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
     });
 
-    
+    test('TC-03 ทดสอบค้นหาข้อมูลหลักสูตรที่ยังไม่เปิดรับสมัคร' , async ({ commonPage , courseOpenPage , page}) => {
+        await commonPage.gotoPrograms()
+        await courseOpenPage.gotoCourseOpenMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
+        await courseOpenPage.clickCourseNotOpenTab()
+        await courseOpenPage.fillSearchBox('สถิติประยุกต์')
+        await courseOpenPage.clickStatusByKeyword('ใช้งาน')
+        await courseOpenPage.filterMoreOption({
+            eduYear:'2569',
+            semester:'ภาคการศึกษาที่ 2',
+            round:'1',
+            eduLevel:'ปริญญาโท',
+            studentType:'ภาคปกติ'
+        })
+        await expect(page.getByText('รอบที่ 1/2569 (ภาคการศึกษาที่ 2)')).toBeVisible()
+    });    
 });
