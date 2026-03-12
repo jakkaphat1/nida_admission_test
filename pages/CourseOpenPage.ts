@@ -160,12 +160,20 @@ export class CourseOpenPage {
         await saveBtn.click()
     }
 
-    async clickKebabButtonByCard(cardName:string){
+    async clickEditInKebabButtonByCard(cardName:string){
         const card = this.page.locator('.card-container').filter({ hasText: cardName })
         const kebabBtn = card.locator('button.menuAction_button')
         const editButton = this.page.getByRole('button', { name: 'แก้ไข' })
         await kebabBtn.click()
         await editButton.click()
+    }
+
+    async clickCopyInKebabButtonByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({ hasText: cardName })
+        const kebabBtn = card.locator('button.menuAction_button')
+        const copyButton = this.page.getByRole('button', { name: 'คัดลอก' })
+        await kebabBtn.click()
+        await copyButton.click()
     }
 
     async fillEditCoursePage(data:{
@@ -209,5 +217,37 @@ export class CourseOpenPage {
             await studentTypeDropdown.click()
             await studentTypeOption.click()
         }
+    }
+
+    async fillCopyCoursePopup(data:{
+        eduYear?:string
+        semester?:string
+        round?:string
+    }){
+        if(data.eduYear){
+            const eduYearDropdown = this.page.locator('.react-select__input-container')
+            const eduYearOption = this.page.getByRole('option', { name: data.eduYear })
+            await eduYearDropdown.click()
+            await eduYearOption.click()
+        }
+
+        if(data.semester){
+            const semesterDropdown = this.page.locator('#semester > .unext-form-control > .react-select__indicators')
+            const semesterOption = this.page.getByRole('option', { name: data.semester })
+            await semesterDropdown.click()
+            await semesterOption.click()
+        }
+
+        if(data.round){
+            const roundDropdown = this.page.locator('#round > .unext-form-control > .react-select__indicators')
+            const roundOption = this.page.getByRole('option', { name: data.round , exact:true } )
+            await roundDropdown.click()
+            await roundOption.click()
+        }
+    }
+
+    async clickConfirmCopying(){
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยันการคัดลอก' })
+        await confirmBtn.click()
     }
 }
