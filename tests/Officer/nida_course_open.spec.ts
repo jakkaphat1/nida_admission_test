@@ -46,5 +46,36 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         })
         await courseOpenPage.clickSaveButton()
         await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
+    });
+
+    test('TC-05 ทดสอบแก้ไขข้อมูลหลักสูตรเปิดรับนักศึกษาใหม่' , async ({ commonPage , courseOpenPage , page}) => {
+        await commonPage.gotoPrograms()
+        await courseOpenPage.gotoCourseOpenMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
+        await courseOpenPage.clickCourseNotOpenTab()
+        await courseOpenPage.clickStatusByKeyword('ไม่ใช้งาน')
+        await courseOpenPage.filterMoreOption({
+            eduYear:'2570',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'1',
+            eduLevel:'ปริญญาโท',
+            studentType:'ภาคปกติ'
+        })
+        await expect(page.getByText('รอบที่ 1/2570 (ภาคการศึกษาที่ 1)')).toBeVisible()
+        await courseOpenPage.clickKebabButtonByCard('รอบที่ 1/2570 (ภาคการศึกษาที่ 1)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program\/edit.*/);
+        await page.waitForLoadState('networkidle')
+        await courseOpenPage.fillEditCoursePage({
+            eduYear:'2570',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'4',
+            eduLevel:'ปริญญาโท',
+            studentType:'ภาคปกติ'
+        })
+        await courseOpenPage.handleStatusToggle('ใช้งาน')
+        await courseOpenPage.clickSaveButton()
+        await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
     });
 });

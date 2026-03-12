@@ -159,4 +159,55 @@ export class CourseOpenPage {
         const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
         await saveBtn.click()
     }
+
+    async clickKebabButtonByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({ hasText: cardName })
+        const kebabBtn = card.locator('button.menuAction_button')
+        const editButton = this.page.getByRole('button', { name: 'แก้ไข' })
+        await kebabBtn.click()
+        await editButton.click()
+    }
+
+    async fillEditCoursePage(data:{
+        eduYear?:string
+        semester?:string
+        round?:string
+        eduLevel?:string
+        studentType?:string
+    }){
+        if(data.eduYear){
+            const eduYearDropdown = this.page.locator('.react-select__indicators').first()
+            const eduYearOption = this.page.getByRole('option', { name: data.eduYear })
+            await eduYearDropdown.click()
+            await eduYearOption.click()
+        }
+
+        if(data.semester){
+            const semesterDropdown = this.page.locator('#semester > .unext-form-control > .react-select__indicators')
+            const semesterOption = this.page.getByRole('option', { name: data.semester })
+            await semesterDropdown.click()
+            await semesterOption.click()
+        }
+
+        if(data.round){
+            const roundDropdown = this.page.locator('#round > .unext-form-control > .react-select__indicators')
+            const roundOption = this.page.getByRole('option', { name: data.round , exact:true } )
+            await roundDropdown.click()
+            await roundOption.click()
+        }
+
+        if(data.eduLevel){
+            const eduLevelDropdown = this.page.locator('#edulevel_code > .unext-form-control > .react-select__indicators')
+            const eduLevelOption = this.page.getByRole('option', { name: data.eduLevel })
+            await eduLevelDropdown.click()
+            await eduLevelOption.click()
+        }
+        
+        if(data.studentType){
+            const studentTypeDropdown = this.page.locator('#student_status_code > .unext-form-control > .react-select__indicators')
+            const studentTypeOption = this.page.getByRole('option', { name: data.studentType })
+            await studentTypeDropdown.click()
+            await studentTypeOption.click()
+        }
+    }
 }
