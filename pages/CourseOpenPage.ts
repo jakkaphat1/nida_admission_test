@@ -37,6 +37,11 @@ export class CourseOpenPage {
         await notOpenTab.click()
     }
 
+    async clickCourseOpenedTab(){
+        const openedTab = this.page.getByRole('button', { name: 'ประกาศเปิดรับสมัครแล้ว' })
+        await openedTab.click()
+    }
+
     async fillSearchBox(searchKeyword:string){
         const searchBox = this.page.getByRole('textbox', { name: 'ค้นหาจากรหัส หรือชื่อหลักสูตรและโครงการ' })
         await searchBox.pressSequentially(searchKeyword)
