@@ -1,4 +1,5 @@
 import { Page, Locator , expect } from '@playwright/test'; 
+import { stat } from 'fs';
 
 export class CourseOpenPage {
     page : Page;
@@ -93,5 +94,69 @@ export class CourseOpenPage {
             await studentTypeOption.click()
         }
         await backfilterBtn.click()
+    }
+
+    async clickAddCourseOpenButton(){
+        const createCourseBtn = this.page.getByRole('button', { name: 'เพิ่มข้อมูล' })
+        await createCourseBtn.click()
+    }
+
+    async handleStatusToggle(targetStatus: 'ใช้งาน' | 'ไม่ใช้งาน'){
+        const statusToggle = this.page.locator('span.label');
+        const currentStatus = await statusToggle.innerText();
+        console.log(`Current: ${currentStatus.trim()} -> Target: ${targetStatus}`);
+
+        if (currentStatus.trim() !== targetStatus){
+            await statusToggle.click()
+            await expect(this.page.getByText(targetStatus , {exact:true})).toBeVisible()
+        }
+    }
+
+    async fillCreateCoursePage(data:{
+        eduYear?:string
+        semester?:string
+        round?:string
+        eduLevel?:string
+        studentType?:string
+    }){
+        if(data.eduYear){
+            const eduYearDropdown = this.page.locator('.react-select__indicators').first()
+            const eduYearOption = this.page.getByRole('option', { name: data.eduYear })
+            await eduYearDropdown.click()
+            await eduYearOption.click()
+        }
+
+        if(data.semester){
+            const semesterDropdown = this.page.locator('#semester > .unext-form-control > .react-select__indicators')
+            const semesterOption = this.page.getByRole('option', { name: data.semester })
+            await semesterDropdown.click()
+            await semesterOption.click()
+        }
+
+        if(data.round){
+            const roundDropdown = this.page.locator('#round > .unext-form-control > .react-select__indicators')
+            const roundOption = this.page.getByRole('option', { name: data.round , exact:true } )
+            await roundDropdown.click()
+            await roundOption.click()
+        }
+
+        if(data.eduLevel){
+            const eduLevelDropdown = this.page.locator('#edulevel_code > .unext-form-control > .react-select__indicators')
+            const eduLevelOption = this.page.getByRole('option', { name: data.eduLevel })
+            await eduLevelDropdown.click()
+            await eduLevelOption.click()
+        }
+        
+        if(data.studentType){
+            const studentTypeDropdown = this.page.locator('#student_status_code > .unext-form-control > .react-select__indicators')
+            const studentTypeOption = this.page.getByRole('option', { name: data.studentType })
+            await studentTypeDropdown.click()
+            await studentTypeOption.click()
+        }
+    }
+
+    async clickSaveButton(){
+        const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
+        await saveBtn.click()
     }
 }

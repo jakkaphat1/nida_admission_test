@@ -29,4 +29,22 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         })
         await expect(page.getByText('รอบที่ 1/2569 (ภาคการศึกษาที่ 2)')).toBeVisible()
     });    
+
+    test('TC-04 ทดสอบกำหนดข้อมูลหลักสูตรเปิดรับนักศึกษาใหม่' , async ({ commonPage , courseOpenPage , page}) => {
+        await commonPage.gotoPrograms()
+        await courseOpenPage.gotoCourseOpenMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
+        await courseOpenPage.clickAddCourseOpenButton()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program\/create.*/);
+        await courseOpenPage.handleStatusToggle('ไม่ใช้งาน')
+        await courseOpenPage.fillCreateCoursePage({
+            eduYear:'2570',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'1',
+            eduLevel:'ปริญญาโท',
+            studentType:'ภาคปกติ'
+        })
+        await courseOpenPage.clickSaveButton()
+        await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible()
+    });
 });
