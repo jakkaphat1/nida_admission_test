@@ -250,4 +250,72 @@ export class CourseOpenPage {
         const confirmBtn = this.page.getByRole('button', { name: 'ยืนยันการคัดลอก' })
         await confirmBtn.click()
     }
+
+    async clickSpecificApplicationDetails(){
+        const specificApplicationButton = this.page.getByRole('button', { name: 'กำหนดรายละเอียดการเปิดรับ' })
+        await specificApplicationButton.click()
+    }
+
+    async clickSpecficDetailByFaculty(faculty:string){
+        const facultyRow = this.page.locator('div.flex.items-center.justify-between').filter({
+            hasText: faculty
+        });
+        const specificDetailBtn = facultyRow.getByRole('button', { name: 'จัดทำข้อมูล' })
+        await specificDetailBtn.click()
+    }
+
+    async clickCheckBoxByCourseOpen(courseName:string[]){
+        for (const name of courseName){
+            const course = this.page.locator('.card-container').filter({ hasText: name }).first()
+            const checkBox = course.locator('#program_quota')
+            await checkBox.setChecked(true);
+            console.log(`เลือกหลักสูตร : ${name} แล้ว`);
+        }      
+    }
+
+    async selectAdmissionPlanOpenDropdown(cardName:string , admPlanName:string){
+            const admPlan = this.page.locator('.card-container').filter({ hasText: cardName }).first()
+            const planDropdown = admPlan.locator('.react-select__indicators')
+            const planOption = this.page.getByRole('option', { name: admPlanName })
+            await planDropdown.click()
+            await planOption.click()
+            console.log(`เลือกแผนการรับ : ${cardName} ของหลักสูตร ${admPlanName} :  แล้ว`);
+              
+    }
+
+    async clickNextButton(){
+        const nextBtn = this.page.getByRole('button', { name: 'ถัดไป' })
+        await nextBtn.click()
+    }
+
+    async selectApplicationPriceByOption(startDate:string,endDate:string){
+        const selectPriceCheckbox = this.page.getByRole('checkbox', { name: 'กำหนดค่าสมัครเพิ่มเติม' })
+        const createApplicationPriceBtn = this.page.getByRole('button', { name: 'กำหนดค่าสมัคร' })
+        const startDatePicker = this.page.getByRole('textbox', { name: 'วันที่เริ่มต้น - วันที่สิ้นสุด*' })
+        const endDatePicker = this.page.getByRole('textbox', { name: 'DD/MM/YYYY' })
+        // const clearDropdown = this.page.locator('.unext-form-control.react-select__control.react-select__control--is-focused > .react-select__indicators > div').first()
+        // const priceDropdown = this.page.locator('.unext-form-control.unext-is-invalid > .react-select__indicators')
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
+        const heading = this.page.getByRole('heading', { name: 'กำหนดค่าสมัครเพิ่มเติม' })
+        await selectPriceCheckbox.click()
+        await createApplicationPriceBtn.click()
+        await startDatePicker.pressSequentially(startDate , {delay:100})
+        await endDatePicker.pressSequentially(endDate , {delay:100})
+        await heading.click()
+        // await clearDropdown.click()
+        // await priceDropdown.click()
+        // await priceOption.click()
+        await confirmBtn.click()
+    }
+
+    async clickViewCalendarByCourse(courseName:string){
+        const course = this.page.locator('.card-container').filter({hasText:courseName}).first()
+        const calendarBtn = course.getByRole('button', { name: 'ดูกำหนดการ' })
+        await calendarBtn.click()
+    }
+
+    async clickCloseViewCalendar(){
+        const closeBtn = this.page.getByRole('button', { name: 'ปิด' })
+        await closeBtn.click()
+    }
 }

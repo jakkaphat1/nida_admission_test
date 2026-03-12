@@ -104,4 +104,46 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page.getByText('คัดลอกข้อมูลสำเร็จ')).toBeVisible()
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
     });
+
+    test('TC-07 ทดสอบกำหนดรายละเอียดการเปิดรับ' , async ({ commonPage , courseOpenPage , page}) => {
+        test.setTimeout(50000)
+        await commonPage.gotoPrograms()
+        await courseOpenPage.gotoCourseOpenMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
+        await courseOpenPage.clickCourseNotOpenTab()
+        await courseOpenPage.clickStatusByKeyword('ใช้งาน')
+        await courseOpenPage.filterMoreOption({
+            eduYear:'2570',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'4',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ'
+        })
+        await expect(page.getByText('รอบที่ 4/2570 (ภาคการศึกษาที่ 1)')).toBeVisible()
+        await courseOpenPage.clickSpecificApplicationDetails()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program\/faculties.*/);
+        await expect(page.getByText('รอบที่ 4/2570')).toBeVisible();
+        await courseOpenPage.clickSpecficDetailByFaculty('คณะสถิติประยุกต์')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program\/faculties\/quotas.*/);
+        await expect(page.getByText('GSAS คณะสถิติประยุกต์')).toBeVisible();
+        await courseOpenPage.clickCheckBoxByCourseOpen([
+            'TGAS12001 - วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)',
+        ])
+        await courseOpenPage.clickSaveButton()
+        await expect(page.getByRole('alert').filter({ hasText: 'บันทึกรายการเรียบร้อยแล้ว' })).toBeVisible()
+        await courseOpenPage.clickNextButton()
+        await courseOpenPage.selectAdmissionPlanOpenDropdown('TGAS12001 - วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)','1099')
+        // await courseOpenPage.selectApplicationPriceByOption('12032569','12032569')  
+        await courseOpenPage.clickSaveButton()
+        await expect(page.getByRole('alert').filter({ hasText: 'บันทึกรายการเรียบร้อยแล้ว' }).last()).toBeVisible()
+        await courseOpenPage.clickNextButton()
+
+        await courseOpenPage.clickViewCalendarByCourse('TGAS12001')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program\/program-calendar.*/);
+        await expect(page.locator('div').filter({ hasText: 'TGAS12001' }).nth(4)).toBeVisible()
+        await courseOpenPage.clickCloseViewCalendar()
+        await courseOpenPage.clickSaveButton()
+        await expect(page.getByRole('alert').filter({ hasText: 'บันทึกข้อมูลสำเร็จ' })).toBeVisible()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program.*/);
+    });
 });
