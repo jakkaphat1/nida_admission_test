@@ -107,6 +107,11 @@ export class CourseOpenPage {
         await createCourseBtn.click()
     }
 
+    async clickStep(stepKeyword:string){
+        const step = this.page.getByRole('button', { name: stepKeyword })
+        await step.click()
+    }
+
     async handleStatusToggle(targetStatus: 'ใช้งาน' | 'ไม่ใช้งาน'){
         const statusToggle = this.page.locator('span.label');
         const currentStatus = await statusToggle.innerText();
@@ -270,6 +275,11 @@ export class CourseOpenPage {
         await specificDetailBtn.click()
     }
 
+    async clickEditButton(){
+        const editBtn = this.page.getByRole('button', { name: 'แก้ไข' })
+        await editBtn.click()
+    }
+
     async clickCheckBoxByCourseOpen(courseName:string[]){
         for (const name of courseName){
             const course = this.page.locator('.card-container').filter({ hasText: name }).first()
@@ -340,6 +350,11 @@ export class CourseOpenPage {
     async clickBackToFirstPage(){
         const backFirstPage = this.page.getByRole('button', { name: 'กลับไปหน้าแรก' })
         await backFirstPage.click()
+    }
+
+    async clickBackBtn(){
+        const backBtn = this.page.getByRole('button', { name: 'ย้อนกลับ' })
+        await backBtn.click()
     }
 
     async clickUploadAnnoucementByCard(cardName:string){
