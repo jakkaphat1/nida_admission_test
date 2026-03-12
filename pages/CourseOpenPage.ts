@@ -1,4 +1,5 @@
 import { Page, Locator , expect } from '@playwright/test'; 
+import { clear } from 'console';
 import { stat } from 'fs';
 
 export class CourseOpenPage {
@@ -357,6 +358,16 @@ export class CourseOpenPage {
         await expandBtn.click()
         await courseCheckBox.click()
     }
+
+    async selectEditCourseToOpenByFacultyAndCourse(facultyName:string,courseName:string){
+        const faculty = this.page.locator('.card-container').filter({hasText:facultyName}).first()
+        const expandBtn = faculty.locator('.status-box')
+        const course = faculty.locator('.content-box > div > div > div').filter({hasText:courseName}).first()
+        const courseCheckBox = course.locator('input#exam_id')
+        await expandBtn.click()
+        await courseCheckBox.setChecked(true);
+        console.log(`ตรวจสอบสถานะวิชา: ${courseName} -> สถานะปัจจุบัน: เลือกแล้ว `);
+    }
     
     async uploadAnnouceFile(filePath: string) {
         const fileChooserPromise = this.page.waitForEvent('filechooser');
@@ -371,5 +382,33 @@ export class CourseOpenPage {
         await expect(this.page.getByRole('heading', { name: 'ยืนยันการอัปโหลดประกาศ' })).toBeVisible()
         await confirmBtn.click()
         await expect(this.page.getByText('อัปโหลดประกาศสำเร็จ')).toBeVisible()
+    }
+
+    async clickConfirmEditUploadAnnouceFilePopup(){
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(this.page.getByRole('heading', { name: 'ยืนยันการแก้ไขประกาศ' })).toBeVisible()
+        await confirmBtn.click()
+        await expect(this.page.getByText('แก้ไขประกาศสำเร็จ')).toBeVisible()
+    }
+
+    async clickSeeAnnoucementButtonByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({hasText:cardName}).first()
+        const seeAnnoucemenntBtn = card.getByRole('button', { name: 'ดูประกาศ' })
+        await seeAnnoucemenntBtn.click()
+    }
+
+    async clickKebabButtonForEditAnnouceByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const kebabBtn = card.locator('button.menuAction_button')
+        const editButton = this.page.getByRole('button', { name: 'แก้ไขประกาศ' })
+        await kebabBtn.click()
+        await editButton.click()
+    }
+
+    async clearFileUpload(hoverText:string){
+        const hoverPlace = this.page.getByText(hoverText)
+        const clearBtn = this.page.locator('.delete-button')
+        await hoverPlace.hover()
+        await clearBtn.click()
     }
 }

@@ -194,4 +194,31 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await courseOpenPage.clickSaveButton()
         await courseOpenPage.clickConfirmUploadAnnouceFilePopup()
     });
+
+    test('TC-10 ทดสอบแก้ไขประกาศข้อมูลหลักสูตรเปิดรับนักศึกษาใหม่' , async ({ commonPage , courseOpenPage , page}) => {
+        test.setTimeout(50000)
+        await commonPage.gotoPrograms()
+        await courseOpenPage.gotoCourseOpenMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
+        await courseOpenPage.clickCourseNotOpenTab()
+        await courseOpenPage.clickStatusByKeyword('ใช้งาน')
+        await courseOpenPage.filterMoreOption({
+            eduYear:'2570',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'4',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ'
+        })
+        await expect(page.getByText('รอบที่ 4/2570 (ภาคการศึกษาที่ 1)')).toBeVisible()
+        await courseOpenPage.clickSeeAnnoucementButtonByCard('รอบที่ 4/2570 (ภาคการศึกษาที่ 1)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program\/view-announcement.*/);
+        await courseOpenPage.clickKebabButtonForEditAnnouceByNumber('12032026213612Svr')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program\/edit-announcement.*/);
+        await courseOpenPage.selectEditCourseToOpenByFacultyAndCourse('คณะสถิติประยุกต์','วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI)')
+        await courseOpenPage.clearFileUpload('ตัวอย่างไฟล์ประกาศหลักสูตรที่เปิดรับ_1773326172012.pdf')
+        const annouceFile = 'downloads/ตัวอย่างไฟล์ประกาศหลักสูตรที่เปิดรับ 2.pdf';
+        await courseOpenPage.uploadAnnouceFile(annouceFile)
+        await courseOpenPage.clickSaveButton()
+        await courseOpenPage.clickConfirmEditUploadAnnouceFilePopup()
+    });
 });
