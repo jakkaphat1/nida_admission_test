@@ -482,6 +482,7 @@ export class CourseOpenPage {
         await kebabBtn.click()
         await cancelButton.click()
     }
+    
 
     async clearFileUpload(hoverText:string){
         const hoverPlace = this.page.getByText(hoverText)
