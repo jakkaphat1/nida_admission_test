@@ -265,6 +265,27 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await courseOpenPage.clickConfirmCancelAnnoucePopup()
     });
 
+    test('TC-13 ทดสอบลบข้อมูลหลักสูตรเปิดรับนักศึกษาใหม่' , async ({ commonPage , courseOpenPage , page}) => {
+        test.setTimeout(50000)
+        await commonPage.gotoPrograms()
+        await courseOpenPage.gotoCourseOpenMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/quota-program/);
+        await courseOpenPage.clickCourseNotOpenTab()
+        await courseOpenPage.clickStatusByKeyword('ใช้งาน')
+        await courseOpenPage.filterMoreOption({
+            eduYear:'2570',
+            semester:'ภาคการศึกษาที่ 2',
+            round:'1',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ'
+        })
+        await expect(page.getByText('รอบที่ 1/2570 (ภาคการศึกษาที่ 2)')).toBeVisible()
+        await courseOpenPage.clickDeleteInKebabButtonByCard('รอบที่ 1/2570 (ภาคการศึกษาที่ 2)')
+        await expect(page.getByRole('heading', { name: 'ยืนยันการลบหลักสูตรที่เปิดรับสมัคร ?' })).toBeVisible()
+        await courseOpenPage.clickConfirmDeleting()
+        await expect(page.getByText('ลบข้อมูลสำเร็จ')).toBeVisible()
+    });
+
     test('TC-14 ทดสอบสอบประกาศเปิดรับสมัคร' , async ({ commonPage , courseOpenPage , page}) => {
         test.setTimeout(35000)
         await commonPage.gotoPrograms()

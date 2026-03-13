@@ -187,6 +187,14 @@ export class CourseOpenPage {
         await copyButton.click()
     }
 
+    async clickDeleteInKebabButtonByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({ hasText: cardName })
+        const kebabBtn = card.locator('button.menuAction_button')
+        const deleteButton = this.page.getByRole('button', { name: 'ลบ' })
+        await kebabBtn.click()
+        await deleteButton.click()
+    }
+
     async fillEditCoursePage(data:{
         eduYear?:string
         semester?:string
@@ -259,6 +267,12 @@ export class CourseOpenPage {
 
     async clickConfirmCopying(){
         const confirmBtn = this.page.getByRole('button', { name: 'ยืนยันการคัดลอก' })
+        await confirmBtn.click()
+    }
+
+    async clickConfirmDeleting(){
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(this.page.getByRole('heading', { name: 'ยืนยันการลบหลักสูตรที่เปิดรับสมัคร ?' })).toBeVisible() 
         await confirmBtn.click()
     }
 
