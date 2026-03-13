@@ -502,4 +502,10 @@ export class SubjectWrittenExamPage {
         await confirmBtn.click()
         await expect(this.page.getByRole('alert').filter({ hasText: 'ประกาศเปิดรับสมัครสำเร็จ' }).last()).toBeVisible()
     }
+    
+
+    async clickSubjectOpenedTab(){
+        const openedTab = this.page.getByRole('button', { name: 'ประกาศเปิดรับสมัครแล้ว' })
+        await openedTab.click()
+    }
 }

@@ -281,4 +281,24 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await subjectWrittenExam.clickAnnouceApplication()
         await subjectWrittenExam.clickConfirmAnnouceApplcationCoursePopup()
     });
+
+    test('TC-11 ทดสอบค้นหาข้อมูลวิชาที่เปิดสอบข้อเขียนที่ประกาศรับสมัครแล้ว' , async ({ commonPage , subjectWrittenExam , page}) => {
+        test.setTimeout(45000)
+        await commonPage.gotoPrograms()
+        await subjectWrittenExam.gotoSubjectWrittenExamMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/subject/);
+        await subjectWrittenExam.checkSubjectWrittenExamMenu()
+        await subjectWrittenExam.clickSubjectOpenedTab()
+        await subjectWrittenExam.fillSearchBox('วิชาเฉพาะ 2')
+        await subjectWrittenExam.filterMoreOption({
+            eduYear:'2570',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'3',
+            eduLevel:'ปริญญาโท',
+            studentType:'ภาคปกติ',
+            status:'ใช้งาน'
+        })
+        await expect(page.getByText('รอบที่ 3/2570 (ภาคการศึกษาที่ 1) - ระยะเวลารับสมัครเรียน (13/03/2569 - 14/03/2569)')).toBeVisible()
+        
+    });
 });
