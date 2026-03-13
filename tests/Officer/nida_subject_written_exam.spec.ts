@@ -185,4 +185,32 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await subjectWrittenExam.clickSaveButton()
         await subjectWrittenExam.clickConfirmUploadAnnouceFilePopup()
     });
+
+    test('TC-07 ทดสอบแก้ไขประกาศวิชาที่เปิดสอบข้อเขียนที่ยังไม่ประกาศรับสมัคร' , async ({ commonPage , subjectWrittenExam , page}) => {
+        test.setTimeout(45000)
+        await commonPage.gotoPrograms()
+        await subjectWrittenExam.gotoSubjectWrittenExamMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/subject/);
+        await subjectWrittenExam.checkSubjectWrittenExamMenu()
+        await subjectWrittenExam.fillSearchBox('วิชาเฉพาะ 2')
+        await subjectWrittenExam.filterMoreOption({
+            eduYear:'2570',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'3',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ',
+            // status:'ใช้งาน'
+        })
+        await expect(page.getByText('รอบที่ 3/2570 (ภาคการศึกษาที่ 1) - ระยะเวลารับสมัครเรียน (13/03/2569 - 14/03/2569)')).toBeVisible()
+        await subjectWrittenExam.clickSeeAnnoucementButtonByCard('รอบที่ 3/2570 (ภาคการศึกษาที่ 1)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/subject\/view-announcement.*/);
+        await subjectWrittenExam.clickKebabButtonForEditAnnouceByNumber('13032026170728lJE')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/subject\/edit-announcement.*/);
+        await subjectWrittenExam.selectEditSubjectToOpen('วิชาเฉพาะ 2')
+        await subjectWrittenExam.clearFileUpload('ตัวอย่างไฟล์ประกาศวิชาสมัครสอบข้อเขียนที่เปิดรับ_1773396448434.pdf')
+        const annouceFile = 'downloads/ตัวอย่างไฟล์ประกาศหลักสูตรที่เปิดรับ 2.pdf';
+        await subjectWrittenExam.uploadAnnouceFile(annouceFile)
+        await subjectWrittenExam.clickSaveButton()
+        await subjectWrittenExam.clickConfirmEditUploadAnnouceFilePopup()
+    });
 });

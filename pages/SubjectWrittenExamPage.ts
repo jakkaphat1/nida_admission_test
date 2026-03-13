@@ -389,11 +389,32 @@ export class SubjectWrittenExamPage {
         await expect(inputFileBox).toBeVisible()
     }
 
+    async clickSeeAnnoucementButtonByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({hasText:cardName}).first()
+        const seeAnnoucemenntBtn = card.getByRole('button', { name: 'ดูประกาศ' })
+        await seeAnnoucemenntBtn.click()
+    }
+
+    async clickKebabButtonForEditAnnouceByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const kebabBtn = card.locator('button.menuAction_button')
+        const editButton = this.page.getByRole('button', { name: 'แก้ไขประกาศ' })
+        await kebabBtn.click()
+        await editButton.click()
+    }
+
     async selectSubjectToOpen(subjectName:string){
         const subject = this.page.locator('.card-container').filter({hasText:subjectName}).first()
         const subjectCheckBox = subject.locator('input#exam_id')
         await subject.click()
         await subjectCheckBox.click()
+    }
+
+    async selectEditSubjectToOpen(subjectName:string){
+        const subject = this.page.locator('.card-container').filter({hasText:subjectName}).first()
+        const subjectCheckBox = subject.locator('input#exam_id')
+        await subjectCheckBox.setChecked(true);
+        console.log(`ตรวจสอบสถานะวิชา: ${subjectName} -> สถานะปัจจุบัน: เลือกแล้ว `);
     }
 
     async uploadAnnouceFile(filePath: string) {
@@ -409,5 +430,19 @@ export class SubjectWrittenExamPage {
         await expect(this.page.getByRole('heading', { name: 'ยืนยันการอัปโหลดประกาศ' })).toBeVisible()
         await confirmBtn.click()
         await expect(this.page.getByText('อัปโหลดประกาศสำเร็จ')).toBeVisible()
+    }
+
+    async clearFileUpload(hoverText:string){
+        const hoverPlace = this.page.getByText(hoverText)
+        const clearBtn = this.page.locator('.delete-button')
+        await hoverPlace.hover()
+        await clearBtn.click()
+    }
+
+    async clickConfirmEditUploadAnnouceFilePopup(){
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(this.page.getByRole('heading', { name: 'ยืนยันการแก้ไขประกาศ' })).toBeVisible()
+        await confirmBtn.click()
+        await expect(this.page.getByText('แก้ไขประกาศสำเร็จ')).toBeVisible()
     }
 }
