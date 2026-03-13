@@ -164,6 +164,49 @@ export class SubjectWrittenExamPage {
         }
     }
 
+    async fillEditWrittenExamPageStep1(data:{
+        eduYear?:string
+        semester?:string
+        round?:string
+        eduLevel?:string
+        studentType?:string
+    }){
+        if(data.eduYear){
+            const eduYearDropdown = this.page.locator('.react-select__indicators').first()
+            const eduYearOption = this.page.getByRole('option', { name: data.eduYear })
+            await eduYearDropdown.click()
+            await eduYearOption.click()
+        }
+
+        if(data.semester){
+            const semesterDropdown = this.page.locator('#semester > .unext-form-control > .react-select__indicators')
+            const semesterOption = this.page.getByRole('option', { name: data.semester })
+            await semesterDropdown.click()
+            await semesterOption.click()
+        }
+
+        if(data.round){
+            const roundDropdown = this.page.locator('#round > .unext-form-control > .react-select__indicators')
+            const roundOption = this.page.getByRole('option', { name: data.round , exact:true } )
+            await roundDropdown.click()
+            await roundOption.click()
+        }
+
+        if(data.eduLevel){
+            const eduLevelDropdown = this.page.locator('#edulevel_code > .unext-form-control > .react-select__indicators')
+            const eduLevelOption = this.page.getByRole('option', { name: data.eduLevel })
+            await eduLevelDropdown.click()
+            await eduLevelOption.click()
+        }
+        
+        if(data.studentType){
+            const studentTypeDropdown = this.page.locator('#student_status_code > .unext-form-control > .react-select__indicators')
+            const studentTypeOption = this.page.getByRole('option', { name: data.studentType })
+            await studentTypeDropdown.click()
+            await studentTypeOption.click()
+        }
+    }
+
     async fillAddWrittenExamPageStep2(data:{
         subject?:string
         changeDate?:'Yes' | 'No'
@@ -199,6 +242,50 @@ export class SubjectWrittenExamPage {
             await feeRadio.check({ force: true });
         }
     }
+
+    async fillEditWrittenExamPageStep2(data:{
+        subject?:string
+        changeDate?:'Yes' | 'No'
+        startDate?:string
+        endDate?:string
+        fee?:string
+    }){
+        const viewForSubject = this.page.locator('.card-container').filter({ hasText: data.subject }).first()
+        const selectSubjectCheckBox = viewForSubject.locator('#exam_id')
+        
+        const startDateBox = this.page.getByRole('textbox', { name: 'DD/MM/YYYY' }).first()
+        const endDateBox = this.page.getByRole('textbox', { name: 'DD/MM/YYYY' }).nth(1)
+        if(data.subject){
+            const selectSubjectCheckBox = viewForSubject.locator('#exam_id');
+            await selectSubjectCheckBox.setChecked(true);
+        }
+        if(data.changeDate=='Yes'){
+            const keywordBox = this.page.locator('div').filter({ hasText: /^เปลี่ยนแปลงวันที่เปิดรับ\*$/ }).nth(2)
+            const selectChangeDate = keywordBox.getByRole('checkbox').first()
+            if (await selectChangeDate.isEnabled()) {
+                await selectChangeDate.setChecked(true);
+            }
+        }
+        if(data.startDate && data.endDate){
+            await startDateBox.click({clickCount:3})
+            await startDateBox.pressSequentially(data.startDate,{delay:100})
+            await endDateBox.click({clickCount:3})
+            await endDateBox.pressSequentially(data.endDate,{delay:100})
+        }
+        if (data.fee) {
+            const feeRadio = viewForSubject.locator('input[type="radio"]').filter({ 
+                has: this.page.locator('..').filter({ hasText: data.fee }) 
+            }).first();
+            const feeOption = viewForSubject.locator('div').filter({ hasText: data.fee }).last();
+            if (!(await feeRadio.isChecked())) {
+                await feeOption.click(); // คลิกที่ตัวแถวเพื่อให้ Radio เปลี่ยนสถานะ
+                console.log(`เลือกค่าธรรมเนียม: ${data.fee}`);
+            } else {
+                console.log(`ค่าธรรมเนียม: ${data.fee} ถูกเลือกไว้อยู่แล้ว`);
+            }
+        }
+    }
+
     async handleStatusToggle(targetStatus: 'ใช้งาน' | 'ไม่ใช้งาน'){
         const statusToggle = this.page.locator('span.label');
         const currentStatus = await statusToggle.innerText();
@@ -233,6 +320,29 @@ export class SubjectWrittenExamPage {
         }
     }
 
+    async fillEditScheduleDates(data: CalendarDateInput[]) {
+        for (const item of data) {
+            const escapedField = item.field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            const row = this.page.locator("div").filter({ 
+                hasText: new RegExp(`^\\d+${escapedField}$`) 
+            }).first();
+            const startDateInput = row.getByRole("textbox", { name: "DD/MM/YYYY" }).first();
+            const endDateInput   = row.getByRole("textbox", { name: "DD/MM/YYYY" }).nth(1);
+
+            console.log(`กำลังกรอก field: "${item.field}" | start: ${item.startDate} → end: ${item.endDate}`)
+
+            await startDateInput.click({clickCount:3});
+            await startDateInput.pressSequentially(item.startDate );
+            await this.page.keyboard.press("Tab");
+
+            await endDateInput.click({clickCount:3});
+            await endDateInput.pressSequentially(item.endDate );
+            await this.page.keyboard.press("Tab");
+            await row.click()
+            console.log(`กรอกเสร็จ: "${item.field}"`)
+        }
+    }
+
     async clickSaveButton(){
         const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
         await saveBtn.click()
@@ -253,5 +363,16 @@ export class SubjectWrittenExamPage {
         const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
         await expect(this.page.getByRole('heading', { name: 'ยืนยันการบันทึก' })).toBeVisible() 
         await confirmBtn.click()
+    }
+
+    async clickEditByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({ hasText: cardName }).first()
+        const editBtn = card.getByRole('button').filter({ hasText: /^$/ }).first()
+        await editBtn.click()
+    }
+
+    async clickEditInfoButton(){
+        const editInfoBtn = this.page.getByRole('button', { name: 'แก้ไข' })
+        await editInfoBtn.click()
     }
 }
