@@ -375,4 +375,39 @@ export class SubjectWrittenExamPage {
         const editInfoBtn = this.page.getByRole('button', { name: 'แก้ไข' })
         await editInfoBtn.click()
     }
+
+    async clickUploadAnnoucementByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({hasText:cardName}).first()
+        const uploadBtn = card.getByRole('button', { name: 'อัปโหลดประกาศ' })
+        await uploadBtn.click()
+    }
+
+    async checkUploadAnnoucementPage(subjectName:string){
+        const subject = this.page.locator('.card-container').filter({hasText:subjectName}).first()
+        const inputFileBox = this.page.locator('.drop-file-box')
+        await expect(subject).toBeVisible()
+        await expect(inputFileBox).toBeVisible()
+    }
+
+    async selectSubjectToOpen(subjectName:string){
+        const subject = this.page.locator('.card-container').filter({hasText:subjectName}).first()
+        const subjectCheckBox = subject.locator('input#exam_id')
+        await subject.click()
+        await subjectCheckBox.click()
+    }
+
+    async uploadAnnouceFile(filePath: string) {
+        const fileChooserPromise = this.page.waitForEvent('filechooser');
+        await this.page.getByRole('button', { name: 'เลือกไฟล์' }).click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(filePath);
+
+    }
+
+    async clickConfirmUploadAnnouceFilePopup(){
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(this.page.getByRole('heading', { name: 'ยืนยันการอัปโหลดประกาศ' })).toBeVisible()
+        await confirmBtn.click()
+        await expect(this.page.getByText('อัปโหลดประกาศสำเร็จ')).toBeVisible()
+    }
 }
