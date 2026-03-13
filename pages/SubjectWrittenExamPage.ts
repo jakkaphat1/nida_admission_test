@@ -403,6 +403,24 @@ export class SubjectWrittenExamPage {
         await editButton.click()
     }
 
+    async clickKebabButtonForAnnouceHistoryByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const kebabBtn = card.locator('button.menuAction_button')
+        const historyButton = this.page.getByRole('button', { name: 'ประวัติ' })
+        await kebabBtn.click()
+        await historyButton.click()
+    }
+
+    async clickSeePDFinHistory(){
+        const pdfButton = this.page.getByRole('button', { name: 'เปิดดู PDF' }).nth(1)
+        await pdfButton.click()
+    }
+
+    async clickClosePDFHistoryPopup(){
+        const closeBtn = this.page.getByRole('button', { name: 'ปิด', exact: true })
+        await closeBtn.click()
+    }
+
     async selectSubjectToOpen(subjectName:string){
         const subject = this.page.locator('.card-container').filter({hasText:subjectName}).first()
         const subjectCheckBox = subject.locator('input#exam_id')
