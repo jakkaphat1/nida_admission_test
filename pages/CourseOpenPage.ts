@@ -1,6 +1,4 @@
 import { Page, Locator , expect } from '@playwright/test'; 
-import { clear } from 'console';
-import { stat } from 'fs';
 
 export class CourseOpenPage {
     page : Page;
