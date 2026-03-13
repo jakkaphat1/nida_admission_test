@@ -478,4 +478,28 @@ export class SubjectWrittenExamPage {
         await confirmBtn.click()
         await expect(this.page.getByRole('alert').filter({ hasText: 'บันทึกรายการเรียบร้อยแล้ว' }).last()).toBeVisible()
     }
+
+    async clickBackToFirstPage(){
+        const backFirstPage = this.page.getByRole('button', { name: 'กลับไปหน้าแรก' })
+        await backFirstPage.click()
+    }
+
+    async clickCheckboxForAnnouceApplicationByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({hasText:cardName}).first()
+        const checkbox = card.getByRole('checkbox').first()
+        await checkbox.click()
+        console.log(` เลือกประกาศสมัครสำหรับ: ${cardName}`);
+    }
+
+    async clickAnnouceApplication(){
+        const annouceApplicationBtn = this.page.getByRole('button', { name: 'ประกาศเปิดรับสมัคร', exact: true })
+        await annouceApplicationBtn.click()
+    }
+
+    async clickConfirmAnnouceApplcationCoursePopup(){
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(this.page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })).toBeVisible()
+        await confirmBtn.click()
+        await expect(this.page.getByRole('alert').filter({ hasText: 'ประกาศเปิดรับสมัครสำเร็จ' }).last()).toBeVisible()
+    }
 }
