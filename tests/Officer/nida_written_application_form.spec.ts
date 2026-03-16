@@ -7,5 +7,10 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await commonPage.fillUsernameAndPassword('sys_admin1','unext@2022')
     });
 
-    
+    test('TC-02 เมนูตรวจสอบใบสมัครสอบข้อเขียน' , async ({ commonPage , verifyWrittenExamApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyWrittenExamApplicationPage.gotoVerifyWrittenExamMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form/);
+        await verifyWrittenExamApplicationPage.checkVerifyWrittenExamMenu()
+    });
 });

@@ -28,4 +28,11 @@ export class VerifyWrittenExamApplicationPage {
         await writtenApplicationListItem.click()
         await verifyWrittenExamMenu.click()
     }
+
+    async checkVerifyWrittenExamMenu(){
+        const draftApplicationBtn = this.page.getByRole('button', { name: 'ฉบับร่าง' })
+        const applynedBtn = this.page.getByRole('button', { name: 'ใบสมัคร', exact: true })
+        await expect(draftApplicationBtn).toBeVisible()
+        await expect(applynedBtn).toBeVisible()
+    }
 }
