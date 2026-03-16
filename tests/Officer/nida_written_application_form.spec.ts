@@ -58,4 +58,25 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await verifyWrittenExamApplicationPage.clickConfirmVerifyApplicationPopup()
         await verifyWrittenExamApplicationPage.clickBackToFirstPage()
     });
+
+    test('TC-05 ทดสอบตรวจสอบใบสมัครข้อเขียน (กรณีแก้ไขข้อมูลแทนผู้สมัคร)' , async ({ commonPage , verifyWrittenExamApplicationPage,examsPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyWrittenExamApplicationPage.gotoVerifyWrittenExamMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form/);
+        await verifyWrittenExamApplicationPage.checkVerifyWrittenExamMenu()
+        await verifyWrittenExamApplicationPage.clickApplicationFormTab()
+        await verifyWrittenExamApplicationPage.fillSearchBox('แอดมิชชั่น')
+        const filterInput = {
+            eduYear:'2569'
+        }
+        await verifyWrittenExamApplicationPage.filterMoreOption(filterInput)
+        await verifyWrittenExamApplicationPage.clickVerifyByIdCard('6032754471030')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form\/detail.*/);
+        await verifyWrittenExamApplicationPage.verifyTextVisible('6032754471030','นาย ทดสอบ แอดมิชชั่น')
+        await verifyWrittenExamApplicationPage.clickEditCandidateInfo()
+        await verifyWrittenExamApplicationPage.changeReligion('พุทธ')
+        await verifyWrittenExamApplicationPage.clickSaveButton()
+        await verifyWrittenExamApplicationPage.clickConfirmChangeCandidateInfoPopup()
+        await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible()
+    });
 });

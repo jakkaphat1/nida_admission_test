@@ -173,4 +173,28 @@ export class VerifyWrittenExamApplicationPage {
         const backFirstPage = this.page.getByRole('button', { name: 'กลับไปหน้าแรก' })
         await backFirstPage.click()
     }
+
+    async clickEditCandidateInfo(){
+        const editCandidateInfoBtn = this.page.getByRole('button', { name: 'แก้ไขแทนผู้สมัคร' })
+        await editCandidateInfoBtn.click()
+    }
+
+    async changeReligion(religion?:string){
+        const religionDropdown = this.page.locator('div:nth-child(14) > .formItem_input > .searchMain_container > .css-nxiuxh-container > .unext-form-control > .react-select__indicators')
+        const religionOption = this.page.getByRole('option', { name: religion })
+        await religionDropdown.click()
+        await religionOption.click()
+    }
+
+    async clickSaveButton(){
+        const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
+        await saveBtn.click()
+    }
+
+    async clickConfirmChangeCandidateInfoPopup(){
+        const heading = this.page.getByRole('heading', { name: 'คุณต้องการบันทึกข้อมูลผู้สมัครหรือไม่' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
 }
