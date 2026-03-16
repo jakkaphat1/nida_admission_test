@@ -13,4 +13,26 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form/);
         await verifyWrittenExamApplicationPage.checkVerifyWrittenExamMenu()
     });
+
+    test('TC-03 ทดสอบค้นหาใบสมัครข้อเขียน' , async ({ commonPage , verifyWrittenExamApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyWrittenExamApplicationPage.gotoVerifyWrittenExamMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form/);
+        await verifyWrittenExamApplicationPage.checkVerifyWrittenExamMenu()
+        await verifyWrittenExamApplicationPage.clickApplicationFormTab()
+        await verifyWrittenExamApplicationPage.fillSearchBox('ทดสอบ')
+        const filterInput = {
+            subject:'วิชาเฉพาะ 9',
+            round:'',
+            eduYear:'2569',
+            semester:'ภาคการศึกษาที่ 1',
+            eduLevel:'ปริญญาโท',
+            status:'ยังไม่ตรวจสอบ',
+            payStatus:'ยังไม่ได้ชำระเงิน',
+            applicationStatus:'ส่งใบสมัคร'
+        }
+
+        await verifyWrittenExamApplicationPage.filterMoreOption(filterInput)
+        await verifyWrittenExamApplicationPage.clickResetAllFilter()
+    });
 });
