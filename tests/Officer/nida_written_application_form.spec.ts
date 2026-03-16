@@ -59,7 +59,7 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await verifyWrittenExamApplicationPage.clickBackToFirstPage()
     });
 
-    test('TC-05 ทดสอบตรวจสอบใบสมัครข้อเขียน (กรณีแก้ไขข้อมูลแทนผู้สมัคร)' , async ({ commonPage , verifyWrittenExamApplicationPage,examsPage , page}) => {
+    test('TC-05 ทดสอบตรวจสอบใบสมัครข้อเขียน (กรณีแก้ไขข้อมูลแทนผู้สมัคร)' , async ({ commonPage , verifyWrittenExamApplicationPage , page}) => {
         await commonPage.gotoPrograms()
         await verifyWrittenExamApplicationPage.gotoVerifyWrittenExamMenu()
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form/);
@@ -78,5 +78,27 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await verifyWrittenExamApplicationPage.clickSaveButton()
         await verifyWrittenExamApplicationPage.clickConfirmChangeCandidateInfoPopup()
         await expect(page.getByText('บันทึกข้อมูลสำเร็จ')).toBeVisible()
+    });
+
+    test('TC-06 ทดสอบตรวจสอบใบสมัครข้อเขียน (กรณีส่งคืนแก้ไขข้อมูลผู้สมัคร)' , async ({ commonPage , verifyWrittenExamApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyWrittenExamApplicationPage.gotoVerifyWrittenExamMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form/);
+        await verifyWrittenExamApplicationPage.checkVerifyWrittenExamMenu()
+        await verifyWrittenExamApplicationPage.clickApplicationFormTab()
+        await verifyWrittenExamApplicationPage.fillSearchBox('แอดมิชชั่น')
+        const filterInput = {
+            eduYear:'2569'
+        }
+        await verifyWrittenExamApplicationPage.filterMoreOption(filterInput)
+        await verifyWrittenExamApplicationPage.clickVerifyByIdCard('6032754471030')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form\/detail.*/);
+        await verifyWrittenExamApplicationPage.verifyTextVisible('6032754471030','นาย ทดสอบ แอดมิชชั่น')
+        await verifyWrittenExamApplicationPage.clickSendBackApplicationToCandidateButton()
+        await verifyWrittenExamApplicationPage.checkSendBackPopup()
+        await verifyWrittenExamApplicationPage.fillReasonForSendBack('ทดสอบการส่งกลับ เพื่อแก้ไข')
+        await verifyWrittenExamApplicationPage.clickConfirmToSendBackButton()
+        await expect(page.getByText('ส่งคืนแก้ไขสำเร็จ')).toBeVisible()
+        await verifyWrittenExamApplicationPage.clickBackToFirstPage()
     });
 });
