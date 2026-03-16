@@ -19,6 +19,7 @@ import { AdmissionScheduleInformationPage } from '../pages/AdmissionScheduleInfo
 import { AdmissionCalendarInformationPage } from '../pages/AdmissionCalendarIInformationPage';
 import { CourseOpenPage } from '../pages/CourseOpenPage';
 import { SubjectWrittenExamPage } from '../pages/SubjectWrittenExamPage';
+import { VerifyWrittenExamApplicationPage } from '../pages/VerifyWrittenExamApplicationPage';
 type MyFixtures = {
   commonPage : CommonPage;
   admissionPage: AdmissionPage;
@@ -40,6 +41,7 @@ type MyFixtures = {
   admissionCalendarInformationPage : AdmissionCalendarInformationPage
   courseOpenPage : CourseOpenPage
   subjectWrittenExam : SubjectWrittenExamPage
+  verifyWrittenExamApplicationPage : VerifyWrittenExamApplicationPage
 };
 
 export const test = base.extend<MyFixtures>({
@@ -122,6 +124,10 @@ export const test = base.extend<MyFixtures>({
   subjectWrittenExam : async ({page} , use) => {
     const subjectWrittenExam = new SubjectWrittenExamPage(page)
     await use(subjectWrittenExam)
+  },
+  verifyWrittenExamApplicationPage : async ({page} , use) => {
+    const verifyWrittenExamApplicationPage = new VerifyWrittenExamApplicationPage(page)
+    await use(verifyWrittenExamApplicationPage)
   },
   
 
