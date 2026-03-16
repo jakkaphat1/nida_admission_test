@@ -139,6 +139,20 @@ export class VerifyWrittenExamApplicationPage {
         await verifyBtn.click()
     }
 
+    //Cancel
+    async clickCancelApplicationByIdCard(idCard: string) {
+        const row = this.page.locator('tr').filter({ hasText: idCard })
+        const cancelBtn = row.getByRole('button', { name: 'ยกเลิกใบสมัคร' }).first()
+        await cancelBtn.click()
+    }
+
+    async clickConfirmCancelApplicationPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันการยกเลิกใบสมัคร' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
+
     async verifyTextVisible(...texts: string[]) {
         for (const text of texts) {
             const element = this.page.getByText(text)
@@ -157,6 +171,21 @@ export class VerifyWrittenExamApplicationPage {
         const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
         await expect(heading).toBeVisible()
         await confirmBtn.click()
+    }
+
+
+    async selectCheckboxByIdCard(...idCards: string[]) {
+
+        for (const select of idCards) {
+            const row = this.page.locator('tr').filter({hasText :select})
+            const checkbox = row.locator('input[type="checkbox"]')
+            await checkbox.check()
+        }
+    }
+
+    async clickVerifyAllBySelect(){
+        const verifyAllBtn = this.page.getByRole('button', { name: 'ตรวจสอบทั้งหมดที่เลือก' })
+        await verifyAllBtn.click()
     }
 
     async clickApplicationPaymentTab(){

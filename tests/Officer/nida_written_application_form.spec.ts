@@ -101,4 +101,34 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page.getByText('ส่งคืนแก้ไขสำเร็จ')).toBeVisible()
         await verifyWrittenExamApplicationPage.clickBackToFirstPage()
     });
+
+    test('TC-07 ทดสอบยกเลิกใบสมัครข้อเขียน' , async ({ commonPage , verifyWrittenExamApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyWrittenExamApplicationPage.gotoVerifyWrittenExamMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form/);
+        await verifyWrittenExamApplicationPage.checkVerifyWrittenExamMenu()
+        await verifyWrittenExamApplicationPage.clickApplicationFormTab()
+        const filterInput = {
+            eduYear:'2568'
+        }
+        await verifyWrittenExamApplicationPage.filterMoreOption(filterInput)
+        await verifyWrittenExamApplicationPage.clickCancelApplicationByIdCard('1790600061827')
+        await verifyWrittenExamApplicationPage.clickConfirmCancelApplicationPopup()
+    });
+
+    test('TC-08 ทดสอบตรวจสอบใบสมัครข้อเขียนหลายใบ' , async ({ commonPage , verifyWrittenExamApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyWrittenExamApplicationPage.gotoVerifyWrittenExamMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form/);
+        await verifyWrittenExamApplicationPage.checkVerifyWrittenExamMenu()
+        await verifyWrittenExamApplicationPage.clickApplicationFormTab()
+        const filterInput = {
+            subject:'วิชาเฉพาะ 2',
+            eduYear:'2568'
+        }
+        await verifyWrittenExamApplicationPage.filterMoreOption(filterInput)
+        await verifyWrittenExamApplicationPage.selectCheckboxByIdCard('1409902959088','6958962589681')
+        await verifyWrittenExamApplicationPage.clickVerifyAllBySelect()
+        
+    });
 });
