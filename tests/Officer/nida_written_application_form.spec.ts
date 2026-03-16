@@ -35,4 +35,27 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await verifyWrittenExamApplicationPage.filterMoreOption(filterInput)
         await verifyWrittenExamApplicationPage.clickResetAllFilter()
     });
+
+    test('TC-04 ทดสอบตรวจสอบใบสมัครข้อเขียน (กรณียังไม่ตรวจสอบ)' , async ({ commonPage , verifyWrittenExamApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyWrittenExamApplicationPage.gotoVerifyWrittenExamMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form/);
+        await verifyWrittenExamApplicationPage.checkVerifyWrittenExamMenu()
+        await verifyWrittenExamApplicationPage.clickApplicationFormTab()
+        await verifyWrittenExamApplicationPage.fillSearchBox('แอดมิชชั่น')
+        const filterInput = {
+            eduYear:'2569'
+        }
+        await verifyWrittenExamApplicationPage.filterMoreOption(filterInput)
+        await verifyWrittenExamApplicationPage.clickVerifyByIdCard('6958962589681')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form\/detail.*/);
+        await verifyWrittenExamApplicationPage.verifyTextVisible('6958962589681','นาย ทดสอบ แอดมิชชั่น')
+        await verifyWrittenExamApplicationPage.clickVerifyWrittenApplicationButton()
+        await verifyWrittenExamApplicationPage.clickConfirmVerifyApplicationPopup()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form\/detail.*/);
+        await verifyWrittenExamApplicationPage.clickApplicationPaymentTab()
+        await verifyWrittenExamApplicationPage.clickConfirmPaymentButton()
+        await verifyWrittenExamApplicationPage.clickConfirmVerifyApplicationPopup()
+        await verifyWrittenExamApplicationPage.clickBackToFirstPage()
+    });
 });

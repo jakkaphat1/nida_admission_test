@@ -132,4 +132,45 @@ export class VerifyWrittenExamApplicationPage {
         await resetFilterBtn.click()
         await backfilterBtn.click()
     }
+
+    async clickVerifyByIdCard(idCard: string) {
+        const row = this.page.locator('tr').filter({ hasText: idCard })
+        const verifyBtn = row.getByRole('button', { name: 'ตรวจสอบ' }).first()
+        await verifyBtn.click()
+    }
+
+    async verifyTextVisible(...texts: string[]) {
+        for (const text of texts) {
+            const element = this.page.getByText(text)
+            await element.highlight()
+            await expect(element).toBeVisible()
+        }
+    }
+
+    async clickVerifyWrittenApplicationButton(){
+        const verifyBtn = this.page.getByRole('button', { name: 'ยืนยันการตรวจสอบ' })
+        await verifyBtn.click()
+    }
+
+    async clickConfirmVerifyApplicationPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันการบันทึก' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
+
+    async clickApplicationPaymentTab(){
+        const paymentTab = this.page.getByRole('button', { name: 'การชำระเงิน' })
+        await paymentTab.click()
+    }
+
+    async clickConfirmPaymentButton(){
+        const confirmPaymentBtn = this.page.getByRole('button', { name: 'ยืนยันการตรวจสอบ' })
+        await confirmPaymentBtn.click()
+    }
+
+    async clickBackToFirstPage(){
+        const backFirstPage = this.page.getByRole('button', { name: 'กลับไปหน้าแรก' })
+        await backFirstPage.click()
+    }
 }
