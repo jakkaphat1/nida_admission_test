@@ -129,6 +129,29 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await verifyWrittenExamApplicationPage.filterMoreOption(filterInput)
         await verifyWrittenExamApplicationPage.selectCheckboxByIdCard('1409902959088','6958962589681')
         await verifyWrittenExamApplicationPage.clickVerifyAllBySelect()
-        
+    });
+
+    test('TC-09 ทดสอบดูใบสมัครข้อเขียนฉบับร่าง' , async ({ commonPage , verifyWrittenExamApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyWrittenExamApplicationPage.gotoVerifyWrittenExamMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/written-application-form/);
+        await verifyWrittenExamApplicationPage.checkVerifyWrittenExamMenu()
+        await verifyWrittenExamApplicationPage.clickApplicationFormTab()
+        await verifyWrittenExamApplicationPage.clickApplicationDraftFormTab()
+        await verifyWrittenExamApplicationPage.fillDraftApplicationSearchBox('ทิตามา')
+        await verifyWrittenExamApplicationPage.filterDraftApplicationMoreOption({
+            subject:'วิชาเฉพาะ 9',
+            round:'1',
+            eduYear:'2568',
+            semester:'',
+            eduLevel:'ปริญญาโท'
+        })
+        await verifyWrittenExamApplicationPage.checkDraftApplicationFilterResult({
+            id:'2493181346562',
+            name:'คุณหญิงทิตามา จองจา',
+            subject:'วิชาเฉพาะ 9',
+            round:'1',
+            eduYear:'2568',
+        })
     });
 });

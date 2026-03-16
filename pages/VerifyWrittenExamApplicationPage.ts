@@ -38,9 +38,18 @@ export class VerifyWrittenExamApplicationPage {
     async clickApplicationFormTab(){
         await this.applynedBtn.click()
     }
+    
+    async clickApplicationDraftFormTab(){
+        await this.draftApplicationBtn.click()
+    }
 
     async fillSearchBox(searchKeyword:string){
         const searchBox = this.page.getByRole('textbox', { name: 'ระบุรหัสใบสมัครสอบ, เลขที่บัตรประชาชน, เลขที่หนังสือเดินทาง หรือชื่อ-นามสกุล' })
+        await searchBox.pressSequentially(searchKeyword)
+    }
+
+    async fillDraftApplicationSearchBox(searchKeyword:string){
+        const searchBox = this.page.getByRole('textbox', { name: 'ระบุเลขที่บัตรประชาชน, เลขที่หนังสือเดินทาง หรือชื่อ-นามสกุล' })
         await searchBox.pressSequentially(searchKeyword)
     }
 
@@ -115,6 +124,107 @@ export class VerifyWrittenExamApplicationPage {
 
         
         await backfilterBtn.click()
+    }
+
+    async filterDraftApplicationMoreOption(data:{
+        subject?:string
+        round?:string
+        eduYear?:string
+        semester?:string
+        eduLevel?:string
+        
+    }){
+        const filterBtn = this.page.getByRole('button', { name: 'ตัวกรอง' })
+        const backfilterBtn = this.page.getByRole('button', { name: 'ตัวกรอง' }).nth(1)
+        await filterBtn.click()
+
+        if(data.subject){
+            const subjectDropdown = this.page.locator('div').filter({ hasText: /^วิชาที่สมัคร$/ }).nth(3)
+            const subjectOption = this.page.getByRole('option', { name: data.subject })
+            await subjectDropdown.click()
+            await subjectOption.click()
+        }
+
+        if(data.round){
+            const roundInputBox = this.page.getByRole('textbox', { name: 'รอบที่' })
+            await roundInputBox.pressSequentially(data.round)
+        }
+
+        if(data.eduYear){
+            const eduYearDropdown = this.page.locator('div').filter({ hasText: /^ปีที่สมัคร$/ }).nth(3)
+            const eduYearOption = this.page.getByRole('option', { name: data.eduYear })
+            await eduYearDropdown.click()
+            await eduYearOption.click()
+        }
+
+        if(data.semester){
+            const semesterDropdown = this.page.locator('div').filter({ hasText: /^ภาคที่สมัคร$/ }).nth(3)
+            const semesterOption = this.page.getByRole('option', { name: data.semester })
+            await semesterDropdown.click()
+            await semesterOption.click()
+        }
+
+        if(data.eduLevel){
+            const eduLevelDropdown = this.page.locator('div').filter({ hasText: /^ระดับการศึกษา$/ }).nth(3)
+            const eduLevelOption = this.page.getByRole('option', { name: data.eduLevel })
+            await eduLevelDropdown.click()
+            await eduLevelOption.click()
+        }
+
+        await backfilterBtn.click()
+    }
+
+    async checkDraftApplicationFilterResult(data:{
+        id?:string
+        name?:string
+        subject?:string
+        round?:string
+        eduYear?:string
+    }){
+        if(data.id){
+            const row = this.page.locator('tr').filter({hasText :data.id})
+            await expect(row).toBeVisible()
+            await row.evaluate(el => {
+                el.style.outline = '3px solid red'
+                el.style.backgroundColor = 'lightyellow'
+            })
+        }
+
+        if(data.name){
+            const row = this.page.locator('tr').filter({hasText :data.name})
+            await expect(row).toBeVisible()
+            await row.evaluate(el => {
+                el.style.outline = '3px solid red'
+                el.style.backgroundColor = 'lightyellow'
+            })
+        }
+
+        if(data.subject){
+            const row = this.page.locator('tr').filter({hasText :data.subject})
+            await expect(row).toBeVisible()
+            await row.evaluate(el => {
+                el.style.outline = '3px solid red'
+                el.style.backgroundColor = 'lightyellow'
+            })
+        }
+
+        if(data.round){
+            const row = this.page.locator('tr').filter({hasText :data.round})
+            await expect(row).toBeVisible()
+            await row.evaluate(el => {
+                el.style.outline = '3px solid red'
+                el.style.backgroundColor = 'lightyellow'
+            })
+        }
+
+        if(data.eduYear){
+            const row = this.page.locator('tr').filter({hasText :data.eduYear})
+            await expect(row).toBeVisible()
+            await row.evaluate(el => {
+                el.style.outline = '3px solid red'
+                el.style.backgroundColor = 'lightyellow'
+            })
+        }
     }
 
     async clickStatusByKeyword(status:string){
