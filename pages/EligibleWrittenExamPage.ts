@@ -77,6 +77,20 @@ export class EligibleWrittenExamPage {
         await viewButton.click()
     }
 
+    async clickKebabButtonForCancelAnnouceByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const kebabBtn = card.locator('button.menuAction_button')
+        const cancelButton = this.page.getByRole('button', { name: 'ยกเลิกประกาศ' })
+        await kebabBtn.click()
+        await cancelButton.click()
+    }
+
+    async clickConfirmCancelAnnoucePopup(){
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(this.page.getByRole('heading', { name: 'ยืนยันยกเลิกประกาศ' })).toBeVisible()
+        await confirmBtn.click()
+        await expect(this.page.getByRole('alert').filter({ hasText: 'บันทึกรายการเรียบร้อยแล้ว' }).last()).toBeVisible()
+    }
 
     async selectEditSubjectToOpen(subjectName:string){
         const subject = this.page.locator('.card-container').filter({hasText:subjectName}).first()
