@@ -122,7 +122,7 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page.getByText('ประกาศรายชื่อผู้มีสิทธิ์สอบสำเร็จ')).toBeVisible()
     });
 
-    test('TC-07 ทดสอบแก้ไขประกาศ' , async ({ commonPage , eligibleWrittenExamPage , page}) => {
+    test('TC-07.1 ทดสอบแก้ไขประกาศ' , async ({ commonPage , eligibleWrittenExamPage , page}) => {
         test.setTimeout(45000)
         await commonPage.gotoPrograms()
         await eligibleWrittenExamPage.gotoEligibleWrittenExamListMenu()
@@ -165,5 +165,28 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await eligibleWrittenExamPage.clickSaveButton()
         await eligibleWrittenExamPage.clickConfirmUploadAnnoucementPopup()
         await expect(page.getByText('แก้ไขประกาศสำเร็จ')).toBeVisible()
+    });
+
+    test('TC-07.2 ทดสอบดูไฟล์ประกาศ' , async ({ commonPage , eligibleWrittenExamPage , page}) => {
+        test.setTimeout(45000)
+        await commonPage.gotoPrograms()
+        await eligibleWrittenExamPage.gotoEligibleWrittenExamListMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list.*/);
+        await eligibleWrittenExamPage.checkEligibleWrittenExamMenu()
+        await eligibleWrittenExamPage.clickAnnoucedTab()
+        await eligibleWrittenExamPage.fillSearchBox('วิชาเฉพาะ 2')
+        await eligibleWrittenExamPage.filterMoreOption({
+            // eduYear:'2568',
+            // semester:'ภาคการศึกษาที่ 2',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ',
+            round:'9',
+            // status:'ใช้งาน'
+        })
+        await eligibleWrittenExamPage.clickExpandDetailButtonByName('รอบที่ 9/2568')
+        await eligibleWrittenExamPage.clickSeeAnnoucementButtonByCard('รอบที่ 9/2568 (ภาคการศึกษาที่ 2) - ระยะเวลารับสมัครเรียน (08/01/2569 - 08/01/2569)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list\/view-announcement.*/);
+        await eligibleWrittenExamPage.clickPDFButtonForViewAnnouceByNumber('17032026140624WpT')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list\/view-announcement.*/);
     });
 });

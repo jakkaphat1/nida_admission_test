@@ -53,6 +53,13 @@ export class EligibleWrittenExamPage {
         await editButton.click()
     }
 
+    async clickPDFButtonForViewAnnouceByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const viewButton = this.page.getByRole('button', { name: 'เปิดดู PDF' })
+        await viewButton.click()
+    }
+
+
     async selectEditSubjectToOpen(subjectName:string){
         const subject = this.page.locator('.card-container').filter({hasText:subjectName}).first()
         const subjectCheckBox = subject.locator('input#exam_id')
