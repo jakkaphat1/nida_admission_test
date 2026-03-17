@@ -58,4 +58,45 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await eligibleWrittenExamPage.handleExportType('pdf')
         await commonPage.clickBackToFirstPage()
     });
+
+    test('TC-05 ทดสอบอัปโหลดประกาศ' , async ({ commonPage , eligibleWrittenExamPage , page}) => {
+        test.setTimeout(45000)
+        await commonPage.gotoPrograms()
+        await eligibleWrittenExamPage.gotoEligibleWrittenExamListMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list.*/);
+        await eligibleWrittenExamPage.checkEligibleWrittenExamMenu()
+        await eligibleWrittenExamPage.fillSearchBox('วิชาเฉพาะ 2')
+        await eligibleWrittenExamPage.filterMoreOption({
+            // eduYear:'2568',
+            // semester:'ภาคการศึกษาที่ 2',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ',
+            round:'9',
+            // status:'ใช้งาน'
+        })
+        await eligibleWrittenExamPage.clickExpandDetailButtonByName('รอบที่ 9/2568')
+        await eligibleWrittenExamPage.clickUploadAnnoucementButtonByCard('รอบที่ 9/2568 (ภาคการศึกษาที่ 2)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list\/upload-announcement.*/);
+        await eligibleWrittenExamPage.checkUploadAnnoucementPage('เลือกวิชาที่ใช้อัปโหลดประกาศ','รายละเอียดข้อมูลห้องสอบ','แนบไฟล์ประกาศ')
+        await eligibleWrittenExamPage.selectSubjectForAnnouce('วิชาเฉพาะ 2','วิชาเฉพาะ 9')
+        const examRoomDetail = {
+            examRoom1 : 'ทดสอบเพิ่มชื่อห้องสอบ',
+            examDate1 : '17032569',
+            examStart1 : '10:30',
+            examEnd1 : '12:30',
+            seat1:'A10-A15',
+            addRoom:'Yes' as const,
+            examRoom2 : 'ทดสอบเพิ่มชื่อห้องสอบ2',
+            examDate2 : '17032569',
+            examStart2 : '13:30',
+            examEnd2 : '15:30',
+            seat2:'A16-A20',
+        }
+        await eligibleWrittenExamPage.selectExamRoomDetail(examRoomDetail)
+        const annouceFile = 'downloads/ตัวอย่างไฟล์ประกาศรายชื่อผู้มีสิทธิ์สอบข้อเขียน.pdf';
+        await eligibleWrittenExamPage.uploadAnnouceFile(annouceFile)
+        await eligibleWrittenExamPage.clickSaveButton()
+        await eligibleWrittenExamPage.clickConfirmUploadAnnoucementPopup()
+        await expect(page.getByText('อัปโหลดประกาศสำเร็จ')).toBeVisible()
+    });
 });
