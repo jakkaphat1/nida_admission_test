@@ -184,4 +184,43 @@ export class AnnouceWriitenExamScorePage {
         await expect(heading).toBeVisible()
         await confirmBtn.click()
     }
+
+    async checkUploadAnnoucementPage(...texts: string[]){
+        const dropBox = this.page.locator('.drop-file-box')
+        await expect(dropBox).toBeVisible()
+
+        for (const text of texts) {
+            const element = this.page.getByText(text)
+            await element.highlight()
+            await expect(element).toBeVisible()
+        }
+    }
+
+    async selectSubjectForAnnouce(...subjects:string[]){
+        for (const subject of subjects) {
+            const subjectLocator = this.page.locator('.card-container').filter({ hasText: subject })
+            const checkbox = subjectLocator.locator('#exam_id').first()
+            await checkbox.click() 
+        }
+    }
+
+    async uploadAnnouceFile(filePath: string) {
+        const fileChooserPromise = this.page.waitForEvent('filechooser');
+        await this.page.getByRole('button', { name: 'เลือกไฟล์' }).click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(filePath);
+    }
+
+
+    async clickSaveButton(){
+        const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
+        await saveBtn.click()
+    }
+
+    async clickConfirmUploadAnnoucementPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันการอัปโหลดประกาศ' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
 }
