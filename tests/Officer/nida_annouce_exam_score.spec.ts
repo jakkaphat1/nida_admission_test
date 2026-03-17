@@ -138,4 +138,24 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await annouceWrittenExamScorePage.clickConfirmUploadAnnoucementPopup()
         await expect(page.getByText('แก้ไขประกาศสำเร็จ')).toBeVisible()
     });
+
+    test('TC-08.2 ทดสอบดูไฟล์ประกาศ' , async ({ commonPage,annouceWrittenExamScorePage,eligibleWrittenExamPage , page}) => {
+        await commonPage.gotoPrograms()
+        await annouceWrittenExamScorePage.gotoAnnouceWrittenExamScoreMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/student-score.*/);
+        await annouceWrittenExamScorePage.checkAnnouceWrittenExamScoreMenu()
+        await annouceWrittenExamScorePage.clickAnnoucedTab()
+        await annouceWrittenExamScorePage.fillSearchBox('วิชาเฉพาะ 2')
+        await annouceWrittenExamScorePage.filterMoreOption({
+            eduYear:'2570',
+            semester:'ภาคการศึกษาที่ 1',
+            eduLevel:'ปริญญาโท',
+            studentType:'ภาคปกติ',
+            round:'4',
+            status:'ใช้งาน'
+        })
+        await annouceWrittenExamScorePage.clickSeeAnnoucementButtonByCard('รอบที่ 4/2570 (ภาคการศึกษาที่ 1) - ระยะเวลารับสมัครเรียน (17/03/2569 - 03/04/2569)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/student-score\/view-announcement.*/);
+        await annouceWrittenExamScorePage.clickPDFButtonForViewAnnouceByNumber('17032026225243acz')
+    });
 });
