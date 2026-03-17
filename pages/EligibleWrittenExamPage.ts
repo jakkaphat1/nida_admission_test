@@ -288,9 +288,24 @@ export class EligibleWrittenExamPage {
         await confirmBtn.click()
     }
 
+    async clickCheckboxForAnnouceEligibleListByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const checkbox = card.getByRole('checkbox').first()
+        await checkbox.click()
+        console.log(` เลือกประกาศสมัครสำหรับ: ${cardName}`);
+    }
 
+    async clickConfirmEligibleAnnoucementPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันการทำรายการ' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
 
-
+    async clickAnnouceEligibleList(){
+        const annouceEligibleBtn = this.page.getByRole('button', { name: 'ประกาศรายชื่อผู้มีสิทธิ์สอบ', exact: true })
+        await annouceEligibleBtn.click()
+    }
 
 
 

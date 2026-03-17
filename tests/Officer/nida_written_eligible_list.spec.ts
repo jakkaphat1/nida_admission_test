@@ -99,4 +99,26 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await eligibleWrittenExamPage.clickConfirmUploadAnnoucementPopup()
         await expect(page.getByText('อัปโหลดประกาศสำเร็จ')).toBeVisible()
     });
+
+    test('TC-06 ทดสอบประกาศรายชื่อผู้มีสิทธิ์สอบ' , async ({ commonPage , eligibleWrittenExamPage , page}) => {
+        test.setTimeout(45000)
+        await commonPage.gotoPrograms()
+        await eligibleWrittenExamPage.gotoEligibleWrittenExamListMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list.*/);
+        await eligibleWrittenExamPage.checkEligibleWrittenExamMenu()
+        await eligibleWrittenExamPage.fillSearchBox('วิชาเฉพาะ 2')
+        await eligibleWrittenExamPage.filterMoreOption({
+            // eduYear:'2568',
+            // semester:'ภาคการศึกษาที่ 2',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ',
+            round:'9',
+            // status:'ใช้งาน'
+        })
+        await eligibleWrittenExamPage.clickExpandDetailButtonByName('รอบที่ 9/2568')
+        await eligibleWrittenExamPage.clickCheckboxForAnnouceEligibleListByCard('รอบที่ 9/2568')
+        await eligibleWrittenExamPage.clickAnnouceEligibleList()
+        await eligibleWrittenExamPage.clickConfirmEligibleAnnoucementPopup()
+        await expect(page.getByText('ประกาศรายชื่อผู้มีสิทธิ์สอบสำเร็จ')).toBeVisible()
+    });
 });
