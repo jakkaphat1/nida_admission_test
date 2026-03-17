@@ -13,4 +13,21 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list.*/);
         await eligibleWrittenExamPage.checkEligibleWrittenExamMenu()
     });
+
+    test('TC-03 ทดสอบค้นหารายการเปิดสอบข้อเขียน' , async ({ commonPage , eligibleWrittenExamPage , page}) => {
+        await commonPage.gotoPrograms()
+        await eligibleWrittenExamPage.gotoEligibleWrittenExamListMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list.*/);
+        await eligibleWrittenExamPage.checkEligibleWrittenExamMenu()
+        await eligibleWrittenExamPage.fillSearchBox('วิชาเฉพาะ 2')
+        await eligibleWrittenExamPage.filterMoreOption({
+            eduYear:'2568',
+            semester:'ภาคการศึกษาที่ 2',
+            eduLevel:'ปริญญาโท',
+            studentType:'ภาคปกติ',
+            round:'4',
+            status:'ใช้งาน'
+        })
+        await eligibleWrittenExamPage.clickExpandDetailButtonByName('รอบที่ 4/2568')
+    });
 });
