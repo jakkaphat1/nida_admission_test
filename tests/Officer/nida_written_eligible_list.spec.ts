@@ -121,4 +121,49 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await eligibleWrittenExamPage.clickConfirmEligibleAnnoucementPopup()
         await expect(page.getByText('ประกาศรายชื่อผู้มีสิทธิ์สอบสำเร็จ')).toBeVisible()
     });
+
+    test('TC-07 ทดสอบแก้ไขประกาศ' , async ({ commonPage , eligibleWrittenExamPage , page}) => {
+        test.setTimeout(45000)
+        await commonPage.gotoPrograms()
+        await eligibleWrittenExamPage.gotoEligibleWrittenExamListMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list.*/);
+        await eligibleWrittenExamPage.checkEligibleWrittenExamMenu()
+        await eligibleWrittenExamPage.clickAnnoucedTab()
+        await eligibleWrittenExamPage.fillSearchBox('วิชาเฉพาะ 2')
+        await eligibleWrittenExamPage.filterMoreOption({
+            // eduYear:'2568',
+            // semester:'ภาคการศึกษาที่ 2',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ',
+            round:'9',
+            // status:'ใช้งาน'
+        })
+        await eligibleWrittenExamPage.clickExpandDetailButtonByName('รอบที่ 9/2568')
+        await eligibleWrittenExamPage.clickSeeAnnoucementButtonByCard('รอบที่ 9/2568 (ภาคการศึกษาที่ 2) - ระยะเวลารับสมัครเรียน (08/01/2569 - 08/01/2569)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list\/view-announcement.*/);
+        await eligibleWrittenExamPage.clickKebabButtonForEditAnnouceByNumber('17032026140624WpT')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list\/edit-announcement.*/);
+        await eligibleWrittenExamPage.selectEditSubjectToOpen('วิชาเฉพาะ 9')
+        const examRoomDetail = {
+            examRoom1 : 'ทดสอบแก้ไขชื่อห้องสอบ',
+            examDate1 : '17032569',
+            examStart1 : '10:30',
+            examEnd1 : '12:30',
+            seat1:'A01-A15',
+            addRoom:'Yes' as const,
+            examRoom2 : 'ทดสอบแก้ไขชื่อห้องสอบ2',
+            examDate2 : '17032569',
+            examStart2 : '14:30',
+            examEnd2 : '16:30',
+            seat2:'A16-A25',
+        }
+        await eligibleWrittenExamPage.deleteExamRoom('ข้อมูลห้องสอบที่ 2')
+        await eligibleWrittenExamPage.editExamRoomDetail(examRoomDetail)
+        await eligibleWrittenExamPage.clearFileUpload('ตัวอย่างไฟล์ประกาศรายชื่อผู้มีสิทธิ์สอบข้อเขียน_1773731184450.pdf')
+        const annouceFile = 'downloads/ตัวอย่างไฟล์ประกาศรายชื่อผู้มีสิทธิ์สอบข้อเขียน.pdf';
+        await eligibleWrittenExamPage.uploadAnnouceFile(annouceFile)
+        await eligibleWrittenExamPage.clickSaveButton()
+        await eligibleWrittenExamPage.clickConfirmUploadAnnoucementPopup()
+        await expect(page.getByText('แก้ไขประกาศสำเร็จ')).toBeVisible()
+    });
 });
