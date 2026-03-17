@@ -32,7 +32,7 @@ export class CommonPage {
     }
 
     async fillUsernameAndPassword(username:string , password:string){
-        const signInButton = this.page.getByRole('button', { name: 'เข้าสู่ระบบ' })
+        const signInButton = this.page.getByRole('button', { name: 'เข้าสู่ระบบ' , exact: true})
         await expect(this.usernameBox).toBeVisible()
         await this.usernameBox.pressSequentially(username ,{ delay : 100 })
 
