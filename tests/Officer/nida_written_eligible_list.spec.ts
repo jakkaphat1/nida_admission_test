@@ -235,6 +235,6 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list\/view-announcement.*/);
         await eligibleWrittenExamPage.clickKebabButtonForCancelAnnouceByNumber('17032026140624WpT')
         await eligibleWrittenExamPage.clickConfirmCancelAnnoucePopup()
-        await expect(this.page.getByRole('alert').filter({ hasText: 'บันทึกรายการเรียบร้อยแล้ว' }).last()).toBeVisible()
+        await expect(page.getByRole('alert').filter({ hasText: 'บันทึกรายการเรียบร้อยแล้ว' }).last()).toBeVisible()
     });
 });
