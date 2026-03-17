@@ -223,4 +223,41 @@ export class AnnouceWriitenExamScorePage {
         await expect(heading).toBeVisible()
         await confirmBtn.click()
     }
+
+    async clickSeeAnnoucementButtonByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const seeAnnoucementBtn = card.getByRole('button', { name: 'ดูประกาศ' }).first()
+        await seeAnnoucementBtn.click()
+    }
+
+    async clickKebabButtonForEditAnnouceByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const kebabBtn = card.locator('button.menuAction_button')
+        const editButton = this.page.getByRole('button', { name: 'แก้ไขประกาศ' })
+        await kebabBtn.click()
+        await editButton.click()
+    }
+
+    async selectCheckboxBySubject(...subjects: string[]) {
+
+        for (const select of subjects) {
+            const row = this.page.locator('.card-container').filter({hasText :select})
+            const checkbox = row.locator('input[type="checkbox"]')
+            await checkbox.check()
+        }
+    }
+
+    async selectEditSubjectToOpen(subjectName:string){
+        const subject = this.page.locator('.card-container').filter({hasText:subjectName}).first()
+        const subjectCheckBox = subject.locator('input#exam_id')
+        await subjectCheckBox.setChecked(true);
+        console.log(`ตรวจสอบสถานะวิชา: ${subjectName} -> สถานะปัจจุบัน: เลือกแล้ว `);
+    }
+
+     async clearFileUpload(hoverText:string){
+        const hoverPlace = this.page.getByText(hoverText)
+        const clearBtn = this.page.locator('.file-container > .delete-button')
+        await hoverPlace.hover()
+        await clearBtn.click()
+    }
 }
