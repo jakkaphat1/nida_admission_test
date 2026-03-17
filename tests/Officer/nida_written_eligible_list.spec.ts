@@ -189,4 +189,28 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await eligibleWrittenExamPage.clickPDFButtonForViewAnnouceByNumber('17032026140624WpT')
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list\/view-announcement.*/);
     });
+
+    test('TC-08 ทดสอบดูประวัติการประกาศ' , async ({ commonPage , eligibleWrittenExamPage , page}) => {
+        test.setTimeout(45000)
+        await commonPage.gotoPrograms()
+        await eligibleWrittenExamPage.gotoEligibleWrittenExamListMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list.*/);
+        await eligibleWrittenExamPage.checkEligibleWrittenExamMenu()
+        await eligibleWrittenExamPage.clickAnnoucedTab()
+        await eligibleWrittenExamPage.fillSearchBox('วิชาเฉพาะ 2')
+        await eligibleWrittenExamPage.filterMoreOption({
+            // eduYear:'2568',
+            // semester:'ภาคการศึกษาที่ 2',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ',
+            round:'9',
+            // status:'ใช้งาน'
+        })
+        await eligibleWrittenExamPage.clickExpandDetailButtonByName('รอบที่ 9/2568')
+        await eligibleWrittenExamPage.clickSeeAnnoucementButtonByCard('รอบที่ 9/2568 (ภาคการศึกษาที่ 2) - ระยะเวลารับสมัครเรียน (08/01/2569 - 08/01/2569)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-for-quiz-list\/view-announcement.*/);
+        await eligibleWrittenExamPage.clickKebabButtonForAnnouceHistoryByNumber('17032026140624WpT')
+        await eligibleWrittenExamPage.clickSeePDFinHistory()
+        await eligibleWrittenExamPage.clickClosePDFHistoryPopup()
+    });
 });
