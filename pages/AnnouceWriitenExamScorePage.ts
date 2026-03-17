@@ -90,10 +90,79 @@ export class AnnouceWriitenExamScorePage {
         }
         await backfilterBtn.click()
     }
-    
+
     async clickExpandDetailButtonByName(cardName:string){
         const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
         const expandDetailBtn = card.getByRole('button').filter({ hasText: /^$/ }).first()
         await expandDetailBtn.click()
+    }
+
+    async clickVerifyDetailButtonByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const verifyDetailBtn = card.getByRole('button', { name: 'ตรวจสอบข้อมูล' })
+        await verifyDetailBtn.click()
+    }
+
+    async clickAnnoucedTab(){
+        await this.annoucedScoreTab.click()
+    }
+
+    async checkStudentScoreDetailPage(...texts: string[]){
+        const eligibleStudentTextBox = this.page.getByRole('textbox', { name: 'ค้นหาใบสมัคร, ชื่อ-นามสกุล' })
+        await expect(eligibleStudentTextBox).toBeVisible()
+
+        for (const text of texts) {
+            const element = this.page.getByText(text , {exact:true})
+            await element.highlight()
+            await expect(element).toBeVisible()
+        }
+    }
+
+    async checkAddStudentScoreDetailPage(...texts: string[]){
+        for (const text of texts) {
+            const element = this.page.getByText(text , {exact:true})
+            await element.highlight()
+            await expect(element).toBeVisible()
+        }
+    }
+
+    async clickCheckandAddStudentScoreButton(){
+        const addStudentScoreBtn = this.page.getByRole('button', { name: 'ตรวจสอบและกรอกคะแนน' })
+        await addStudentScoreBtn.click()
+    }
+
+    async fillStraightSpecialSubjectScoreByApplicationID(id:string, score:string){
+        const inputScoreBox = this.page.getByRole('textbox', { name: 'กรุณาระบุ' })
+        if(id){
+            const row = this.page.locator('tr').filter({ hasText: id })
+            await expect(row).toBeVisible()
+            await inputScoreBox.fill(score)
+        }
+    }
+
+    async clickInputScoreByFileButton(){
+        const inputfileBtn = this.page.getByRole('button', { name: 'นำเข้าข้อมูลคะแนน' })
+        await inputfileBtn.click()
+    }
+
+    async fillSpecialSubjectScoreByFile(filePath: string) {
+        const importFileBtn = this.page.getByRole('button', { name: 'นำเข้า', exact: true })
+        const fileChooserPromise = this.page.waitForEvent('filechooser');
+        await this.page.getByRole('button', { name: 'เลือกไฟล์' }).click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(filePath);
+        await importFileBtn.click()
+    }
+
+    async clickConfirmImportScoreFile(){
+        const confimrBtn = this.page.getByRole('button', { name: 'ยืนยันการนำเข้า' })
+        await confimrBtn.click()
+    }
+
+    async clickConfirmImportScoreFilePopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันการนำเข้า' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
     }
 }
