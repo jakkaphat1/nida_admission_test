@@ -97,4 +97,93 @@ export class EligibleWrittenExamPage {
         const expandDetailBtn = card.getByRole('button').filter({ hasText: /^$/ }).first()
         await expandDetailBtn.click()
     }
+
+    async clickVerifyDetailButtonByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const verifyDetailBtn = card.getByRole('button', { name: 'ตรวจสอบข้อมูล' })
+        await verifyDetailBtn.click()
+    }
+
+    async checkEligibleStudentDetailPage(...texts: string[]){
+        const eligibleStudentTextBox = this.page.getByRole('textbox', { name: 'ค้นหาใบสมัคร, ชื่อ-นามสกุล' })
+        await expect(eligibleStudentTextBox).toBeVisible()
+
+        for (const text of texts) {
+            const element = this.page.getByText(text)
+            await element.highlight()
+            await expect(element).toBeVisible()
+        }
+    }
+
+    async fillSearchEligibleWrittenExamStudent(studentName:string){
+        const texBox = this.page.getByRole('textbox', { name: 'ค้นหาใบสมัคร, ชื่อ-นามสกุล' })
+        await texBox.pressSequentially(studentName)
+    }
+
+    async clickExpandDetailButtonBySubject(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const expandDetailBtn = card.getByRole('button').filter({ hasText: /^$/ }).first()
+        await expandDetailBtn.click()
+    }
+
+    async filterEligibleSearchOption(subject?:string , annouce?:string){
+        const subjectDropdown = this.page.locator('.react-select__indicators').first()
+        const subjectOption = this.page.getByRole('option', { name: subject })
+        const annouceDropdown = this.page.locator('#search-select-announceStatus > .unext-form-control > .react-select__indicators')
+        const annouceOption = this.page.getByRole('option', { name: annouce })
+        const filterBtn = this.page.getByRole('button', { name: 'ตัวกรอง' })
+        const filterBackBtn = this.page.getByRole('button', { name: 'ตัวกรอง' }).nth(1)
+        await filterBtn.click()
+        if(subject){
+            await subjectDropdown.click()
+            await subjectOption.click()
+        }
+        if(annouce){
+            await annouceDropdown.click()
+            await annouceOption.click()
+        }
+        await filterBackBtn.click()
+    }
+
+    async clickCheckboxBySubject(subjectName:string){
+        const card = this.page.locator('.input-and-title').filter({hasText:subjectName})
+        const checkbox = card.locator('#appication_form')
+        await checkbox.click()
+    }
+
+    async clickExportButton(){
+        const exportBtn = this.page.getByRole('button', { name: 'EXPORT' })
+        await exportBtn.click()
+    }
+
+    async handleExportType(type:string){
+        const heading = this.page.getByRole('heading', { name: 'ประเภทไฟล์การนำออกข้อมูล' })
+        const typeRadio = this.page.getByRole('radio', { name: type })
+        const confirm = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await expect(heading).toBeVisible()
+        await expect(typeRadio).toBeVisible()
+        await typeRadio.click()
+        await confirm.click()
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }

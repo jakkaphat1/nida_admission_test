@@ -44,4 +44,9 @@ export class CommonPage {
     async gotoPrograms() {
         await this.page.goto('https://backoffice-uat.nida.ac.th/admin/rolesAndPermissions/master/role-permission');
     }
+
+    async clickBackToFirstPage(){
+        const backFirstPage = this.page.getByRole('button', { name: 'กลับไปหน้าแรก' })
+        await backFirstPage.click()
+    }
 }
