@@ -128,4 +128,47 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await eligibleLearningPage.clickConfirmEligibleAnnoucementPopup()
         await expect(page.getByText('ประกาศรายชื่อผู้มีสิทธิ์สอบประจำโครงการสำเร็จ')).toBeVisible()
     });
+
+    test('TC-07.1 ทดสอบแก้ไขประกาศ' , async ({ commonPage , eligibleLearningPage , page}) => {
+        test.setTimeout(45000)
+        await commonPage.gotoPrograms()
+        await eligibleLearningPage.gotoEligibleLearningMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-candidates-list-for-program/);
+        await eligibleLearningPage.checkLearningEligibleMenu()
+        await eligibleLearningPage.clickAnyTabByKeyword('ประกาศรายชื่อผู้มีสิทธิ์สอบประจำโครงการ')
+        await eligibleLearningPage.clickStatusByKeyword('ใช้งาน')
+        await eligibleLearningPage.filterMoreOption({
+            eduYear:'2569',
+            // semester:'ภาคการศึกษาที่ 1',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ',
+            round:'7',
+        })
+        await eligibleLearningPage.clickExpandDetailButtonByName('รอบที่ 7/2569 (ภาคการศึกษาที่ 1)')
+        await eligibleLearningPage.clickSeeAnnoucementButtonByCard('รอบที่ 7/2569 (ภาคการศึกษาที่ 1)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-candidates-list-for-program\/view-announcement.*/);
+        await eligibleLearningPage.clickKebabButtonForEditAnnouceByNumber('18032026173922TDn')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-candidates-list-for-program\/edit-announcement.*/);
+        const examRoomDetail = {
+            examRoom1 : 'ทดสอบเพิ่มชื่อห้องสอบ',
+            examDate1 : '19032569',
+            examStart1 : '10:30',
+            examEnd1 : '12:30',
+            seat1:'A10-A15',
+            addRoom:'Yes' as const,
+            examRoom2 : 'ทดสอบเพิ่มชื่อห้องสอบ2',
+            examDate2 : '19032569',
+            examStart2 : '13:30',
+            examEnd2 : '15:30',
+            seat2:'A16-A20',
+        }
+        await eligibleLearningPage.deleteExamRoom('ข้อมูลห้องสอบที่ 2')
+        await eligibleLearningPage.editExamRoomDetail(examRoomDetail)
+        await eligibleLearningPage.clearFileUpload('ตัวอย่างไฟล์ประกาศรายชื่อผู้มีสิทธิ์สมัครเรียน_1773830362761.pdf')
+        const annouceFile = 'downloads/ตัวอย่างไฟล์ประกาศรายชื่อผู้มีสิทธิ์สมัครเรียน.pdf';
+        await eligibleLearningPage.uploadAnnouceFile(annouceFile)
+        await eligibleLearningPage.clickSaveButton()
+        await eligibleLearningPage.clickConfirmEditUploadAnnoucementPopup()
+        await expect(page.getByText('แก้ไขประกาศสำเร็จ')).toBeVisible()
+    });
 });
