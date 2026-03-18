@@ -260,4 +260,43 @@ export class VerifyLearningApplicationPage {
         const expandDetailBtn = card.getByRole('button').filter({ hasText: /^$/ }).first()
         await expandDetailBtn.click()
     }
+
+    async clickEditCandidateInfo(){
+        const editCandidateInfoBtn = this.page.getByRole('button', { name: 'แก้ไขแทนผู้สมัคร' })
+        await editCandidateInfoBtn.click()
+    }
+
+    async changeReligion(religion?:string){
+        const religionDropdown = this.page.locator('#religion_code > .unext-form-control > .react-select__indicators')
+        const religionOption = this.page.getByRole('option', { name: religion })
+        await religionDropdown.click()
+        await religionOption.click()
+    }
+
+    async fillOtherScore(ieltsScore:string , toeflCBTScore:string,  toeflIBTScore:string , toeflITPScore:string ,gmatScore:string , nidaTEAPScore:string  ){
+        const ielts = this.page.getByRole('textbox', { name: 'IELTS' })
+        const toeflCBT = this.page.getByRole('textbox', { name: 'TOEFL CBT' })
+        const toeflIBT = this.page.getByRole('textbox', { name: 'TOEFL IBT' })
+        const toeflITP = this.page.getByRole('textbox', { name: 'TOEFL ITP (NIDA)' })
+        const gmat = this.page.getByRole('textbox', { name: 'GMAT' })
+        const nidaTEAP = this.page.getByRole('textbox', { name: 'NIDA TEAP' })
+
+        await ielts.fill(ieltsScore)
+        await toeflCBT.fill(toeflCBTScore)
+        await toeflIBT.fill(toeflIBTScore)
+        await toeflITP.fill(toeflITPScore)
+        await gmat.fill(gmatScore)
+        await nidaTEAP.fill(nidaTEAPScore)
+
+    }
+
+    async clickSaveInfoAndSendRecheck(){
+        const SaveInfoAndSendRecheckBtn = this.page.getByRole('button', { name: 'บันทึก' })
+        await SaveInfoAndSendRecheckBtn.click()
+    }
+
+    async clickConfirmPopupButton(){
+        const confirmButton = this.page.getByRole('button', { name: 'ยืนยัน' })
+        await confirmButton.click()
+    }
 }
