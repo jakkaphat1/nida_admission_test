@@ -39,9 +39,15 @@ export class VerifyLearningApplicationPage {
         await expect(confirmRegisTab).toBeVisible()
     }
 
-    async clickAnyTabByKeyword(tab:string){
+    async clickAnyTabByKeyword(tab:'ฉบับร่าง'|'ใบสมัคร'|'ยืนยันสิทธิ์'){
         const tabBtn = this.page.getByRole('button', { name: tab })
-        await tabBtn.click()
+        const tabBtnExact = this.page.getByRole('button', { name: tab , exact:true })
+        if(tab==='ฉบับร่าง'|| tab==='ยืนยันสิทธิ์'){
+            await tabBtn.click()
+        }
+        if(tab==='ใบสมัคร'){
+            await tabBtnExact.click()
+        }
     }
     async fillSearchBox(searchKeyword:string){
         const searchBox = this.page.getByRole('textbox', { name: 'ระบุรหัสใบสมัครเรียน, เลขที่บัตรประชาชน, เลขที่หนังสือเดินทาง หรือชื่อ-นามสกุล' })
@@ -111,9 +117,90 @@ export class VerifyLearningApplicationPage {
             await statusDropdown.click()
             await statusOption.click()
         }
+        await backfilterBtn.click()
+    }
 
+    async filterApplicationMoreOption(data:{
+        eduYear?:string
+        semester?:string
+        round?:string
+        faculty?:string
+        eduLevel?:string
+        course?:string
+        program?:string
+        status?:string
+        payStatus?:string
+    }){
+        const filterBtn = this.page.getByRole('button', { name: 'ตัวกรอง' })
+        const backfilterBtn = this.page.getByRole('button', { name: 'ตัวกรอง' }).nth(1)
+        await filterBtn.click()
+        if(data.eduYear){
+            const eduYearDropdown = this.page.locator('div').filter({ hasText: /^ปีการศึกษา$/ }).nth(3)
+            const eduYearOption = this.page.getByRole('option', { name: data.eduYear })
+            await eduYearDropdown.click()
+            await eduYearOption.click()
+        }
+        if(data.semester){
+            const semesterDropdown = this.page.locator('div').filter({ hasText: /^ภาคการศึกษา$/ }).nth(3)
+            const semesterOption = this.page.getByRole('option', { name: data.semester })
+            await semesterDropdown.click()
+            await semesterOption.click()
+        }
+        if(data.round){
+            const roundInputBox = this.page.locator('div').filter({ hasText: /^รอบที่$/ }).nth(3)
+            const roundOption = this.page.getByRole('option', { name: data.round })
+            await roundInputBox.click()
+            await roundOption.click()
+        }
+        if(data.eduLevel){
+            const eduLevelDropdown = this.page.locator('div').filter({ hasText: /^ระดับการศึกษา$/ }).nth(3)
+            const eduLevelOption = this.page.getByRole('option', { name: data.eduLevel })
+            await eduLevelDropdown.click()
+            await eduLevelOption.click()
+        }
+        if(data.faculty){
+            const facultyInputBox = this.page.locator('div').filter({ hasText: /^คณะ$/ }).nth(3)
+            const facultyOption = this.page.getByRole('option', { name: data.faculty })
+            await facultyInputBox.click()
+            await facultyOption.click()
+        }
+        if(data.course){
+            const courseDropdown = this.page.locator('div').filter({ hasText: /^หลักสูตร$/ }).nth(3)
+            const courseOption = this.page.getByRole('option', { name: data.course })
+            await courseDropdown.click()
+            await courseOption.click()
+        }
+        if(data.program){
+            const programDropdown = this.page.locator('div').filter({ hasText: /^โครงการ$/ }).nth(3)
+            const programOption = this.page.getByRole('option', { name: data.program ,exact:true }).first()
+            await programDropdown.click()
+            await programOption.click()
+        }
+        if(data.status){
+            const statusDropdown = this.page.locator('#search-select-status > .unext-form-control > .react-select__indicators')
+            const statusOption = this.page.getByRole('option', { name: data.status })
+            await statusDropdown.click()
+            const isSelected = await statusOption.getAttribute('aria-selected')
+            if (isSelected !== 'true') {
+                await statusOption.click({ force: true })
+            }
+            await expect(statusOption).toHaveAttribute('aria-selected', 'true')
+        }
+        if(data.payStatus){
+            const payStatusDropdown = this.page.locator('div').filter({ hasText: /^สถานะการชำระเงิน$/ }).nth(3)
+            const payStatusOption = this.page.getByRole('option', { name: data.payStatus })
+            await payStatusDropdown.click()
+            await payStatusOption.click()
+        }
+        await backfilterBtn.click()
+    }
 
-        
+    async clickResetAllFilter(){
+        const resetFilterBtn = this.page.getByRole('button', { name: 'ล้างข้อมูลทั้งหมด' })
+        const filterBtn = this.page.getByRole('button', { name: 'ตัวกรอง' })
+        const backfilterBtn = this.page.getByRole('button', { name: 'ตัวกรอง' }).nth(1)
+        await filterBtn.click()
+        await resetFilterBtn.click()
         await backfilterBtn.click()
     }
 }

@@ -35,4 +35,27 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await verifyLearningApplicationPage.filterMoreOption(filterInput)
         
     });
+
+    test('TC-04 ทดสอบค้นหาใบสมัครเรียน' , async ({ commonPage , verifyLearningApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyLearningApplicationPage.gotoVerifyLearningApplicationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form/);
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationMenu()
+        await verifyLearningApplicationPage.clickAnyTabByKeyword('ใบสมัคร')
+        await verifyLearningApplicationPage.fillSearchBox('ทดสอบ')
+        const filterInput = {
+            eduYear:'2568',
+            semester:'ภาคการศึกษาที่ 2',
+            round:undefined,
+            eduLevel:'ปริญญาโท',
+            faculty:'คณะสถิติประยุกต์',
+            course:undefined,
+            program:undefined,
+            status:'นำส่งใบสมัครแล้ว',
+            payStatus:'ยังไม่ได้ชำระเงิน'
+        }
+
+        await verifyLearningApplicationPage.filterApplicationMoreOption(filterInput)
+        await verifyLearningApplicationPage.clickResetAllFilter()
+    });
 });
