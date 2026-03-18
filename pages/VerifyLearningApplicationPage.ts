@@ -254,4 +254,10 @@ export class VerifyLearningApplicationPage {
         await newPage.waitForLoadState()
         await newPage.close()
     }
+
+    async clickExpandDetailButtonByName(cardName:string){
+        const card = this.page.locator('.card-container').filter({ hasText: cardName }).first()
+        const expandDetailBtn = card.getByRole('button').filter({ hasText: /^$/ }).first()
+        await expandDetailBtn.click()
+    }
 }

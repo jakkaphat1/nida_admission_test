@@ -118,4 +118,35 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await verifyLearningApplicationPage.clickVerifyLearningApplicationButton()
         await verifyLearningApplicationPage.clickConfirmVerifyApplicationPopup()
     });
+
+    test('TC-07 ทดสอบตรวจสอบการชำระเงินของผู้สมัคร' , async ({ commonPage , verifyLearningApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyLearningApplicationPage.gotoVerifyLearningApplicationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form/);
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationMenu()
+        await verifyLearningApplicationPage.clickAnyTabByKeyword('ใบสมัคร')
+        // await verifyLearningApplicationPage.fillSearchBox('ทดสอบ')
+        const filterInput = {
+            eduYear:undefined,
+            semester:undefined,
+            round:undefined,
+            eduLevel:undefined,
+            faculty:undefined,
+            course:undefined,
+            program:undefined,
+            status:undefined,
+            payStatus:'ชำระเงินแล้ว'
+        }
+
+        await verifyLearningApplicationPage.filterApplicationMoreOption(filterInput)
+        await verifyLearningApplicationPage.clickVerifyByIdCard('694241111008')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form\/detail.*/);
+        await verifyLearningApplicationPage.verifyTextVisible('694241111008','Mr. คณาธิศ รตโนภาส')
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationPage()
+        await verifyLearningApplicationPage.clickVerifyInfoAnyTabByKeyword('การชำระเงิน')
+        await verifyLearningApplicationPage.clickExpandDetailButtonByName('00006940017')
+        await verifyLearningApplicationPage.clickVerifyLearningApplicationButton()
+        await verifyLearningApplicationPage.clickConfirmVerifyApplicationPopup()
+        await commonPage.clickBackToFirstPage()
+    });
 });
