@@ -49,6 +49,12 @@ export class VerifyLearningApplicationPage {
             await tabBtnExact.click()
         }
     }
+
+    async clickVerifyInfoAnyTabByKeyword(tab:'ตรวจสอบข้อมูลผู้สมัคร'|'ตรวจสอบเอกสารแนบ'|'การชำระเงิน'){
+        const tabBtn = this.page.getByRole('button', { name: tab })
+        await tabBtn.click()
+    }
+
     async fillSearchBox(searchKeyword:string){
         const searchBox = this.page.getByRole('textbox', { name: 'ระบุรหัสใบสมัครเรียน, เลขที่บัตรประชาชน, เลขที่หนังสือเดินทาง หรือชื่อ-นามสกุล' })
         await searchBox.pressSequentially(searchKeyword)
@@ -202,5 +208,40 @@ export class VerifyLearningApplicationPage {
         await filterBtn.click()
         await resetFilterBtn.click()
         await backfilterBtn.click()
+    }
+
+     async clickVerifyByIdCard(idCard: string) {
+        const row = this.page.locator('tr').filter({ hasText: idCard })
+        const verifyBtn = row.getByRole('button', { name: 'ตรวจสอบ' }).first()
+        await verifyBtn.click()
+    }
+
+    async verifyTextVisible(...texts: string[]) {
+        for (const text of texts) {
+            const element = this.page.getByText(text)
+            await element.highlight()
+            await expect(element).toBeVisible()
+        }
+    }
+
+    async checkVerifyLearningApplicationPage(){
+        const candidateInfoTab = this.page.getByRole('button', { name: 'ตรวจสอบข้อมูลผู้สมัคร' })
+        const attachmentInfoTab = this.page.getByRole('button', { name: 'ตรวจสอบเอกสารแนบ' })
+        const paymentInfoTab = this.page.getByRole('button', { name: 'การชำระเงิน' })
+        await expect(candidateInfoTab).toBeVisible()
+        await expect(attachmentInfoTab).toBeVisible()
+        await expect(paymentInfoTab).toBeVisible()
+    }
+
+    async clickVerifyLearningApplicationButton(){
+        const verifyBtn = this.page.getByRole('button', { name: 'ยืนยันการตรวจสอบ' })
+        await verifyBtn.click()
+    }
+
+    async clickConfirmVerifyApplicationPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันการตรวจสอบ ?' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
     }
 }

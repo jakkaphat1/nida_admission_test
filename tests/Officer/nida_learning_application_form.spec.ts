@@ -58,4 +58,34 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await verifyLearningApplicationPage.filterApplicationMoreOption(filterInput)
         await verifyLearningApplicationPage.clickResetAllFilter()
     });
+
+    test('TC-05 ทดสอบตรวจสอบข้อมูลผู้สมัคร' , async ({ commonPage , verifyLearningApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyLearningApplicationPage.gotoVerifyLearningApplicationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form/);
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationMenu()
+        await verifyLearningApplicationPage.clickAnyTabByKeyword('ใบสมัคร')
+        // await verifyLearningApplicationPage.fillSearchBox('ทดสอบ')
+        const filterInput = {
+            eduYear:undefined,
+            semester:undefined,
+            round:undefined,
+            eduLevel:undefined,
+            faculty:undefined,
+            course:undefined,
+            program:undefined,
+            status:undefined,
+            payStatus:'ชำระเงินแล้ว'
+        }
+
+        await verifyLearningApplicationPage.filterApplicationMoreOption(filterInput)
+        await verifyLearningApplicationPage.clickVerifyByIdCard('694241111008')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form\/detail.*/);
+        await verifyLearningApplicationPage.verifyTextVisible('694241111008','Mr. คณาธิศ รตโนภาส')
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationPage()
+        await verifyLearningApplicationPage.clickVerifyInfoAnyTabByKeyword('ตรวจสอบข้อมูลผู้สมัคร')
+        await verifyLearningApplicationPage.verifyTextVisible('| ข้อมูลทั่วไป','| ข้อมูลที่อยู่ปัจจุบัน','| ข้อมูลประวัติการศึกษา','| ข้อมูลประวัติการทำงาน','| ข้อมูลคะแนนเพิ่มเติม','| แบบสำรวจ')
+        await verifyLearningApplicationPage.clickVerifyLearningApplicationButton()
+        await verifyLearningApplicationPage.clickConfirmVerifyApplicationPopup()
+    });
 });
