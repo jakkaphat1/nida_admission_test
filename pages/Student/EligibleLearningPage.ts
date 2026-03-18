@@ -193,4 +193,126 @@ export class EligibleLearningPage {
         await expect(heading).toBeVisible()
         await confirm.click()
     }
+
+//Upload
+    async clickUploadAnnoucementButtonByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const verifyDetailBtn = card.getByRole('button', { name: 'อัปโหลดประกาศ' }).first()
+        await verifyDetailBtn.click()
+    }
+
+    async checkUploadAnnoucementPage(...texts: string[]){
+        const dropBox = this.page.locator('.drop-file-box')
+        await expect(dropBox).toBeVisible()
+
+        for (const text of texts) {
+            const element = this.page.getByText(text)
+            await element.highlight()
+            await expect(element).toBeVisible()
+        }
+    }
+
+    async selectFacultyForAnnouce(...facultys:string[]){
+        for (const faculty of facultys) {
+            const facultyLocator = this.page.locator('.card-container').filter({ hasText: faculty })
+            const checkbox = facultyLocator.locator('#exam_id').first()
+            await checkbox.click() 
+        }
+    }
+
+    async selectTime(locator: Locator, time: string) {
+        const [hour, minute] = time.split(':')
+        
+        await locator.click()
+        
+        // ใช้ attribute selector แทน id selector
+        await this.page.locator('.hour-container')
+            .locator(`[id="${hour}"]`)
+            .click()
+        
+        await this.page.locator('.minute-container')
+            .locator(`[id="${minute}"]`)
+            .click()
+    }
+
+    async selectExamRoomDetail(data : {
+        examRoom1 : string
+        examDate1 : string
+        examStart1 : string
+        examEnd1 : string
+        seat1 : string
+        addRoom? : 'Yes'|'No'
+        examRoom2? : string
+        examDate2? : string
+        examStart2? : string
+        examEnd2? : string
+        seat2? : string
+    }){
+        const examRoomInput1 = this.page.getByRole('textbox', { name: 'ชื่อห้องสอบ' })
+        const examDatePicker1 = this.page.getByRole('textbox', { name: 'DD/MM/YYYY' })
+        const examStartTimePicker1 = this.page.getByRole('textbox', { name: ':00' }).first()
+        const examEndTimePicker1 = this.page.getByRole('textbox', { name: ':00' }).nth(1)
+        const seatInput1 = this.page.getByRole('textbox', { name: 'ลำดับที่นั่งสอบ' })
+        const addRoomBtn = this.page.getByRole('button', { name: 'เพิ่มข้อมูลห้องสอบ' })
+        const examRoomInput2 = this.page.getByRole('textbox', { name: 'ชื่อห้องสอบ' }).nth(1)
+        const examDatePicker2 = this.page.getByRole('textbox', { name: 'DD/MM/YYYY' }).nth(1)
+        const examStartTimePicker2 = this.page.getByRole('textbox', { name: ':00' }).nth(2)
+        const examEndTimePicker2 = this.page.getByRole('textbox', { name: ':00' }).nth(3)
+        const seatInput2 = this.page.getByRole('textbox', { name: 'ลำดับที่นั่งสอบ' }).nth(1)
+        if(data.examRoom1){
+            await examRoomInput1.pressSequentially(data.examRoom1)
+        }
+        if(data.examDate1){
+            await examDatePicker1.click({clickCount:3})
+            await examDatePicker1.pressSequentially(data.examDate1)
+        }
+        if(data.examStart1){
+            await this.selectTime(examStartTimePicker1, data.examStart1)
+        }
+        if(data.examEnd1){
+            await this.selectTime(examEndTimePicker1, data.examEnd1)
+        }
+        if(data.seat1){
+            await seatInput1.pressSequentially(data.seat1)
+        }
+
+        if(data.addRoom==='Yes'){
+            await addRoomBtn.click()
+                if(data.examRoom2){
+                    await examRoomInput2.pressSequentially(data.examRoom2)
+            }
+                if(data.examDate2){
+                    await examDatePicker2.click({clickCount:3})
+                    await examDatePicker2.pressSequentially(data.examDate2)
+            }
+                if(data.examStart2){
+                    await this.selectTime(examStartTimePicker2, data.examStart2)
+            }
+                if(data.examEnd2){
+                    await this.selectTime(examEndTimePicker2, data.examEnd2)
+            }
+                if(data.seat2){
+                    await seatInput2.pressSequentially(data.seat2)
+            }
+        }
+    }
+
+    async uploadAnnouceFile(filePath: string) {
+        const fileChooserPromise = this.page.waitForEvent('filechooser');
+        await this.page.getByRole('button', { name: 'เลือกไฟล์' }).click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(filePath);
+    }
+
+    async clickSaveButton(){
+        const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
+        await saveBtn.click()
+    }
+
+    async clickConfirmUploadAnnoucementPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันการอัปโหลดประกาศ' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
 }
