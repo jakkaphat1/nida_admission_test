@@ -28,4 +28,10 @@ export class EligibleLearningPage {
         await eligibleLearningApplicationMenu.click()
     }
 
+    async checkLearningEligibleMenu(){
+        const notAnnouce = this.page.getByRole('button', { name: 'ยังไม่ประกาศรายชื่อผู้มีสิทธิ์สอบประจำโครงการ' })
+        const annouced = this.page.getByRole('button', { name: 'ประกาศรายชื่อผู้มีสิทธิ์สอบประจำโครงการ' }).nth(1)
+        await expect(notAnnouce).toBeVisible();
+        await expect(annouced).toBeVisible()
+    }
 }

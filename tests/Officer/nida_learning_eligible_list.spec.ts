@@ -7,5 +7,10 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await commonPage.fillUsernameAndPassword('sys_admin1','unext@2022')
     });
 
-    
+    test('TC-02 เมนูตรวจสอบใบสมัครเรียน' , async ({ commonPage , eligibleLearningPage , page}) => {
+        await commonPage.gotoPrograms()
+        await eligibleLearningPage.gotoEligibleLearningMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-candidates-list-for-program/);
+        await eligibleLearningPage.checkLearningEligibleMenu()
+    });
 });
