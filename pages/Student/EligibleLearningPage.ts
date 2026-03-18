@@ -315,4 +315,22 @@ export class EligibleLearningPage {
         await expect(heading).toBeVisible()
         await confirmBtn.click()
     }
+
+ //Annouce
+    async clickCheckboxForAnnouceEligibleListByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const checkbox = card.getByRole('checkbox').first()
+        await checkbox.click()
+        console.log(` เลือกประกาศสมัครสำหรับ: ${cardName}`);
+    }   
+    async clickAnnouceEligibleList(){
+        const annouceEligibleBtn = this.page.locator('button').filter({ hasText: /^ประกาศรายชื่อผู้มีสิทธิ์สอบประจำโครงการ$/ })
+        await annouceEligibleBtn.click()
+    }
+    async clickConfirmEligibleAnnoucementPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ประกาศรายชื่อผู้มีสิทธิ์สอบประจำโครงการ' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
 }

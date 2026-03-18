@@ -106,4 +106,26 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await eligibleLearningPage.clickConfirmUploadAnnoucementPopup()
         await expect(page.getByText('อัปโหลดประกาศสำเร็จ')).toBeVisible()
     });
+
+    test('TC-06 ทดสอบประกาศรายชื่อผู้มีสิทธิ์สอบประจำโครงการ' , async ({ commonPage , eligibleLearningPage , page}) => {
+        await commonPage.gotoPrograms()
+        await eligibleLearningPage.gotoEligibleLearningMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-candidates-list-for-program/);
+        await eligibleLearningPage.checkLearningEligibleMenu()
+        // await eligibleLearningPage.clickAnyTabByKeyword('ประกาศรายชื่อผู้มีสิทธิ์สอบประจำโครงการ')
+        // await eligibleLearningPage.fillSearchBox('วิชาเฉพาะ 2')
+        await eligibleLearningPage.clickStatusByKeyword('ใช้งาน')
+        await eligibleLearningPage.filterMoreOption({
+            eduYear:'2569',
+            // semester:'ภาคการศึกษาที่ 1',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ',
+            round:'7',
+        })
+        await eligibleLearningPage.clickExpandDetailButtonByName('รอบที่ 7/2569 (ภาคการศึกษาที่ 1)')
+        await eligibleLearningPage.clickCheckboxForAnnouceEligibleListByCard('รอบที่ 7/2569 (ภาคการศึกษาที่ 1)')
+        await eligibleLearningPage.clickAnnouceEligibleList()
+        await eligibleLearningPage.clickConfirmEligibleAnnoucementPopup()
+        await expect(page.getByText('ประกาศรายชื่อผู้มีสิทธิ์สอบประจำโครงการสำเร็จ')).toBeVisible()
+    });
 });
