@@ -299,4 +299,29 @@ export class VerifyLearningApplicationPage {
         const confirmButton = this.page.getByRole('button', { name: 'ยืนยัน' })
         await confirmButton.click()
     }
+
+
+
+//ส่งกลับ    
+    async clickSendBackApplicationToCandidateButton(){
+        const sendBackBtn = this.page.getByRole('button', { name: 'ส่งคืนแก้ไข' })
+        await sendBackBtn.click()
+    }
+
+    async checkSendBackPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ส่งคืนแก้ไข' })
+        const reasonBox = this.page.getByRole('textbox', { name: 'ระบุเหตุผลในการส่งคืนแก้ไข' })
+        await expect(heading).toBeVisible()
+        await expect(reasonBox).toBeVisible()
+    }
+
+    async fillReasonForSendBack(reason:string){
+        const reasonBox = this.page.getByRole('textbox', { name: 'ระบุเหตุผลในการส่งคืนแก้ไข' })
+        await reasonBox.pressSequentially(reason , {delay:100})
+    }
+
+    async clickConfirmToSendBackButton(){
+        const confirmBtn = this.page.locator('#portal').getByRole('button', { name: 'ส่งคืนแก้ไข' })
+        await confirmBtn.click()
+    }
 }

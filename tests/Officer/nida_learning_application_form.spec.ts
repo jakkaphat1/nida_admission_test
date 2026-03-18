@@ -183,4 +183,38 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page.getByRole('heading', { name: 'คุณต้องการบันทึกข้อมูลผู้สมัครหรือไม่ ?' })).toBeVisible()
         await verifyLearningApplicationPage.clickConfirmPopupButton()
     });
+
+    test('TC-09 ทดสอบตรวจสอบข้อมูลผู้สมัคร (กรณีแก้ไขข้อมูลแทนผู้สมัคร)' , async ({ commonPage , verifyLearningApplicationPage,applicationStatusPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyLearningApplicationPage.gotoVerifyLearningApplicationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form/);
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationMenu()
+        await verifyLearningApplicationPage.clickAnyTabByKeyword('ใบสมัคร')
+        // await verifyLearningApplicationPage.fillSearchBox('ทดสอบ')
+        const filterInput = {
+            eduYear:undefined,
+            semester:undefined,
+            round:undefined,
+            eduLevel:undefined,
+            faculty:undefined,
+            course:undefined,
+            program:undefined,
+            status:undefined,
+            payStatus:'ชำระเงินแล้ว'
+        }
+
+        await verifyLearningApplicationPage.filterApplicationMoreOption(filterInput)
+        await verifyLearningApplicationPage.clickVerifyByIdCard('2110100024861')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form\/detail.*/);
+        await verifyLearningApplicationPage.verifyTextVisible('2110100024861','Mr. สุรวัช สะภาภักดิ์ดี')
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationPage()
+        await verifyLearningApplicationPage.clickVerifyInfoAnyTabByKeyword('ตรวจสอบข้อมูลผู้สมัคร')
+        await verifyLearningApplicationPage.verifyTextVisible('| ข้อมูลทั่วไป','| ข้อมูลที่อยู่ปัจจุบัน','| ข้อมูลประวัติการศึกษา','| ข้อมูลประวัติการทำงาน','| ข้อมูลคะแนนเพิ่มเติม','| แบบสำรวจ')
+        await verifyLearningApplicationPage.clickSendBackApplicationToCandidateButton()
+        await verifyLearningApplicationPage.checkSendBackPopup()
+        await verifyLearningApplicationPage.fillReasonForSendBack('ทดสอบการส่งกลับ เพื่อแก้ไข')
+        await verifyLearningApplicationPage.clickConfirmToSendBackButton()
+        await expect(page.getByText('ส่งคืนแก้ไขสำเร็จ')).toBeVisible()
+        await commonPage.clickBackToFirstPage()
+    });
 });
