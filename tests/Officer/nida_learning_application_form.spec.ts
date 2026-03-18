@@ -217,4 +217,37 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page.getByText('ส่งคืนแก้ไขสำเร็จ')).toBeVisible()
         await commonPage.clickBackToFirstPage()
     });
+
+    test('TC-10 ทดสอบตรวจสอบเอกสารแนบ (ส่งคืนแก้ไขเอกสารแนบ)' , async ({ commonPage , verifyLearningApplicationPage,applicationStatusPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyLearningApplicationPage.gotoVerifyLearningApplicationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form/);
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationMenu()
+        await verifyLearningApplicationPage.clickAnyTabByKeyword('ใบสมัคร')
+        // await verifyLearningApplicationPage.fillSearchBox('ทดสอบ')
+        const filterInput = {
+            eduYear:undefined,
+            semester:undefined,
+            round:undefined,
+            eduLevel:undefined,
+            faculty:undefined,
+            course:undefined,
+            program:undefined,
+            status:undefined,
+            payStatus:'ชำระเงินแล้ว'
+        }
+
+        await verifyLearningApplicationPage.filterApplicationMoreOption(filterInput)
+        await verifyLearningApplicationPage.clickVerifyByIdCard('2110100024861')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form\/detail.*/);
+        await verifyLearningApplicationPage.verifyTextVisible('2110100024861','Mr. สุรวัช สะภาภักดิ์ดี')
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationPage()
+        await verifyLearningApplicationPage.clickVerifyInfoAnyTabByKeyword('ตรวจสอบเอกสารแนบ')
+        await verifyLearningApplicationPage.clickSendBackApplicationToCandidateButton()
+        await verifyLearningApplicationPage.checkSendBackPopup()
+        await verifyLearningApplicationPage.fillReasonForSendBack('ทดสอบการส่งกลับการตรวจสอบเอกสารแนบ เพื่อแก้ไขเอกสารแนบ')
+        await verifyLearningApplicationPage.clickConfirmToSendBackButton()
+        await expect(page.getByText('ส่งคืนแก้ไขสำเร็จ')).toBeVisible()
+        await commonPage.clickBackToFirstPage()
+    });
 });
