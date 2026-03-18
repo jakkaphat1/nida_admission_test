@@ -250,4 +250,29 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page.getByText('ส่งคืนแก้ไขสำเร็จ')).toBeVisible()
         await commonPage.clickBackToFirstPage()
     });
+
+    test('TC-11 ทดสอบยกเลิกใบสมัคร **(หมายเหตุ: สามารถยกเลิกได้ในกรณีที่ยังไม่ชำระเงินค่าสมัคร)**' , async ({ commonPage , verifyLearningApplicationPage,applicationStatusPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyLearningApplicationPage.gotoVerifyLearningApplicationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form/);
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationMenu()
+        await verifyLearningApplicationPage.clickAnyTabByKeyword('ใบสมัคร')
+        // await verifyLearningApplicationPage.fillSearchBox('ทดสอบ')
+        const filterInput = {
+            eduYear:undefined,
+            semester:undefined,
+            round:undefined,
+            eduLevel:undefined,
+            faculty:undefined,
+            course:undefined,
+            program:undefined,
+            status:undefined,
+            payStatus:'ยังไม่ได้ชำระเงิน'
+        }
+
+        await verifyLearningApplicationPage.filterApplicationMoreOption(filterInput)
+        await verifyLearningApplicationPage.clickCancelApplicationByIdCard('3101702148754')
+        await verifyLearningApplicationPage.clickConfirmCancelApplicationPopup()
+        
+    });
 });

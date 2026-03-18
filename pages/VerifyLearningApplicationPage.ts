@@ -324,4 +324,19 @@ export class VerifyLearningApplicationPage {
         const confirmBtn = this.page.locator('#portal').getByRole('button', { name: 'ส่งคืนแก้ไข' })
         await confirmBtn.click()
     }
+
+
+    //Cancel
+    async clickCancelApplicationByIdCard(idCard: string) {
+        const row = this.page.locator('tr').filter({ hasText: idCard })
+        const cancelBtn = row.getByRole('button', { name: 'ยกเลิกใบสมัคร' }).first()
+        await cancelBtn.click()
+    }
+
+    async clickConfirmCancelApplicationPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันการยกเลิกใบสมัคร' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
 }
