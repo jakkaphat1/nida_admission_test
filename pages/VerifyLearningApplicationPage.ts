@@ -339,4 +339,19 @@ export class VerifyLearningApplicationPage {
         await expect(heading).toBeVisible()
         await confirmBtn.click()
     }
+
+
+    async selectCheckboxByIdCard(...idCards: string[]) {
+
+        for (const select of idCards) {
+            const row = this.page.locator('tr').filter({hasText :select})
+            const checkbox = row.locator('input[type="checkbox"]')
+            await checkbox.check()
+        }
+    }
+
+    async clickVerifyAllBySelect(){
+        const verifyAllBtn = this.page.getByRole('button', { name: 'ตรวจสอบทั้งหมดที่เลือก' })
+        await verifyAllBtn.click()
+    }
 }

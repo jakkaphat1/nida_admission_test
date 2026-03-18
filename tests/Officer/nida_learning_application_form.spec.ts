@@ -275,4 +275,28 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await verifyLearningApplicationPage.clickConfirmCancelApplicationPopup()
         
     });
+
+    test('TC-12 ทดสอบตรวจสอบใบสมัครเรียนหลายใบ' , async ({ commonPage , verifyLearningApplicationPage , page}) => {
+        await commonPage.gotoPrograms()
+        await verifyLearningApplicationPage.gotoVerifyLearningApplicationMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/application-form/);
+        await verifyLearningApplicationPage.checkVerifyLearningApplicationMenu()
+        await verifyLearningApplicationPage.clickAnyTabByKeyword('ใบสมัคร')
+        // await verifyLearningApplicationPage.fillSearchBox('ทดสอบ')
+        const filterInput = {
+            eduYear:undefined,
+            semester:'ภาคการศึกษาที่ 2',
+            round:'10',
+            eduLevel:undefined,
+            faculty:undefined,
+            course:undefined,
+            program:undefined,
+            status:undefined,
+            payStatus:'ยังไม่ได้ชำระเงิน'
+        }
+
+        await verifyLearningApplicationPage.filterApplicationMoreOption(filterInput)
+        await verifyLearningApplicationPage.selectCheckboxByIdCard('2875469224987','2493181346562')
+        await verifyLearningApplicationPage.clickVerifyAllBySelect()
+    });
 });
