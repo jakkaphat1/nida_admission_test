@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures/baseTest';
 
-test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรับสมัคร/การทำงาน/การสมัครสอบวิชาเฉพาะ/ตรวจสอบใบสมัคเรียน', () => {
+test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรับสมัคร/การทำงาน/การสมัครเรียน/ตรวจสอบใบสมัคเรียน', () => {
     test('TC-01 ทดสอบการเข้าใช้งานระบบรับสมัคร (NIDA Admission)' , async ({ commonPage , page}) => {
         await commonPage.gotoBackOfficeLogin();
         await expect(page).toHaveURL('https://backoffice-uat.nida.ac.th/login');
