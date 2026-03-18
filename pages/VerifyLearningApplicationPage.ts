@@ -244,4 +244,14 @@ export class VerifyLearningApplicationPage {
         await expect(heading).toBeVisible()
         await confirmBtn.click()
     }
+
+    async clickPreviewByDocumentName(docName: string) {
+        const docRow = this.page.locator('div').filter({ hasText: docName }).first()
+        const newPagePromise = this.page.context().waitForEvent('page')
+        await docRow.getByText('preview').click()
+
+        const newPage = await newPagePromise
+        await newPage.waitForLoadState()
+        await newPage.close()
+    }
 }
