@@ -171,4 +171,26 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await eligibleLearningPage.clickConfirmEditUploadAnnoucementPopup()
         await expect(page.getByText('แก้ไขประกาศสำเร็จ')).toBeVisible()
     });
+
+    test('TC-07.2 ทดสอบดูไฟล์ประกาศ' , async ({ commonPage , eligibleLearningPage , page}) => {
+        test.setTimeout(45000)
+        await commonPage.gotoPrograms()
+        await eligibleLearningPage.gotoEligibleLearningMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-candidates-list-for-program/);
+        await eligibleLearningPage.checkLearningEligibleMenu()
+        await eligibleLearningPage.clickAnyTabByKeyword('ประกาศรายชื่อผู้มีสิทธิ์สอบประจำโครงการ')
+        await eligibleLearningPage.clickStatusByKeyword('ใช้งาน')
+        await eligibleLearningPage.filterMoreOption({
+            eduYear:'2569',
+            // semester:'ภาคการศึกษาที่ 1',
+            // eduLevel:'ปริญญาโท',
+            // studentType:'ภาคปกติ',
+            round:'7',
+        })
+        await eligibleLearningPage.clickExpandDetailButtonByName('รอบที่ 7/2569 (ภาคการศึกษาที่ 1)')
+        await eligibleLearningPage.clickSeeAnnoucementButtonByCard('รอบที่ 7/2569 (ภาคการศึกษาที่ 1)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-candidates-list-for-program\/view-announcement.*/);
+        await eligibleLearningPage.clickPDFButtonForViewAnnouceByNumber('18032026173922TDn')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/eligible-candidates-list-for-program\/view-announcement.*/);
+    });
 });

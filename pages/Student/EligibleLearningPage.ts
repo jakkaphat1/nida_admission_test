@@ -433,4 +433,10 @@ export class EligibleLearningPage {
         await expect(heading).toBeVisible()
         await confirmBtn.click()
     }
+
+    async clickPDFButtonForViewAnnouceByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const viewButton = this.page.getByRole('button', { name: 'เปิดดู PDF' })
+        await viewButton.click()
+    }
 }
