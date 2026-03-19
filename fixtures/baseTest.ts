@@ -24,6 +24,7 @@ import { EligibleWrittenExamPage } from '../pages/EligibleWrittenExamPage';
 import { AnnouceWriitenExamScorePage } from '../pages/AnnouceWriitenExamScorePage';
 import { VerifyLearningApplicationPage } from '../pages/VerifyLearningApplicationPage';
 import { EligibleLearningPage } from '../pages/Student/EligibleLearningPage';
+import { AnnouceLearningResultPage } from '../pages/Student/AnnouceLearningResultPage';
 type MyFixtures = {
   commonPage : CommonPage;
   admissionPage: AdmissionPage;
@@ -50,6 +51,7 @@ type MyFixtures = {
   annouceWrittenExamScorePage : AnnouceWriitenExamScorePage
   verifyLearningApplicationPage : VerifyLearningApplicationPage
   eligibleLearningPage : EligibleLearningPage
+  annouceLearningResultPage : AnnouceLearningResultPage
 };
 
 export const test = base.extend<MyFixtures>({
@@ -152,6 +154,10 @@ export const test = base.extend<MyFixtures>({
   eligibleLearningPage : async ({page},use) => {
     const eligibleLearningPage = new EligibleLearningPage(page)
     await use(eligibleLearningPage)
+  },
+  annouceLearningResultPage : async ({page},use) => {
+    const annouceLearningResultPage = new AnnouceLearningResultPage(page)
+    await use(annouceLearningResultPage)
   },
   
 
