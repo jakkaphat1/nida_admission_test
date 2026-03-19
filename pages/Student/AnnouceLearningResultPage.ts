@@ -13,8 +13,8 @@ export class AnnouceLearningResultPage {
  * ---------------------------------------------------------------- */
     constructor(page:Page) {
         this.page = page;
-        this.notAnnouceScoreTab = this.page.getByRole('button', { name: 'ยังไม่ประกาศผลคะแนน' })
-        this.annoucedScoreTab = this.page.getByRole('button', { name: 'ประกาศผลคะแนนแล้ว' })
+        this.notAnnouceScoreTab = this.page.getByRole('button', { name: 'ยังไม่ประกาศผลการคัดเลือก' })
+        this.annoucedScoreTab = this.page.getByRole('button', { name: 'ประกาศรายชื่อผลการคัดเลือก' })
     }
     /**
  * Method SECTION
@@ -29,5 +29,10 @@ export class AnnouceLearningResultPage {
         await learningApplicationListItem.click()
         await annouceLearningApplicationMenu.click()
     }
-
+    async checkAnnouceLearningResultMenu(){
+        await this.notAnnouceScoreTab.highlight()
+        await this.annoucedScoreTab.highlight()
+        await expect(this.notAnnouceScoreTab).toBeVisible();
+        await expect(this.annoucedScoreTab).toBeVisible()
+    }
 }

@@ -7,5 +7,10 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await commonPage.fillUsernameAndPassword('sys_admin1','unext@2022')
     });
 
-    
+    test('TC-02 เมนูตรวจสอบและประกาศผลการคัดเลือก' , async ({ commonPage , annouceLearningResultPage , page}) => {
+        await commonPage.gotoPrograms()
+        await annouceLearningResultPage.gotoAnnouceLearningResultMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement.*/);
+        await annouceLearningResultPage.checkAnnouceLearningResultMenu()
+    });
 });
