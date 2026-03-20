@@ -35,6 +35,14 @@ export class AnnouceLearningResultPage {
         await expect(this.notAnnouceScoreTab).toBeVisible();
         await expect(this.annoucedScoreTab).toBeVisible()
     }
+
+    async clickAnyTabByKeyword(tab:'ยังไม่ประกาศผลการคัดเลือก'|'ประกาศรายชื่อผลการคัดเลือก'){
+        const tabBtn = this.page.getByRole('button', { name: tab })
+        const tabBtnExact = this.page.getByRole('button', { name: tab})
+        if(tab){
+            await tabBtn.click()
+        }
+    }    
     //method ค้นหาในกล่องค้นหา
     async fillSearchBox(searchKeyword:string){
         const searchBox = this.page.getByRole('textbox', { name: 'ค้นหาจากรหัส หรือชื่อหลักสูตรและโครงการ' })
@@ -283,6 +291,13 @@ export class AnnouceLearningResultPage {
         await confirmBtn.click()
     }
 
+    async clickConfirmReUploadAnnoucementPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันการแก้ไขประกาศ' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
+
     async clickCheckboxForAnnouceResultListByCard(cardName:string){
         const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
         const checkbox = card.getByRole('checkbox').first()
@@ -300,5 +315,31 @@ export class AnnouceLearningResultPage {
         const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
         await expect(heading).toBeVisible()
         await confirmBtn.click()
+    }
+
+
+
+
+    //See Annnouce
+    async clickSeeAnnoucementButtonByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const seeAnnoucementBtn = card.getByRole('button', { name: 'ดูประกาศ' }).first()
+        await seeAnnoucementBtn.click()
+    }
+
+    //Edit annouce
+    async clickKebabButtonForEditAnnouceByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const kebabBtn = card.locator('button.menuAction_button')
+        const editButton = this.page.getByRole('button', { name: 'แก้ไขประกาศ' })
+        await kebabBtn.click()
+        await editButton.click()
+    }
+
+    async clearFileUpload(hoverText:string){
+        const hoverPlace = this.page.getByText(hoverText)
+        const clearBtn = this.page.locator('.file-container > .delete-button')
+        await hoverPlace.hover()
+        await clearBtn.click()
     }
 }

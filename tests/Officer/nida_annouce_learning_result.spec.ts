@@ -143,4 +143,30 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await annouceLearningResultPage.clickConfirmResultAnnoucementPopup()
         await expect(page.getByText('ประกาศผลการคัดเลือกสำเร็จ')).toBeVisible()
     });
+
+    test('TC-07 ทดสอบแก้ไขประกาศ' , async ({ commonPage , annouceLearningResultPage , page}) => {
+        await commonPage.gotoPrograms()
+        await annouceLearningResultPage.gotoAnnouceLearningResultMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement.*/);
+        await annouceLearningResultPage.checkAnnouceLearningResultMenu()
+        await annouceLearningResultPage.clickAnyTabByKeyword('ประกาศรายชื่อผลการคัดเลือก')
+        // await annouceLearningResultPage.fillSearchBox('สถิติ')
+        await annouceLearningResultPage.filterMoreOption({
+            eduYear:'2568',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'1',
+            // eduLevel:'ปริญญาโท',
+            studentType:'นานาชาติ' 
+        })
+        await annouceLearningResultPage.clickSeeAnnoucementButtonByCard('รอบที่ 1/2568 (ภาคการศึกษาที่ 1)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement\/view-announcement.*/);
+        await annouceLearningResultPage.clickKebabButtonForEditAnnouceByNumber('20032026144302rHg')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement\/edit-announcement.*/);
+        await annouceLearningResultPage.clearFileUpload('ตัวอย่างไฟล์สำหรับการประกาศผลการคัดเลือกเข้าศึกษา_1773992582499.pdf')
+        const annouceFile = 'downloads/ตัวอย่างไฟล์สำหรับการประกาศผลการคัดเลือกเข้าศึกษา.pdf';
+        await annouceLearningResultPage.uploadAnnouceFile(annouceFile)
+        await annouceLearningResultPage.clickSaveButton()
+        await annouceLearningResultPage.clickConfirmReUploadAnnoucementPopup()
+        await expect(page.getByText('แก้ไขประกาศสำเร็จ')).toBeVisible()
+    });
 });
