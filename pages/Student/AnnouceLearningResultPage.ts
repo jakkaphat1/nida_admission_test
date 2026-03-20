@@ -88,4 +88,137 @@ export class AnnouceLearningResultPage {
         await card.evaluate(el => el.style.backgroundColor = 'yellow');
         await expect(card).toBeVisible()
     }
+
+    //Verify detail
+    async clickVerifyDetailButtonByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const verifyDetailBtn = card.getByRole('button', { name: 'ตรวจสอบข้อมูล' })
+        await verifyDetailBtn.click()
+    }
+
+    async checkStudentScoreDetailPage(...texts: string[]){
+        const eligibleStudentTextBox = this.page.getByRole('textbox', { name: 'ค้นหาจากรหัส หรือชื่อ-นามสกุลใบสมัคร' })
+        await expect(eligibleStudentTextBox).toBeVisible()
+
+        for (const text of texts) {
+            const element = this.page.getByText(text , {exact:true})
+            await element.evaluate(el => el.style.backgroundColor = 'yellow');
+            await expect(element).toBeVisible()
+        }
+    }
+
+    async fillSearchEligibleLearningStudent(studentName:string){
+        const texBox = this.page.getByRole('textbox', { name: 'ค้นหาจากรหัส หรือชื่อ-นามสกุลใบสมัคร' })
+        await texBox.pressSequentially(studentName)
+    }
+
+    async filterEligibleSearchOption(data:{
+        status?:string , faculty?:string , course?:string , program?:string
+    }){
+        const statusDropdown = this.page.locator('div').filter({ hasText: /^สถานะ$/ }).nth(3)
+        const statusOption = this.page.getByRole('option', { name: data.status })
+        const facultyDropdown = this.page.locator('div').filter({ hasText: /^คณะ$/ }).nth(3)
+        const facultyOption = this.page.getByRole('option', { name: data.faculty })
+        const courseDropdown = this.page.locator('div').locator('div').filter({ hasText: /^หลักสูตร$/ }).nth(3)
+        const courseOption = this.page.getByRole('option', { name: data.course })
+        const programDropdown = this.page.locator('div').filter({ hasText: /^โครงการ$/ }).nth(3)
+        const programOption = this.page.getByRole('option', { name: data.program })
+
+        const filterBtn = this.page.getByRole('button', { name: 'ตัวกรอง' })
+        const filterBackBtn = this.page.getByRole('button', { name: 'ตัวกรอง' }).nth(1)
+        await filterBtn.click()
+        if(data.status){
+            await statusDropdown.click()
+            await statusOption.click()
+        }
+        if(data.faculty){
+            await facultyDropdown.click()
+            await facultyOption.click()
+        }
+        if(data.course){
+            await courseDropdown.click()
+            await courseOption.click()
+        }
+        if(data.program){
+            await programDropdown.click()
+            await programOption.click()
+        }
+        await filterBackBtn.click()
+    }
+
+    async clickExpandDetailButtonByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const expandDetailBtn = card.getByRole('button').filter({ hasText: /^$/ }).first()
+        await expandDetailBtn.click()
+    }
+
+    async clickCheckandAddStudentResultButtonByCard(cardName:string){
+        const card = this.page.locator('.card-container').filter({hasText:cardName})
+        const addStudentScoreBtn = card.getByRole('button', { name: 'ตรวจสอบและจัดการ' })
+        await addStudentScoreBtn.click()
+    }
+
+    async handleEditStudentResultButton(){
+        const editBtn = this.page.getByRole('button', { name: 'แก้ไข' })
+        // await expect(editBtn).toBeVisible
+        if (await editBtn.count() > 0) {
+            await editBtn.click()
+        }
+    }
+
+    async handlSequenceStudentResultPopup(){
+        const heading = this.page.getByRole('heading', { name: 'กำหนดลำดับของการแสดงผลผู้ผ่านการคัดเลือก' })
+        const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
+        // await expect(editBtn).toBeVisible
+        if (await heading.count() > 0) {
+            await saveBtn.click()
+        }
+    }
+
+    async handleEditStudentResultButton2(){
+        const editBtn = this.page.getByRole('button', { name: 'แก้ไข' })
+        await editBtn.click()
+    }
+
+    async selectLearningExamResult(id: string, result: 'ผ่าน' | 'ไม่ผ่าน') {
+        const row = this.page.locator('tr').filter({ hasText: id })
+        const dropdown = row.locator('.react-select__indicators').first()
+        await dropdown.click()
+        await this.page.getByRole('option', { name: result, exact: true }).click()
+    }
+
+    async selectLearningExamResultForScholarship(id: string, result: 'ผ่าน' | 'ไม่ผ่าน',scholar:string) {
+        const row = this.page.locator('tr').filter({ hasText: id })
+        const dropdown = row.locator('.react-select__indicators').first()
+        const scholarDropdown = row.locator('.react-select__indicators').nth(1)
+        await dropdown.click()
+        await this.page.getByRole('option', { name: result, exact: true }).click()
+        await scholarDropdown.click()
+        await this.page.getByRole('option', { name: scholar, exact: true }).click()
+    }
+
+    async editLearningExamResult(id: string, result: 'ผ่าน' | 'ไม่ผ่าน') {
+        const row = this.page.locator('tr').filter({ hasText: id })
+        const clearBtn = row.locator('.react-select__indicators div[aria-hidden="true"]').first()
+        await clearBtn.click()
+        const dropdown = row.locator('.react-select__control')
+        await dropdown.click()
+        await this.page.getByRole('option', { name: result, exact: true }).click()
+    }
+
+    async clickSaveButton(){
+        const saveBtn = this.page.getByRole('button', { name: 'บันทึก' })
+        await saveBtn.click()
+    }
+
+    async clickNextButton(){
+        const nextBtn = this.page.getByRole('button', { name: 'ถัดไป' })
+        await nextBtn.click()
+    }
+
+    async clickExportButton(){
+        const exportBtn = this.page.getByRole('button', { name: 'Export' })
+        await exportBtn.click()
+    }
+    
 }
