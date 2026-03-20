@@ -13,4 +13,20 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement.*/);
         await annouceLearningResultPage.checkAnnouceLearningResultMenu()
     });
+
+    test('TC-03 ทดสอบค้นหารายการหลักสูตรสมัครเรียน' , async ({ commonPage , annouceLearningResultPage , page}) => {
+        await commonPage.gotoPrograms()
+        await annouceLearningResultPage.gotoAnnouceLearningResultMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement.*/);
+        await annouceLearningResultPage.checkAnnouceLearningResultMenu()
+        await annouceLearningResultPage.fillSearchBox('สถิติ')
+        await annouceLearningResultPage.filterMoreOption({
+            eduYear:'2569',
+            semester:'ภาคการศึกษาที่ 2',
+            round:'1',
+            eduLevel:'ปริญญาโท',
+            studentType:'ภาคปกติ' 
+        })
+        await annouceLearningResultPage.highlightDetailButtonByName('รอบที่ 1/2569')
+    });
 });
