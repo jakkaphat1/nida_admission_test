@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures/baseTest';
 import path from 'path';
-
+import { StudentInfoForApplyExam } from '../../pages/Student/ExamsPage'
 test.describe('NIDA Apply Exam Tests', () => {
 
     test('TC-01 การเข้าใช้งานระบบรับสมัคร (NIDA Admission)', async ({ admissionPage, page }) => {
