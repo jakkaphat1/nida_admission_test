@@ -209,4 +209,25 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await annouceLearningResultPage.clickSeePDFinHistory()
         await annouceLearningResultPage.clickClosePDFHistoryPopup()
     });
+
+    test('TC-09 ทดสอบยกเลิกประกาศ' , async ({ commonPage , annouceLearningResultPage , page}) => {
+        await commonPage.gotoPrograms()
+        await annouceLearningResultPage.gotoAnnouceLearningResultMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement.*/);
+        await annouceLearningResultPage.checkAnnouceLearningResultMenu()
+        await annouceLearningResultPage.clickAnyTabByKeyword('ประกาศรายชื่อผลการคัดเลือก')
+        // await annouceLearningResultPage.fillSearchBox('สถิติ')
+        await annouceLearningResultPage.filterMoreOption({
+            eduYear:'2568',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'1',
+            // eduLevel:'ปริญญาโท',
+            studentType:'นานาชาติ' 
+        })
+        await annouceLearningResultPage.clickSeeAnnoucementButtonByCard('รอบที่ 1/2568 (ภาคการศึกษาที่ 1)')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement\/view-announcement.*/);
+        await annouceLearningResultPage.clickKebabButtonForCancelAnnouceByNumber('20032026144302rHg')
+        await annouceLearningResultPage.clickConfirmCancelAnnoucePopup()
+        await expect(page.getByRole('alert').filter({ hasText: 'บันทึกรายการเรียบร้อยแล้ว' }).last()).toBeVisible()
+    });
 });
