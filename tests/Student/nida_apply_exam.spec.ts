@@ -1,5 +1,4 @@
 import { test, expect } from '../../fixtures/baseTest';
-import { ExamsPage, StudentInfoForApplyExam } from '../../pages/ExamsPage';
 import path from 'path';
 
 test.describe('NIDA Apply Exam Tests', () => {
