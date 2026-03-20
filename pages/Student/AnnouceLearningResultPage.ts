@@ -342,4 +342,10 @@ export class AnnouceLearningResultPage {
         await hoverPlace.hover()
         await clearBtn.click()
     }
+
+    async clickPDFButtonForViewAnnouceByNumber(number:string){
+        const card = this.page.locator('div').filter({ hasText: number}).nth(5)
+        const viewButton = this.page.getByRole('button', { name: 'เปิดดู PDF' })
+        await viewButton.click()
+    }
 }
