@@ -221,4 +221,65 @@ export class AnnouceLearningResultPage {
         await exportBtn.click()
     }
     
+
+    //Upload
+    async clickUploadAnnoucementButtonByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const verifyDetailBtn = card.getByRole('button', { name: 'อัปโหลดประกาศ' }).first()
+        await verifyDetailBtn.click()
+    }
+
+    async checkUploadAnnoucementPage(...texts: string[]){
+        const dropBox = this.page.locator('.drop-file-box')
+        await expect(dropBox).toBeVisible()
+
+        for (const text of texts) {
+            const element = this.page.getByText(text)
+            await element.highlight()
+            await expect(element).toBeVisible()
+        }
+    }
+
+    // async selectProgramForAnnouce(faculty:string,...programs:string[]){
+    //     const facultyCard = this.page.locator('.card-container').filter({hasText:faculty})
+    //     const expand = facultyCard.getByRole('button').nth(0)
+    //     await expand.click()
+    //     for (const program of programs) {
+    //         const programLocator = this.page.locator('.card-container').filter({ hasText: program })
+    //         const checkbox = programLocator.locator('#exam_id').first()
+    //         await checkbox.evaluate(el => el.style.backgroundColor = 'yellow');
+    //         await checkbox.click() 
+    //         await this.page.waitForTimeout(1000)
+    //     }
+    // }
+    async selectProgramForAnnounce(faculty: string, ...programs: string[]) {
+        const facultyCard = this.page.locator('.card-container').filter({ hasText: faculty })
+        const expandBtn = facultyCard.getByRole('button').first()
+        await expandBtn.click()
+
+        for (const program of programs) {
+            const checkbox = facultyCard.locator('.checkbox_container')
+                .filter({ hasText: program })
+                .locator('#exam_id')
+            
+            await checkbox.evaluate(el => (el as HTMLElement).style.backgroundColor = 'yellow')
+            await checkbox.click()
+            await this.page.waitForTimeout(1000)
+        }
+    }
+
+    async uploadAnnouceFile(filePath: string) {
+        const fileChooserPromise = this.page.waitForEvent('filechooser');
+        await this.page.getByRole('button', { name: 'เลือกไฟล์' }).click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(filePath);
+    }
+
+
+    async clickConfirmUploadAnnoucementPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันการอัปโหลดประกาศ' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
 }

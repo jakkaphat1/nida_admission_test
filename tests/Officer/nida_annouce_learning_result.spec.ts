@@ -55,10 +55,10 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await annouceLearningResultPage.clickCheckandAddStudentResultButtonByCard('วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์และระบบสารสนเทศ ภาคปกติ (สอบสัมภาษณ์ CSAI) ศูนย์การศึกษาจังหวัดกรุงเทพมหานคร ครั้งที่ 4 ปี 2568')
         await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement\/.*/);
         await annouceLearningResultPage.handleEditStudentResultButton()
-        // await annouceLearningResultPage.selectLearningExamResult('684241122001','ผ่าน')
-        // await annouceLearningResultPage.selectLearningExamResult('684241122002','ไม่ผ่าน')
-        await annouceLearningResultPage.editLearningExamResult('684241122001','ผ่าน')
-        await annouceLearningResultPage.editLearningExamResult('684241122002','ไม่ผ่าน')
+        // await annouceLearningResultPage.selectLearningExamResult('684241122001','ผ่าน') // กรณีเข้ามาจัดการผลครั้งแรก
+        // await annouceLearningResultPage.selectLearningExamResult('684241122002','ไม่ผ่าน') // กรณีเข้ามาจัดการผลครั้งแรก
+        await annouceLearningResultPage.editLearningExamResult('684241122001','ผ่าน') //กรณีแก้ไข
+        await annouceLearningResultPage.editLearningExamResult('684241122002','ไม่ผ่าน') //กรณีแก้ไข
         await annouceLearningResultPage.clickSaveButton()
         await annouceLearningResultPage.clickNextButton()
         await annouceLearningResultPage.handleEditStudentResultButton2()
@@ -100,4 +100,28 @@ test.describe('Test Script - NIDA Backoffice โมดูล ADM งานรั
         await annouceLearningResultPage.clickExportButton()
     });
 
+    test('TC-05 ทดสอบอัปโหลดประกาศ' , async ({ commonPage , annouceLearningResultPage , page}) => {
+        await commonPage.gotoPrograms()
+        await annouceLearningResultPage.gotoAnnouceLearningResultMenu()
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement.*/);
+        await annouceLearningResultPage.checkAnnouceLearningResultMenu()
+        // await annouceLearningResultPage.fillSearchBox('สถิติ')
+        await annouceLearningResultPage.filterMoreOption({
+            eduYear:'2568',
+            semester:'ภาคการศึกษาที่ 1',
+            round:'1',
+            // eduLevel:'ปริญญาโท',
+            studentType:'นานาชาติ' 
+        })
+        await annouceLearningResultPage.highlightDetailButtonByName('รอบที่ 1/2568')
+        await annouceLearningResultPage.clickUploadAnnoucementButtonByCard('รอบที่ 1/2568')
+        await annouceLearningResultPage.checkUploadAnnoucementPage('เลือกโครงการที่ใช้อัปโหลดประกาศ','แนบไฟล์ประกาศ')
+        await expect(page).toHaveURL(/.*admin\/admission\/transaction\/selection-results-announcement\/upload-announcement.*/);
+        await annouceLearningResultPage.selectProgramForAnnounce('คณะภาษาและการสื่อสาร','ภาษาอังกฤษศึกษาและการสอนภาษาอังกฤษ นักศึกษาต่างชาติ (นานาชาติ)','ภาษาอังกฤษศึกษาและการสอนภาษาอังกฤษ นักศึกษาไทย (นานาชาติ)')
+        const annouceFile = 'downloads/ตัวอย่างไฟล์สำหรับการประกาศผลการคัดเลือกเข้าศึกษา.pdf';
+        await annouceLearningResultPage.uploadAnnouceFile(annouceFile)
+        await annouceLearningResultPage.clickSaveButton()
+        await annouceLearningResultPage.clickConfirmUploadAnnoucementPopup()
+        await expect(page.getByText('อัปโหลดประกาศสำเร็จ')).toBeVisible()
+    });
 });
