@@ -282,4 +282,23 @@ export class AnnouceLearningResultPage {
         await expect(heading).toBeVisible()
         await confirmBtn.click()
     }
+
+    async clickCheckboxForAnnouceResultListByCard(cardName:string){
+        const card = this.page.locator('div').filter({ hasText: cardName }).nth(5)
+        const checkbox = card.getByRole('checkbox').first()
+        await checkbox.click()
+        console.log(` เลือกประกาศสมัครสำหรับ: ${cardName}`);
+    }
+
+    async clickAnnouceScoreList(){
+        const annouceScoreBtn = this.page.getByRole('button', { name: 'ประกาศผลการคัดเลือก', exact: true })
+        await annouceScoreBtn.click()
+    }
+
+    async clickConfirmResultAnnoucementPopup(){
+        const heading = this.page.getByRole('heading', { name: 'ยืนยันประกาศผลการคัดเลือก' })
+        const confirmBtn = this.page.getByRole('button', { name: 'ยืนยัน', exact: true })
+        await expect(heading).toBeVisible()
+        await confirmBtn.click()
+    }
 }
