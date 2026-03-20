@@ -1,5 +1,4 @@
 import { test, expect } from '../../fixtures/baseTest';
-import { AdmissionPage } from '../../pages/AdmissionPage';
 import path from 'path';
 
 // test.use({ storageState: 'playwright/.auth/user.json' });

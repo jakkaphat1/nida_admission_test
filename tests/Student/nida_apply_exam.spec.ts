@@ -1,5 +1,4 @@
 import { test, expect } from '../../fixtures/baseTest';
-import { AdmissionPage } from '../../pages/AdmissionPage';
 import { ExamsPage, StudentInfoForApplyExam } from '../../pages/ExamsPage';
 import path from 'path';
 
