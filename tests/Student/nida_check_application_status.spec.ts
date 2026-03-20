@@ -150,14 +150,13 @@ test.describe('NIDA Check Application Status' , () => {
         await expect(page).toHaveURL(/\/application-status\/check/);
         await applicationStatusPage.clickEditInputFileInfo()
         await expect(page).toHaveURL(/\/editAttachmentApplicant\/\d+$/);
-        await applicationStatusPage.hoverApplicationFile('DOC003_1030120220262311306.')
-        await applicationStatusPage.clickDeleteApplicationFileButton()
+        await applicationStatusPage.hoverApplicationFile('DOC003_174319032026230608653.jpeg')
+        await applicationStatusPage.clickDeleteApplicationFileButton('DOC003_174319032026230608653.jpeg')
 
-        const filePath = path.join(__dirname, '../downloads/สำเนาบัตรประชาน - ทดสอบ.jpg');
-        await applicationStatusPage.uploadFile(filePath);
+        await applicationStatusPage.uploadFile(path.resolve('downloads', 'สำเนาบัตรประชาน - ทดสอบ.jpg'),'สำเนาบัตรประชาชน')
 
         await applicationStatusPage.clickSaveInfoAndSendRecheck()
-        await applicationStatusPage.clickConfirmPopupButton()
+        // await applicationStatusPage.clickConfirmPopupButton()
 
     });
 

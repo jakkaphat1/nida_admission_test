@@ -54,8 +54,8 @@ test.describe('NIDA Admission Test Suite' , () => {
         await paymentPage.clickHistoryPaid()
         await expect(page).toHaveURL(/\/payment\/history/);
         await paymentPage.checkHistoryPaid()
-        await paymentPage.checkPaidStatus('00006940002','ชำระเงินแล้ว')
-        await paymentPage.checkExpandCardDetail('00006940002','200.00','Bill Payment','ผู้ดูแลระบบ 1 แอดมิน')
+        await paymentPage.checkPaidStatus('00006940005','ชำระเงินแล้ว')
+        await paymentPage.checkExpandCardDetail('00006940005','200.00','Bill Payment','ผู้ดูแลระบบ 1 แอดมิน')
         
     });
 

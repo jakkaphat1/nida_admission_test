@@ -359,17 +359,19 @@ export class ApplicationStatusPage {
     }
 
     async hoverApplicationFile(Filename:string){
-        await this.page.getByText(Filename).hover()
-        // await this.page.locator('.attach-icon > svg').hover()
+        const fileContainter = this.page.locator('.file-container').filter({hasText:Filename})
+        await fileContainter.hover()
     }
     
-    async clickDeleteApplicationFileButton(){
-        await this.page.getByRole('button').filter({ hasText: /^$/ }).click()
+    async clickDeleteApplicationFileButton(Filename: string) {
+        const fileContainer = this.page.locator('.file-container').filter({ hasText: Filename })
+        await fileContainer.locator('.delete-button button').click()
     }
 
-    async uploadFile(filePath: string) {
-        const fileInput = this.page.locator('.drop-file-box input[type="file"]');
-        await fileInput.setInputFiles(filePath);
+    async uploadFile(filePath: string, labelText: string) {
+        const formItem = this.page.locator('.formItem_vertical').filter({ hasText: labelText })
+        const fileInput = formItem.locator('.drop-file-box input[type="file"]')
+        await fileInput.setInputFiles(filePath)
     }
 
     async clickWrrittenExamLabel(){
